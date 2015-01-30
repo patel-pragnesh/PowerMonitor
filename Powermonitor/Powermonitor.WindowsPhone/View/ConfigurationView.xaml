@@ -13,14 +13,10 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
-        <!-- <common:BoolToObjectConverter x:Key="TurnOnOffConverter"
-                             TrueValue="Turn Off"
-                             FalseValue="Turn On"/>
-        <common:BoolToObjectConverter x:Key="TurnOnOffColorConverter"
-                             TrueValue="{StaticResource ToggleOff}"
-                             FalseValue="{StaticResource ToggleOn}"/>-->
+        <!-- Begin Template Modules -->
         <DataTemplate x:Key="ModuleTemplate">
         	<ListViewItem Holding="ListViewItem_Holding" HorizontalContentAlignment="Stretch">
+                <!-- Main grid -->
         		<Grid Name="gModuleItem" Holding="gModuleItem_Holding">
         			<Grid.ColumnDefinitions>
         				<ColumnDefinition Width="4*"/>
@@ -36,6 +32,7 @@
         				<TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="{Binding Profil.Name}"/>
         			</StackPanel>
         			<ToggleSwitch Grid.Row="0" Grid.Column="1" IsOn="{Binding On}" Toggled="ToggleSwitch_Toggled" OffContent="Off" OnContent="On"/>
+                    <!-- Options grid -->
                     <Grid  HorizontalAlignment="Stretch" Visibility="Collapsed" x:Name="panel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -64,23 +61,22 @@
                     </Grid>
                 </Grid>
         	</ListViewItem>
-
         </DataTemplate>
+        <!-- End Template Modules -->
+        <!-- Begin Template Profils-->
         <DataTemplate x:Key="ProfilTemplate">
         	<StackPanel>
         		<TextBlock Text="{Binding Name}"/>
         	</StackPanel>
         </DataTemplate>
+        <!-- End Template Profils-->
     </Page.Resources>
 	<Grid x:Name="LayoutRoot" Style="{StaticResource BackgroundColor}">
 		<!--Contrôle Pivot-->
 		<Pivot Title="{StaticResource ApplicationTitle}">
-			<!--Élément un de tableau croisé dynamique-->
+			<!-- Begin Modules -->
 			<PivotItem Header="Modules">
 				<StackPanel>
-					<!--<ListView ItemsSource="{Binding Modules, Mode=OneWay}" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}">
-                    </ListView>-->
-					<!--<ListView SelectionChanged="ModuleList_SelectionChanged" SelectionMode="Single" Holding="ModuleList_Holding" Name="ModuleList" Height="200" ItemsSource="{Binding Modules, Mode=OneWay}" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}">-->
 					<ListView Height="450" x:Name="ModuleList" ItemsSource="{Binding Modules, Mode=OneWay}" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}" Margin="0,0,-0.333,0">
 						<ListView.ItemContainerStyle>
 							<Style TargetType="ListViewItem">
@@ -89,21 +85,11 @@
 							</Style>
 						</ListView.ItemContainerStyle>
 					</ListView>
-					<!--<Button Name="bRename" CommandParameter="renameStack" Command="{Binding bRename_Command}" Style="{StaticResource Buttons}">Renommer</Button>
-                    <StackPanel Name="renameStack" Visibility="{Binding RenameStackVisibility}">
-                        <TextBox KeyDown="TextBox_KeyDown" PlaceholderText="Entrez un nouveau nom" Text="{Binding RenameText, Mode=TwoWay}"></TextBox>
-                        <Button Name="bAcceptRename" Command="{Binding bAcceptRename_Command}" Style="{StaticResource Buttons}">Accept</Button>
-                    </StackPanel>
-                    <Button Name="bModifyProfil" Style="{StaticResource Buttons}">Modifier le profil interne</Button>
-                    <Button Name="bModifyAssiociatedProfil" Style="{StaticResource Buttons}"  Command="{Binding bModifyAssiociatedProfil_Command}">Changer le profil associé</Button>
-                    <StackPanel Name="modifyAssiociatedProfilStack" Visibility="{Binding ModifyAssiociatedProfilStackVisibility}">
-                        <ListBox ItemsSource="{Binding Profils, Mode=OneWay}" SelectedValue="{Binding SelectedProfil, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}"/>
-                        <Button Name="bAcceptModifyAssiociatedProfil" Command="{Binding bAcceptModifyAssiociatedProfil_Command}" Style="{StaticResource Buttons}">Accept</Button>
-                    </StackPanel>-->
 				</StackPanel>
 			</PivotItem>
+            <!-- End Modules -->
 
-			<!--Élément deux de tableau croisé dynamique-->
+			<!--Begin Profils -->
 			<PivotItem Header="Profils">
 				<StackPanel>
 					<ListBox ItemsSource="{Binding Profils, Mode=OneWay}" SelectedValue="{Binding SelectedProfil, Mode=TwoWay}" ItemTemplate="{StaticResource ProfilTemplate}"/>
@@ -112,6 +98,7 @@
 					<Button x:Name="bDelete" Style="{StaticResource Buttons}" Click="bDelete_Click" Content="Supprimer"/>
 				</StackPanel>
 			</PivotItem>
+            <!-- End Profils -->
 		</Pivot>
 	</Grid>
 </Page>
