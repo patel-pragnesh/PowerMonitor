@@ -1,0 +1,117 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Powermonitor.View"
+    xmlns:common="using:Powermonitor.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:Controls="using:WinRTXamlToolkit.Controls"
+    x:Class="Powermonitor.View.ConfigurationView"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <!-- <common:BoolToObjectConverter x:Key="TurnOnOffConverter"
+                             TrueValue="Turn Off"
+                             FalseValue="Turn On"/>
+        <common:BoolToObjectConverter x:Key="TurnOnOffColorConverter"
+                             TrueValue="{StaticResource ToggleOff}"
+                             FalseValue="{StaticResource ToggleOn}"/>-->
+        <DataTemplate x:Key="ModuleTemplate">
+        	<ListViewItem Holding="ListViewItem_Holding" HorizontalContentAlignment="Stretch">
+        		<Grid Name="gModuleItem" Holding="gModuleItem_Holding">
+        			<Grid.ColumnDefinitions>
+        				<ColumnDefinition Width="4*"/>
+        				<ColumnDefinition Width="3*"/>
+        			</Grid.ColumnDefinitions>
+        			<Grid.RowDefinitions>
+        				<RowDefinition Height="Auto"/>
+        				<RowDefinition Height="Auto"/>
+        			</Grid.RowDefinitions>
+        			<StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
+        				<TextBox KeyDown="TextBox_KeyDown" x:Name="ModuleNewName" Visibility="Collapsed" PlaceholderText="{Binding Name}"/>
+        				<TextBlock x:Name="ModuleName" Holding="ModuleName_Holding" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
+        				<TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="{Binding Profil.Name}"/>
+        			</StackPanel>
+        			<ToggleSwitch Grid.Row="0" Grid.Column="1" IsOn="{Binding On}" Toggled="ToggleSwitch_Toggled" OffContent="Off" OnContent="On"/>
+                    <Grid  HorizontalAlignment="Stretch" Visibility="Collapsed" x:Name="panel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Margin="5,0,5,0" x:Name="bModifyProfil" Style="{StaticResource Buttons}">
+                            <StackPanel>
+                                <TextBlock>
+        						<Run Text="Modifier le"/>
+                                </TextBlock>
+                                <TextBlock>
+        						<Run Text="profil interne"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="1" Margin="5,0,5,0" x:Name="bModifyAssiociatedProfil" Style="{StaticResource Buttons}"  Command="{Binding bModifyAssiociatedProfil_Command}">
+                            <StackPanel>
+                                <TextBlock>
+        						<Run Text="Changer le"/>
+                                </TextBlock>
+                                <TextBlock>
+        						<Run Text="profil associé"/>
+                                </TextBlock>
+                            </StackPanel>
+                            </Button>
+                    </Grid>
+                </Grid>
+        	</ListViewItem>
+
+        </DataTemplate>
+        <DataTemplate x:Key="ProfilTemplate">
+        	<StackPanel>
+        		<TextBlock Text="{Binding Name}"/>
+        	</StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+	<Grid x:Name="LayoutRoot" Style="{StaticResource BackgroundColor}">
+		<!--Contrôle Pivot-->
+		<Pivot Title="{StaticResource ApplicationTitle}">
+			<!--Élément un de tableau croisé dynamique-->
+			<PivotItem Header="Modules">
+				<StackPanel>
+					<!--<ListView ItemsSource="{Binding Modules, Mode=OneWay}" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}">
+                    </ListView>-->
+					<!--<ListView SelectionChanged="ModuleList_SelectionChanged" SelectionMode="Single" Holding="ModuleList_Holding" Name="ModuleList" Height="200" ItemsSource="{Binding Modules, Mode=OneWay}" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}">-->
+					<ListView Height="450" x:Name="ModuleList" ItemsSource="{Binding Modules, Mode=OneWay}" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}" Margin="0,0,-0.333,0">
+						<ListView.ItemContainerStyle>
+							<Style TargetType="ListViewItem">
+								<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+								<Setter Property="HorizontalAlignment" Value="Stretch"/>
+							</Style>
+						</ListView.ItemContainerStyle>
+					</ListView>
+					<!--<Button Name="bRename" CommandParameter="renameStack" Command="{Binding bRename_Command}" Style="{StaticResource Buttons}">Renommer</Button>
+                    <StackPanel Name="renameStack" Visibility="{Binding RenameStackVisibility}">
+                        <TextBox KeyDown="TextBox_KeyDown" PlaceholderText="Entrez un nouveau nom" Text="{Binding RenameText, Mode=TwoWay}"></TextBox>
+                        <Button Name="bAcceptRename" Command="{Binding bAcceptRename_Command}" Style="{StaticResource Buttons}">Accept</Button>
+                    </StackPanel>
+                    <Button Name="bModifyProfil" Style="{StaticResource Buttons}">Modifier le profil interne</Button>
+                    <Button Name="bModifyAssiociatedProfil" Style="{StaticResource Buttons}"  Command="{Binding bModifyAssiociatedProfil_Command}">Changer le profil associé</Button>
+                    <StackPanel Name="modifyAssiociatedProfilStack" Visibility="{Binding ModifyAssiociatedProfilStackVisibility}">
+                        <ListBox ItemsSource="{Binding Profils, Mode=OneWay}" SelectedValue="{Binding SelectedProfil, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}"/>
+                        <Button Name="bAcceptModifyAssiociatedProfil" Command="{Binding bAcceptModifyAssiociatedProfil_Command}" Style="{StaticResource Buttons}">Accept</Button>
+                    </StackPanel>-->
+				</StackPanel>
+			</PivotItem>
+
+			<!--Élément deux de tableau croisé dynamique-->
+			<PivotItem Header="Profils">
+				<StackPanel>
+					<ListBox ItemsSource="{Binding Profils, Mode=OneWay}" SelectedValue="{Binding SelectedProfil, Mode=TwoWay}" ItemTemplate="{StaticResource ProfilTemplate}"/>
+					<Button x:Name="bCreate" Style="{StaticResource Buttons}" Click="bCreate_Click" Content="Créer"/>
+					<Button x:Name="bModify" Style="{StaticResource Buttons}" Click="bModify_Click" Content="Modifier"/>
+					<Button x:Name="bDelete" Style="{StaticResource Buttons}" Click="bDelete_Click" Content="Supprimer"/>
+				</StackPanel>
+			</PivotItem>
+		</Pivot>
+	</Grid>
+</Page>
