@@ -27,6 +27,9 @@ namespace Powermonitor.View
     /// </summary>
     public sealed partial class ConfigurationView : Page
     {
+        private Grid _activeOptions = null;
+        private TextBox _currentTBox = null;
+        private TextBlock _currentTBlock = null;
         private NavigationHelper navigationHelper;
         private ViewModelBase defaultViewModel = new ConfigurationViewModel();
 
@@ -126,36 +129,46 @@ namespace Powermonitor.View
             this.Frame.Navigate(typeof(ModifyProfilView));
         }
 
+        // This function catches the holding event in order to display the options of the selected module
         private void gModuleItem_Holding(object sender, HoldingRoutedEventArgs e)
         {
             Grid grid = (Grid)sender;
-            var tmp = grid.Children.Cast<FrameworkElement>().First(panel => panel.Name == "panel");
-            tmp.Visibility = Visibility.Visible;
+            if (_activeOptions != null)
+                _activeOptions.Visibility = Visibility.Collapsed;
+            _activeOptions = grid.Children.Cast<FrameworkElement>().First(panel => panel.Name == "gModuleOptions") as Grid;
+            _activeOptions.Visibility = Visibility.Visible;
+            if (_currentTBlock != null)
+                _currentTBlock.Visibility = Visibility.Visible;
+            if (_currentTBox != null)
+                _currentTBox.Visibility = Visibility.Collapsed;
+            ModuleList.SelectedItem = e.OriginalSource;
+            StackPanel sp = grid.Children.OfType<StackPanel>().ElementAt(0) as StackPanel;
+            _currentTBox = sp.Children.Cast<FrameworkElement>().First(el => el.Name == "ModuleNewName") as TextBox;
+            _currentTBox.Visibility = Visibility.Visible;
+           // _currentTBox.Focus(FocusState.Programmatic);
+            _currentTBlock = sp.Children.Cast<FrameworkElement>().First(el => el.Name == "ModuleName") as TextBlock;
+            _currentTBlock.Visibility = Visibility.Collapsed;
         }
 
         private void TextBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
-                var test = (((sender as TextBox).Parent as StackPanel).Parent as Grid).Parent;
                 (DefaultViewModel as ConfigurationViewModel).rename((sender as TextBox).Text);
+
+                // To do ? Hide options after rename done
+
+                /*var test = (((sender as TextBox).Parent as StackPanel).Parent as Grid).Parent;
                 (sender as TextBox).Visibility = Visibility.Collapsed;
                 StackPanel parent = (sender as TextBox).Parent as StackPanel;
                 var tmp = parent.Children.Cast<FrameworkElement>().First(el => el.Name == "ModuleName");
-                tmp.Visibility = Visibility.Visible;
+                tmp.Visibility = Visibility.Visible;*/
             }
         }
 
         private void ModuleName_Holding(object sender, HoldingRoutedEventArgs e)
         {
-            ModuleList.SelectedItem = e.OriginalSource;
-            TextBlock tb = sender as TextBlock;
-            StackPanel parent = tb.Parent as StackPanel;
-            var tmp = parent.Children.Cast<FrameworkElement>().First(el => el.Name == "ModuleNewName");
-            tmp.Visibility = Visibility.Visible;
-            tb.Visibility = Visibility.Collapsed;
-            tb.Focus(FocusState.Programmatic);
-            var sfdgsdc = e.OriginalSource;
+
 
         }
 
