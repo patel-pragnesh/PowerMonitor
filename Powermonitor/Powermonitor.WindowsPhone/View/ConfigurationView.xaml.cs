@@ -141,13 +141,21 @@ namespace Powermonitor.View
                 _currentTBlock.Visibility = Visibility.Visible;
             if (_currentTBox != null)
                 _currentTBox.Visibility = Visibility.Collapsed;
-            ModuleList.SelectedItem = e.OriginalSource;
             StackPanel sp = grid.Children.OfType<StackPanel>().ElementAt(0) as StackPanel;
             _currentTBox = sp.Children.Cast<FrameworkElement>().First(el => el.Name == "ModuleNewName") as TextBox;
             _currentTBox.Visibility = Visibility.Visible;
            // _currentTBox.Focus(FocusState.Programmatic);
             _currentTBlock = sp.Children.Cast<FrameworkElement>().First(el => el.Name == "ModuleName") as TextBlock;
             _currentTBlock.Visibility = Visibility.Collapsed;
+        }
+
+        private void gProfilItem_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            Grid grid = (Grid)sender;
+            if (_activeOptions != null)
+                _activeOptions.Visibility = Visibility.Collapsed;
+            _activeOptions = grid.Children.Cast<FrameworkElement>().First(panel => panel.Name == "gProfilOptions") as Grid;
+            _activeOptions.Visibility = Visibility.Visible;
         }
 
         private void TextBox_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -157,7 +165,8 @@ namespace Powermonitor.View
                 (DefaultViewModel as ConfigurationViewModel).rename((sender as TextBox).Text);
 
                 // To do ? Hide options after rename done
-
+                (sender as TextBox).IsEnabled = false;
+                (sender as TextBox).IsEnabled = true;
                 /*var test = (((sender as TextBox).Parent as StackPanel).Parent as Grid).Parent;
                 (sender as TextBox).Visibility = Visibility.Collapsed;
                 StackPanel parent = (sender as TextBox).Parent as StackPanel;
@@ -172,10 +181,21 @@ namespace Powermonitor.View
 
         }
 
-        private void ListViewItem_Holding(object sender, HoldingRoutedEventArgs e)
+        private void ModuleListViewItem_Holding(object sender, HoldingRoutedEventArgs e)
         {
             var tmp = (sender as ListViewItem).DataContext;
             ModuleList.SelectedItem = tmp;
+        }
+
+        private void ProfilListViewItem_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            var tmp = (sender as ListViewItem).DataContext;
+            ProfilList.SelectedItem = tmp;
+        }
+
+        private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

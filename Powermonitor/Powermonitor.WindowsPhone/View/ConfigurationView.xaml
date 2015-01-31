@@ -12,10 +12,11 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <!-- Begin Resources -->
     <Page.Resources>
         <!-- Begin Template Modules -->
         <DataTemplate x:Key="ModuleTemplate">
-        	<ListViewItem Holding="ListViewItem_Holding" HorizontalContentAlignment="Stretch">
+        	<ListViewItem Holding="ModuleListViewItem_Holding" HorizontalContentAlignment="Stretch">
                 <!-- Main grid -->
         		<Grid Name="gModuleItem" Holding="gModuleItem_Holding">
         			<Grid.ColumnDefinitions>
@@ -57,48 +58,72 @@
         						<Run Text="profil associé"/>
                                 </TextBlock>
                             </StackPanel>
-                            </Button>
+                        </Button>
                     </Grid>
                 </Grid>
         	</ListViewItem>
         </DataTemplate>
         <!-- End Template Modules -->
+        
         <!-- Begin Template Profils-->
         <DataTemplate x:Key="ProfilTemplate">
-        	<StackPanel>
-        		<TextBlock Text="{Binding Name}"/>
-        	</StackPanel>
+            <ListViewItem Holding="ProfilListViewItem_Holding" HorizontalContentAlignment="Stretch">
+                <Grid Name="gProfilItem" HorizontalAlignment="Stretch" Holding="gProfilItem_Holding">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
+                    <Grid Visibility="Collapsed" Name="gProfilOptions" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Style="{StaticResource Buttons}">Modifier</Button>
+                        <Button Grid.Column="1" Style="{StaticResource Buttons}">Supprimer</Button>
+                    </Grid>
+                </Grid>
+            </ListViewItem>
         </DataTemplate>
         <!-- End Template Profils-->
     </Page.Resources>
-	<Grid x:Name="LayoutRoot" Style="{StaticResource BackgroundColor}">
-		<!--Contrôle Pivot-->
-		<Pivot Title="{StaticResource ApplicationTitle}">
-			<!-- Begin Modules -->
-			<PivotItem Header="Modules">
-				<StackPanel>
-					<ListView Height="450" x:Name="ModuleList" ItemsSource="{Binding Modules, Mode=OneWay}" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}" Margin="0,0,-0.333,0">
-						<ListView.ItemContainerStyle>
-							<Style TargetType="ListViewItem">
-								<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-								<Setter Property="HorizontalAlignment" Value="Stretch"/>
-							</Style>
-						</ListView.ItemContainerStyle>
-					</ListView>
-				</StackPanel>
-			</PivotItem>
+    <!-- End Resources -->
+
+    <Grid x:Name="LayoutRoot" Style="{StaticResource BackgroundColor}">
+        <!--Contrôle Pivot-->
+        <Pivot Title="{StaticResource ApplicationTitle}" SelectionChanged="Pivot_SelectionChanged">
+            <!-- Begin Modules -->
+            <PivotItem Header="Modules">
+                <StackPanel>
+                    <ListView Height="440" x:Name="ModuleList" ItemsSource="{Binding Modules, Mode=OneWay}" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}" Margin="0,0,-0.333,0">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </StackPanel>
+            </PivotItem>
             <!-- End Modules -->
 
-			<!--Begin Profils -->
-			<PivotItem Header="Profils">
-				<StackPanel>
-					<ListBox ItemsSource="{Binding Profils, Mode=OneWay}" SelectedValue="{Binding SelectedProfil, Mode=TwoWay}" ItemTemplate="{StaticResource ProfilTemplate}"/>
-					<Button x:Name="bCreate" Style="{StaticResource Buttons}" Click="bCreate_Click" Content="Créer"/>
-					<Button x:Name="bModify" Style="{StaticResource Buttons}" Click="bModify_Click" Content="Modifier"/>
-					<Button x:Name="bDelete" Style="{StaticResource Buttons}" Click="bDelete_Click" Content="Supprimer"/>
-				</StackPanel>
-			</PivotItem>
+            <!--Begin Profils -->
+            <PivotItem Header="Profils">
+                <StackPanel>
+                    <ListView Name="ProfilList" ItemsSource="{Binding Profils, Mode=OneWay}" SelectedValue="{Binding SelectedProfil, Mode=TwoWay}" ItemTemplate="{StaticResource ProfilTemplate}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                    <Button x:Name="bCreate" Style="{StaticResource Buttons}" Click="bCreate_Click" Content="Créer"/>
+                    <!--<Button x:Name="bModify" Style="{StaticResource Buttons}" Click="bModify_Click" Content="Modifier"/>
+					<Button x:Name="bDelete" Style="{StaticResource Buttons}" Click="bDelete_Click" Content="Supprimer"/>-->
+                </StackPanel>
+            </PivotItem>
             <!-- End Profils -->
-		</Pivot>
-	</Grid>
+        </Pivot>
+    </Grid>
 </Page>
