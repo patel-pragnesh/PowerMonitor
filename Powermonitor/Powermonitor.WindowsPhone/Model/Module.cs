@@ -64,8 +64,8 @@ namespace Powermonitor.Model
         }
         #endregion
         #region Profil
-        private Profil _profil;
-        public Profil Profil
+        private Profile _profil;
+        public Profile Profil
         {
             get
             {
@@ -81,7 +81,7 @@ namespace Powermonitor.Model
 
         }
         #endregion
-        public Module(string name, bool on, Profil profil)
+        public Module(string name, bool on, Profile profil)
         {
             Name = name;
             On = on;

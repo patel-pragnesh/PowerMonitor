@@ -16,7 +16,7 @@ namespace Powermonitor.ViewModel
 {
     public class ConfigurationViewModel : ViewModelBase
     {
-        public ObservableCollection<Profil> Profils { get; private set; }
+        public ObservableCollection<Profile> Profils { get; private set; }
        // public TrulyObservableCollection<Module> Modules { get; private set; }
         public ObservableCollection<Module> Modules { get; private set; }
         public ICommand bRename_Command { get { return new RelayCommand(renameCommand); } }
@@ -132,24 +132,24 @@ namespace Powermonitor.ViewModel
 
         }
         #endregion
-        bool test;
+
         public ConfigurationViewModel()
         {
-            Profils = new ObservableCollection<Profil>();
-            Profils.Add(new Profil("Profil 1"));
-            Profils.Add(new Profil("Profil 2"));
+            Profils = new ObservableCollection<Profile>();
+            Profils.Add(new Profile("Profil 1"));
+            Profils.Add(new Profile("Profil 2"));
             Modules = new ObservableCollection<Module>();
-            Modules.Add(new Module("module 1", true, new Profil("Profil 1")));
-            Modules.Add(new Module("module 2", false, new Profil("Profil 2")));
-            Modules.Add(new Module("module 3", false, new Profil("Profil 3")));
-            Modules.Add(new Module("module 4", false, new Profil("Profil 4")));
-            Modules.Add(new Module("module 5", false, new Profil("Profil 5")));
-            Modules.Add(new Module("module 6", false, new Profil("Profil 6")));
-            Modules.Add(new Module("module 7", false, new Profil("Profil 7")));
-            Modules.Add(new Module("module 8", false, new Profil("Profil 8")));
-            Modules.Add(new Module("module 8", false, new Profil("Profil 8")));
-            Modules.Add(new Module("module 8", false, new Profil("Profil 8")));
-            Modules.Add(new Module("module 8", false, new Profil("Profil 8")));
+            Modules.Add(new Module("module 1", true, new Profile("Profil 1")));
+            Modules.Add(new Module("module 2", false, new Profile("Profil 2")));
+            Modules.Add(new Module("module 3", false, new Profile("Profil 3")));
+            Modules.Add(new Module("module 4", false, new Profile("Profil 4")));
+            Modules.Add(new Module("module 5", false, new Profile("Profil 5")));
+            Modules.Add(new Module("module 6", false, new Profile("Profil 6")));
+            Modules.Add(new Module("module 7", false, new Profile("Profil 7")));
+            Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
+            Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
+            Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
+            Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
             Test = "sdfwsdf";
             RenameStackVisibility = "Collapsed";
             ModifyAssiociatedProfilStackVisibility = "Collapsed";

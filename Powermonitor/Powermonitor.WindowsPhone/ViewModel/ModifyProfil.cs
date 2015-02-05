@@ -11,8 +11,8 @@ namespace Powermonitor.ViewModel
     public class ModifyProfil : ViewModelBase
     {
         #region Profil
-        private Profil _profil;
-        public Profil Profil
+        private Profile _profil;
+        public Profile Profil
         {
             get
             {

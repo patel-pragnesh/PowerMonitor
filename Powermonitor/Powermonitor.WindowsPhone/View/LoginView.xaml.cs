@@ -16,6 +16,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight;
+using Windows.Networking.Sockets;
+using Windows.Networking;
+using Windows.Storage.Streams;
 
 // Pour en savoir plus sur le modèle d'élément Page de base, consultez la page http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -28,10 +31,13 @@ namespace Powermonitor.View
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        Sockets socket;
 
         public LoginView()
         {
             this.InitializeComponent();
+
+            socket = new Sockets();
 
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
@@ -82,9 +88,56 @@ namespace Powermonitor.View
         {
         }
 
-        private void bConnect_Click(object sender, RoutedEventArgs e)
+        private async void Send_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(HomeView));
+            socket.addMsg("lolxd");
+      /*      if (!connected)
+            {
+                StatusText.Text = "Must be connected to send!";
+                return;
+            }
+
+            UInt32 len = 0; // Gets the UTF-8 string length.
+
+            try
+            {
+                OutputView.Text = "";
+                StatusText.Text = "Trying to send data ...";
+
+                // add a newline to the text to send
+                string sendData = SendText.Text + Environment.NewLine;
+                DataWriter writer = new DataWriter(_socket.OutputStream);
+                len = writer.MeasureString(sendData); // Gets the UTF-8 string length.
+
+                // Call StoreAsync method to store the data to a backing stream
+                await writer.StoreAsync();
+
+                StatusText.Text = "Data was sent" + Environment.NewLine;
+
+                // detach the stream and close it
+                writer.DetachStream();
+                writer.Dispose();
+
+            }
+            catch (Exception exception)
+            {
+                // If this is an unknown status, 
+                // it means that the error is fatal and retry will likely fail.
+                if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
+                {
+                    throw;
+                }
+
+                StatusText.Text = "Send data or receive failed with error: " + exception.Message;
+                // Could retry the connection, but for this simple example
+                // just close the socket.
+
+                closing = true;
+                _socket.Dispose();
+                _socket = null;
+                connected = false;
+
+            }*/
         }
 
         #region Inscription de NavigationHelper

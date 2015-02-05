@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Powermonitor.Model
 {
-    public class Profil : INotifyPropertyChanged
+    public class Profile : INotifyPropertyChanged
     {
         #region Name
         private string _name;
@@ -30,7 +30,7 @@ namespace Powermonitor.Model
         #endregion
 
         public ObservableCollection<Alert> Alerts { get; private set; }
-        public Profil(String name)
+        public Profile(String name)
         {
             Name = name;
         }
