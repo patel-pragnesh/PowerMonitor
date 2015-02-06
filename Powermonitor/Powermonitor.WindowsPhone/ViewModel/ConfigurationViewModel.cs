@@ -138,6 +138,10 @@ namespace Powermonitor.ViewModel
             Profils = new ObservableCollection<Profile>();
             Profils.Add(new Profile("Profil 1"));
             Profils.Add(new Profile("Profil 2"));
+            Profils.Add(new Profile("Profil 3"));
+            Profils.Add(new Profile("Profil 4"));
+            Profils.Add(new Profile("Profil 5"));
+            Profils.Add(new Profile("Profil 6"));
             Modules = new ObservableCollection<Module>();
             Modules.Add(new Module("module 1", true, new Profile("Profil 1")));
             Modules.Add(new Module("module 2", false, new Profile("Profil 2")));

@@ -18,7 +18,7 @@
         <DataTemplate x:Key="ModuleTemplate">
         	<ListViewItem Holding="ModuleListViewItem_Holding" HorizontalContentAlignment="Stretch">
                 <!-- Main grid -->
-                <Grid Name="gModuleItem">
+                <Grid Name="gModuleItem" Holding="gModuleItem_Holding">
         		<!--<Grid Name="gModuleItem" Holding="gModuleItem_Holding">-->
                     <Grid.ColumnDefinitions>
         				<ColumnDefinition Width="4*"/>
@@ -28,7 +28,15 @@
         				<RowDefinition Height="Auto"/>
         				<RowDefinition Height="Auto"/>
         			</Grid.RowDefinitions>
-        			<StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
+                    <FlyoutBase.AttachedFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem x:Name="EditButton" Text="Renommer" />
+                            <MenuFlyoutItem x:Name="DeleteButton" Text="Modifier le profil interne"/>
+                            <MenuFlyoutItem x:Name="DeleteButton2" Text="Changer le profil associé"/>
+                        </MenuFlyout>
+                    </FlyoutBase.AttachedFlyout>
+
+                    <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
         				<TextBlock x:Name="ModuleName" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
         				<TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="{Binding Profil.Name}"/>
         			</StackPanel>
@@ -73,6 +81,18 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
+
+                    <FlyoutBase.AttachedFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem x:Name="EditButton"
+                                                            Text="Modifier"
+                                                            />
+                            <MenuFlyoutItem x:Name="DeleteButton"
+                                                            Text="Supprimer"
+                                                            />
+                        </MenuFlyout>
+                    </FlyoutBase.AttachedFlyout>
+
                     <TextBlock Grid.Column="0" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
                     <Grid Visibility="Collapsed" Name="gProfilOptions" Grid.Column="1">
                         <Grid.ColumnDefinitions>
@@ -80,7 +100,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Style="{StaticResource Buttons}">Modifier</Button>
-                        <Button Grid.Column="1" Style="{StaticResource Buttons}">Supprimer</Button>
+                        <Button Name="bDelete" Click="bDelete_Click" Grid.Column="1" Style="{StaticResource Buttons}">Supprimer</Button>
                     </Grid>
                 </Grid>
             </ListViewItem>
@@ -103,14 +123,14 @@
                             </Style>
                         </ListView.ItemContainerStyle>
                     </ListView>
-                    <ContentDialog x:Name="optionsDialog" PrimaryButtonText="Annuler">
+                    <ContentDialog x:Name="moduleOptionsDialog" PrimaryButtonText="Annuler">
                         <StackPanel>
                             <Button Name="bRename" HorizontalAlignment="Stretch" Click="bRename_Click">Renommer</Button>
-                            <Button HorizontalAlignment="Stretch">Modifier le profil interne</Button>
-                            <Button HorizontalAlignment="Stretch">Changer le profil associé</Button>
+                            <Button Name="bModifyInternalProfile" HorizontalAlignment="Stretch" Click="bModifyInternalProfile_Click">Modifier le profil interne</Button>
+                            <Button Name="bChangeAssociatedProfile" HorizontalAlignment="Stretch" Click="bChangeAssociatedProfile_Click">Changer le profil associé</Button>
                         </StackPanel>
                     </ContentDialog>
-                    <ContentDialog x:Name="renameDialog" PrimaryButtonText="Renommer" PrimaryButtonClick="renameDialog_PrimaryButtonClick"
+                    <ContentDialog x:Name="moduleRenameDialog" PrimaryButtonText="Renommer" PrimaryButtonClick="renameDialog_PrimaryButtonClick"
                                    SecondaryButtonText="Annuler"
                                    Title="Renommer le module"
                                    Opened="renameDialog_Opened"
@@ -118,6 +138,55 @@
                         <StackPanel>
                             <TextBox KeyDown="TextBox_KeyDown" Name="renameTextBox"></TextBox>
                         </StackPanel>
+                    </ContentDialog>
+                    <ContentDialog x:Name="moduleModifyInternalProfileDialog" PrimaryButtonText="Accepter"
+                                   SecondaryButtonText="Annuler">
+                        <StackPanel>
+                            
+                        </StackPanel>
+                    </ContentDialog>
+                    <ContentDialog Style="{StaticResource FullScreenContentDialogStyle}" x:Name="moduleAssociatedProfileDialog" PrimaryButtonText="Accepter"
+                                   SecondaryButtonText="Annuler">
+                            <ListBox ItemsSource="{Binding Profils, Mode=OneWay}" ItemTemplate="{StaticResource ProfilTemplate}" Background="Transparent"></ListBox>
+                        <!--<ListView x:Name="mylistview" ItemsSource="{Binding Profils, Mode=OneWay}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListViewItem">
+                                                <Grid>
+                                                    <VisualStateManager.VisualStateGroups>
+                                                        <VisualStateGroup x:Name="CommonStates">
+                                                            <VisualState x:Name="Normal"/>
+                                                        </VisualStateGroup>
+                                                        <VisualStateGroup x:Name="SelectionStates">
+                                                            <VisualState x:Name="Unselected">
+                                                                <Storyboard>
+                                                                    <ColorAnimation Duration="0" Storyboard.TargetName="myback" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="Transparent"/>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="SelectedUnfocused">
+                                                                <Storyboard>
+                                                                    <ColorAnimation Duration="0" Storyboard.TargetName="myback" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#FF268CEE"/>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                        </VisualStateGroup>
+                                                    </VisualStateManager.VisualStateGroups>
+                                                    <Border x:Name="myback" Background="Transparent">
+                                                        <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                                    </Border>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" FontSize="15"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>-->
                     </ContentDialog>
                 </StackPanel>
             </PivotItem>
@@ -137,9 +206,20 @@
                     <Button x:Name="bCreate" Style="{StaticResource Buttons}" Click="bCreate_Click" Content="Créer"/>
                     <!--<Button x:Name="bModify" Style="{StaticResource Buttons}" Click="bModify_Click" Content="Modifier"/>
 					<Button x:Name="bDelete" Style="{StaticResource Buttons}" Click="bDelete_Click" Content="Supprimer"/>-->
+                    <ContentDialog Name="confirmDelete" PrimaryButtonText="Accepter" SecondaryButtonText="Annuler"
+                                   Title="Confirmer la suppression">
+                        <TextBlock>Voulez vous vraiment supprimer ce profil de façon définitive ?</TextBlock>
+                    </ContentDialog>
                 </StackPanel>
             </PivotItem>
             <!-- End Profils -->
         </Pivot>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Add" Label="Nouveau"></AppBarButton>
+            <AppBarButton Icon="Delete" Label="Supprimer"></AppBarButton>
+            <AppBarButton Icon="Edit" Label="Modifier"></AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

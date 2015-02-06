@@ -120,9 +120,9 @@ namespace Powermonitor.View
             this.Frame.Navigate(typeof(CreateProfilView));
         }
 
-        private void bDelete_Click(object sender, RoutedEventArgs e)
+        private async void bDelete_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(CreateProfilView));
+            await confirmDelete.ShowAsync();
         }
 
         private void bModify_Click(object sender, RoutedEventArgs e)
@@ -132,11 +132,14 @@ namespace Powermonitor.View
 
         private void gProfilItem_Holding(object sender, HoldingRoutedEventArgs e)
         {
-            Grid grid = (Grid)sender;
+           /* Grid grid = (Grid)sender;
             if (_activeOptions != null)
                 _activeOptions.Visibility = Visibility.Collapsed;
             _activeOptions = grid.Children.Cast<FrameworkElement>().First(panel => panel.Name == "gProfilOptions") as Grid;
-            _activeOptions.Visibility = Visibility.Visible;
+            _activeOptions.Visibility = Visibility.Visible;*/
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(sender as FrameworkElement);
+
+            flyoutBase.ShowAt(sender as FrameworkElement);
         }
 
         private void TextBox_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -154,7 +157,7 @@ namespace Powermonitor.View
             {
                 var tmp = (sender as ListViewItem).DataContext;
                 ModuleList.SelectedItem = tmp;
-                await optionsDialog.ShowAsync();
+               // await moduleOptionsDialog.ShowAsync();
             }
         }
 
@@ -171,8 +174,20 @@ namespace Powermonitor.View
 
         private async void bRename_Click(object sender, RoutedEventArgs e)
         {
-            optionsDialog.Hide();
-            await renameDialog.ShowAsync();
+            moduleOptionsDialog.Hide();
+            await moduleRenameDialog.ShowAsync();
+        }
+
+        private async void bModifyInternalProfile_Click(object sender, RoutedEventArgs e)
+        {
+            moduleOptionsDialog.Hide();
+            await moduleModifyInternalProfileDialog.ShowAsync();
+        }
+
+        private async void bChangeAssociatedProfile_Click(object sender, RoutedEventArgs e)
+        {
+            moduleOptionsDialog.Hide();
+            await moduleAssociatedProfileDialog.ShowAsync();
         }
 
         private void renameDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
@@ -190,6 +205,14 @@ namespace Powermonitor.View
             {
                 (DefaultViewModel as ConfigurationViewModel).rename(renameTextBox.Text);
             }
+        }
+
+        private void gModuleItem_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(sender as FrameworkElement);
+
+            flyoutBase.ShowAt(sender as FrameworkElement);
+
         }
     }
 }
