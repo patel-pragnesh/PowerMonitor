@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using Powermonitor.Common;
+using Powermonitor.Model;
 using Powermonitor.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -129,26 +130,6 @@ namespace Powermonitor.View
             this.Frame.Navigate(typeof(ModifyProfilView));
         }
 
-        // This function catches the holding event in order to display the options of the selected module
-        private void gModuleItem_Holding(object sender, HoldingRoutedEventArgs e)
-        {
-            Grid grid = (Grid)sender;
-            if (_activeOptions != null)
-                _activeOptions.Visibility = Visibility.Collapsed;
-            _activeOptions = grid.Children.Cast<FrameworkElement>().First(panel => panel.Name == "gModuleOptions") as Grid;
-            _activeOptions.Visibility = Visibility.Visible;
-            if (_currentTBlock != null)
-                _currentTBlock.Visibility = Visibility.Visible;
-            if (_currentTBox != null)
-                _currentTBox.Visibility = Visibility.Collapsed;
-            StackPanel sp = grid.Children.OfType<StackPanel>().ElementAt(0) as StackPanel;
-            _currentTBox = sp.Children.Cast<FrameworkElement>().First(el => el.Name == "ModuleNewName") as TextBox;
-            _currentTBox.Visibility = Visibility.Visible;
-           // _currentTBox.Focus(FocusState.Programmatic);
-            _currentTBlock = sp.Children.Cast<FrameworkElement>().First(el => el.Name == "ModuleName") as TextBlock;
-            _currentTBlock.Visibility = Visibility.Collapsed;
-        }
-
         private void gProfilItem_Holding(object sender, HoldingRoutedEventArgs e)
         {
             Grid grid = (Grid)sender;
@@ -162,29 +143,19 @@ namespace Powermonitor.View
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
-                (DefaultViewModel as ConfigurationViewModel).rename((sender as TextBox).Text);
-
-                // To do ? Hide options after rename done
                 (sender as TextBox).IsEnabled = false;
                 (sender as TextBox).IsEnabled = true;
-                /*var test = (((sender as TextBox).Parent as StackPanel).Parent as Grid).Parent;
-                (sender as TextBox).Visibility = Visibility.Collapsed;
-                StackPanel parent = (sender as TextBox).Parent as StackPanel;
-                var tmp = parent.Children.Cast<FrameworkElement>().First(el => el.Name == "ModuleName");
-                tmp.Visibility = Visibility.Visible;*/
             }
         }
 
-        private void ModuleName_Holding(object sender, HoldingRoutedEventArgs e)
+        private async void ModuleListViewItem_Holding(object sender, HoldingRoutedEventArgs e)
         {
-
-
-        }
-
-        private void ModuleListViewItem_Holding(object sender, HoldingRoutedEventArgs e)
-        {
-            var tmp = (sender as ListViewItem).DataContext;
-            ModuleList.SelectedItem = tmp;
+            if (e.HoldingState == Windows.UI.Input.HoldingState.Started)
+            {
+                var tmp = (sender as ListViewItem).DataContext;
+                ModuleList.SelectedItem = tmp;
+                await optionsDialog.ShowAsync();
+            }
         }
 
         private void ProfilListViewItem_Holding(object sender, HoldingRoutedEventArgs e)
@@ -196,6 +167,29 @@ namespace Powermonitor.View
         private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private async void bRename_Click(object sender, RoutedEventArgs e)
+        {
+            optionsDialog.Hide();
+            await renameDialog.ShowAsync();
+        }
+
+        private void renameDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
+        {
+            renameTextBox.Text = (ModuleList.SelectedItem as Module).Name;
+        }
+
+        private void renameDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            if (renameTextBox.Text.Count() == 0)
+            {
+                args.Cancel = true;
+            }
+            else
+            {
+                (DefaultViewModel as ConfigurationViewModel).rename(renameTextBox.Text);
+            }
         }
     }
 }

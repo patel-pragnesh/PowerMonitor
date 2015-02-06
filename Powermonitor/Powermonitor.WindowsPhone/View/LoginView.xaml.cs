@@ -19,6 +19,7 @@ using GalaSoft.MvvmLight;
 using Windows.Networking.Sockets;
 using Windows.Networking;
 using Windows.Storage.Streams;
+using Windows.UI.Popups;
 
 // Pour en savoir plus sur le modèle d'élément Page de base, consultez la page http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -36,9 +37,8 @@ namespace Powermonitor.View
         public LoginView()
         {
             this.InitializeComponent();
-
+            ContentDialog tmp = new ContentDialog();
             socket = new Sockets();
-
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
@@ -90,7 +90,7 @@ namespace Powermonitor.View
 
         private async void Send_Click(object sender, RoutedEventArgs e)
         {
-            socket.addMsg("lolxd");
+           // socket.addMsg("lolxd");
       /*      if (!connected)
             {
                 StatusText.Text = "Must be connected to send!";
@@ -166,5 +166,10 @@ namespace Powermonitor.View
         }
 
         #endregion
+
+        private void bConnection_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(ConfigurationView));
+        }
     }
 }

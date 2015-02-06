@@ -18,8 +18,9 @@
         <DataTemplate x:Key="ModuleTemplate">
         	<ListViewItem Holding="ModuleListViewItem_Holding" HorizontalContentAlignment="Stretch">
                 <!-- Main grid -->
-        		<Grid Name="gModuleItem" Holding="gModuleItem_Holding">
-        			<Grid.ColumnDefinitions>
+                <Grid Name="gModuleItem">
+        		<!--<Grid Name="gModuleItem" Holding="gModuleItem_Holding">-->
+                    <Grid.ColumnDefinitions>
         				<ColumnDefinition Width="4*"/>
         				<ColumnDefinition Width="3*"/>
         			</Grid.ColumnDefinitions>
@@ -28,7 +29,6 @@
         				<RowDefinition Height="Auto"/>
         			</Grid.RowDefinitions>
         			<StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
-        				<TextBox KeyDown="TextBox_KeyDown" x:Name="ModuleNewName" Visibility="Collapsed" Text="{Binding Name}"/>
         				<TextBlock x:Name="ModuleName" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
         				<TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="{Binding Profil.Name}"/>
         			</StackPanel>
@@ -103,6 +103,22 @@
                             </Style>
                         </ListView.ItemContainerStyle>
                     </ListView>
+                    <ContentDialog x:Name="optionsDialog" PrimaryButtonText="Annuler">
+                        <StackPanel>
+                            <Button Name="bRename" HorizontalAlignment="Stretch" Click="bRename_Click">Renommer</Button>
+                            <Button HorizontalAlignment="Stretch">Modifier le profil interne</Button>
+                            <Button HorizontalAlignment="Stretch">Changer le profil associé</Button>
+                        </StackPanel>
+                    </ContentDialog>
+                    <ContentDialog x:Name="renameDialog" PrimaryButtonText="Renommer" PrimaryButtonClick="renameDialog_PrimaryButtonClick"
+                                   SecondaryButtonText="Annuler"
+                                   Title="Renommer le module"
+                                   Opened="renameDialog_Opened"
+                                   >
+                        <StackPanel>
+                            <TextBox KeyDown="TextBox_KeyDown" Name="renameTextBox"></TextBox>
+                        </StackPanel>
+                    </ContentDialog>
                 </StackPanel>
             </PivotItem>
             <!-- End Modules -->
