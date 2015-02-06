@@ -88,8 +88,10 @@
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\Protocol.cs" />
+    <Compile Include="Common\Singleton.cs" />
     <Compile Include="Common\Sockets.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Common\Trame.cs" />
     <Compile Include="Model\Alert.cs" />
     <Compile Include="Model\Module.cs" />
     <Compile Include="Model\Profile.cs" />
@@ -181,6 +183,9 @@
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="WinRTXamlToolkit">
       <HintPath>..\..\packages\WinRTXamlToolkit.WindowsPhone.1.8.1.0\lib\wpa\WinRTXamlToolkit.dll</HintPath>
