@@ -29,7 +29,7 @@ namespace Powermonitor.Common
 
         private static T CreateInstanceOfT()
         {
-            return Activator.CreateInstance(typeof(T), true) as T;
+            return Activator.CreateInstance(typeof(T)) as T;
         }
     }
 }

@@ -20,6 +20,7 @@ using Windows.Networking.Sockets;
 using Windows.Networking;
 using Windows.Storage.Streams;
 using Windows.UI.Popups;
+using System.Text;
 
 // Pour en savoir plus sur le modèle d'élément Page de base, consultez la page http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -32,15 +33,16 @@ namespace Powermonitor.View
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        Communication socket;
 
         public LoginView()
         {
             this.InitializeComponent();
-            socket = new Communication();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            Communication com = Communication.getInstance;
+            ResourceManager res = ResourceManager.getInstance;
+           // com.sendFuncs["getModules"].DynamicInvoke();
         }
 
         /// <summary>
@@ -168,7 +170,7 @@ namespace Powermonitor.View
 
         private void bConnection_Click(object sender, RoutedEventArgs e)
         {
-           // socket.SendRawMessage("yolo");
+            //socket.addMsg("yolo");
             this.Frame.Navigate(typeof(HomeView));
         }
     }

@@ -22,7 +22,7 @@
                     <MenuFlyout>
                         <MenuFlyoutItem x:Name="bRename" Text="Renommer" Click="bRename_Click" />
                         <MenuFlyoutItem x:Name="bModifyInternalProfile" Click="bModifyInternalProfile_Click" Text="Modifier le profil interne"/>
-                        <MenuFlyoutItem x:Name="bChangeAssociatedProfil" Click="bChangeAssociatedProfile_Click" Text="Changer le profil associé"/>
+                        <MenuFlyoutItem x:Name="bChangeAssociatedProfile" Click="bChangeAssociatedProfile_Click" Text="Changer le profil associé"/>
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
 
@@ -39,17 +39,17 @@
                     <!-- Grid Content -->
                     <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
         				<TextBlock x:Name="ModuleName" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
-        				<TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="{Binding Profil.Name}"/>
+        				<TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="{Binding Profile.Name}"/>
         			</StackPanel>
-        			<ToggleSwitch Grid.Row="0" Grid.Column="1" IsOn="{Binding On}" OffContent="Off" OnContent="On"/>
+        			<ToggleSwitch Grid.Row="0" Grid.Column="1" IsOn="{Binding Status}" OffContent="Off" OnContent="On"/>
                 </Grid>
         	</ListViewItem>
         </DataTemplate>
         <!-- End Template Modules -->
         
-        <!-- Begin Template Profils-->
-        <DataTemplate x:Key="ProfilTemplate">
-            <ListViewItem Holding="ProfilListViewItem_Holding" HorizontalContentAlignment="Stretch">
+        <!-- Begin Template Profiles-->
+        <DataTemplate x:Key="ProfileTemplate">
+            <ListViewItem Holding="ProfileListViewItem_Holding" HorizontalContentAlignment="Stretch">
                 <!-- Menu -->
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout>
@@ -59,7 +59,7 @@
                 </FlyoutBase.AttachedFlyout>
                 
                 <!-- Main grid -->
-                <Grid Name="gProfilItem" HorizontalAlignment="Stretch">
+                <Grid Name="gProfileItem" HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
@@ -68,7 +68,7 @@
                 </Grid>
             </ListViewItem>
         </DataTemplate>
-        <!-- End Template Profils-->
+        <!-- End Template Profiles-->
     </Page.Resources>
     <!-- End Resources -->
 
@@ -95,7 +95,7 @@
                         </StackPanel>
                     </ContentDialog>
 
-                    <!-- ContentDialog modify profil -->
+                    <!-- ContentDialog modify profile -->
                     <ContentDialog x:Name="moduleModifyInternalProfileDialog" PrimaryButtonText="Accepter"
                                    SecondaryButtonText="Annuler">
                         <StackPanel>
@@ -103,19 +103,19 @@
                         </StackPanel>
                     </ContentDialog>
 
-                    <!-- ContentDialog change associated profil -->
+                    <!-- ContentDialog change associated profile -->
                     <ContentDialog Style="{StaticResource FullScreenContentDialogStyle}" x:Name="moduleAssociatedProfileDialog" PrimaryButtonText="Accepter"
                                    SecondaryButtonText="Annuler">
-                            <ListBox ItemsSource="{Binding Profils, Mode=OneWay}" ItemTemplate="{StaticResource ProfilTemplate}" Background="Transparent"></ListBox>
+                            <ListBox ItemsSource="{Binding Profiles, Mode=OneWay}" ItemTemplate="{StaticResource ProfileTemplate}" Background="Transparent"></ListBox>
                     </ContentDialog>
                 </StackPanel>
             </PivotItem>
             <!-- End Modules -->
 
-            <!--Begin Profils -->
+            <!--Begin Profiles -->
             <PivotItem Header="Profils">
                 <StackPanel>
-                    <ListView Name="ProfilList" ItemsSource="{Binding Profils, Mode=OneWay}" SelectedValue="{Binding SelectedProfil, Mode=TwoWay}" ItemTemplate="{StaticResource ProfilTemplate}">
+                    <ListView Name="ProfileList" ItemsSource="{Binding Profiles, Mode=OneWay}" SelectedValue="{Binding SelectedProfile, Mode=TwoWay}" ItemTemplate="{StaticResource ProfileTemplate}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -131,7 +131,7 @@
                     </ContentDialog>
                 </StackPanel>
             </PivotItem>
-            <!-- End Profils -->
+            <!-- End Profiles -->
         </Pivot>
     </Grid>
     

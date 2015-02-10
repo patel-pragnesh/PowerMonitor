@@ -156,12 +156,12 @@ namespace Powermonitor.View
             }
         }
 
-        private void ProfilListViewItem_Holding(object sender, HoldingRoutedEventArgs e)
+        private void ProfileListViewItem_Holding(object sender, HoldingRoutedEventArgs e)
         {
             if (e.HoldingState == Windows.UI.Input.HoldingState.Started)
             {
                 var tmp = (sender as ListViewItem).DataContext;
-                ProfilList.SelectedItem = tmp;
+                ProfileList.SelectedItem = tmp;
 
                 FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(sender as FrameworkElement);
 

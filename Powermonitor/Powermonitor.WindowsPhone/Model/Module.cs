@@ -27,20 +27,20 @@ namespace Powermonitor.Model
 
         }
         #endregion
-        #region On
-        private bool _on;
-        public bool On
+        #region Status
+        private bool _status;
+        public bool Status
         {
             get
             {
-                return _on;
+                return _status;
             }
             set
             {
-                if (value == _on)
+                if (value == _status)
                     return;
-                _on = value;
-                RaisePropertyChanged("On");
+                _status = value;
+                RaisePropertyChanged("Status");
             }
 
         }
@@ -63,30 +63,33 @@ namespace Powermonitor.Model
 
         }
         #endregion
-        #region Profil
-        private Profile _profil;
-        public Profile Profil
+        #region Profile
+        private Profile _profile;
+        public Profile Profile
         {
             get
             {
-                return _profil;
+                return _profile;
             }
             set
             {
-                if (value == _profil)
+                if (value == _profile)
                     return;
-                _profil = value;
-                RaisePropertyChanged("Profil");
+                _profile = value;
+                RaisePropertyChanged("Profile");
             }
 
         }
         #endregion
-        public Module(string name, bool on, Profile profil)
+        public UInt64 Id { get; private set; }
+        public UInt64? DefaultProfile { get; private set; }
+        public UInt64 InterneProfile { get; private set; }
+        public Module(string name, bool status, Profile profile)
         {
             Name = name;
-            On = on;
+            Status = status;
             IsSelected = true;
-            Profil = profil;
+            Profile = profile;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

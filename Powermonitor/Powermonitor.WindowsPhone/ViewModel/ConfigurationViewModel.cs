@@ -16,7 +16,7 @@ namespace Powermonitor.ViewModel
 {
     public class ConfigurationViewModel : ViewModelBase
     {
-        public ObservableCollection<Profile> Profils { get; private set; }
+        public ObservableCollection<Profile> Profiles { get; private set; }
        // public TrulyObservableCollection<Module> Modules { get; private set; }
         public ObservableCollection<Module> Modules { get; private set; }
         public ICommand bRename_Command { get { return new RelayCommand(renameCommand); } }
@@ -135,25 +135,26 @@ namespace Powermonitor.ViewModel
 
         public ConfigurationViewModel()
         {
-            Profils = new ObservableCollection<Profile>();
-            Profils.Add(new Profile("Profil 1"));
-            Profils.Add(new Profile("Profil 2"));
-            Profils.Add(new Profile("Profil 3"));
-            Profils.Add(new Profile("Profil 4"));
-            Profils.Add(new Profile("Profil 5"));
-            Profils.Add(new Profile("Profil 6"));
-            Modules = new ObservableCollection<Module>();
-            Modules.Add(new Module("module 1", true, new Profile("Profil 1")));
-            Modules.Add(new Module("module 2", false, new Profile("Profil 2")));
-            Modules.Add(new Module("module 3", false, new Profile("Profil 3")));
-            Modules.Add(new Module("module 4", false, new Profile("Profil 4")));
-            Modules.Add(new Module("module 5", false, new Profile("Profil 5")));
-            Modules.Add(new Module("module 6", false, new Profile("Profil 6")));
-            Modules.Add(new Module("module 7", false, new Profile("Profil 7")));
-            Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
-            Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
-            Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
-            Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
+            Modules = ResourceManager.getInstance.Modules.ModuleList;
+            Profiles = new ObservableCollection<Profile>();
+            Profiles.Add(new Profile("Profil 1"));
+            Profiles.Add(new Profile("Profil 2"));
+            Profiles.Add(new Profile("Profil 3"));
+            Profiles.Add(new Profile("Profil 4"));
+            Profiles.Add(new Profile("Profil 5"));
+            Profiles.Add(new Profile("Profil 6"));
+            //Modules = new ObservableCollection<Module>();
+            //Modules.Add(new Module("module 1", true, new Profile("Profil 1")));
+            //Modules.Add(new Module("module 2", false, new Profile("Profil 2")));
+            //Modules.Add(new Module("module 3", false, new Profile("Profil 3")));
+            //Modules.Add(new Module("module 4", false, new Profile("Profil 4")));
+            //Modules.Add(new Module("module 5", false, new Profile("Profil 5")));
+            //Modules.Add(new Module("module 6", false, new Profile("Profil 6")));
+            //Modules.Add(new Module("module 7", false, new Profile("Profil 7")));
+            //Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
+            //Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
+            //Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
+            //Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
             Test = "sdfwsdf";
             RenameStackVisibility = "Collapsed";
             ModifyAssiociatedProfilStackVisibility = "Collapsed";
@@ -192,7 +193,7 @@ namespace Powermonitor.ViewModel
         private void turnOnOffCommand()
         {
             if (SelectedModule != null)
-                SelectedModule.On = !SelectedModule.On;
+                SelectedModule.Status = !SelectedModule.Status;
         }
     }
 }

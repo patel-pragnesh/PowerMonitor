@@ -11,10 +11,11 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Collections;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace Powermonitor.Common
 {
-    public class Communication
+    public class Communication : Singleton<Communication>
     {
         private readonly StreamSocket _clientSocket;
         private bool _connected;
@@ -31,6 +32,7 @@ namespace Powermonitor.Common
             _toSend = new ObservableCollection<string>();
             _toSend.CollectionChanged += sendMsgs;
             _received = new ObservableCollection<string>();
+            _received.CollectionChanged += receivedMsgs;
             sendFuncs = new Dictionary<string, Delegate>();
             recvFuncs = new Dictionary<string, Func<Trame, bool>>();
 
@@ -44,8 +46,8 @@ namespace Powermonitor.Common
        private async Task<bool> Connect()
         {
             if (_connected) return false;
-            var hostname = new HostName("127.0.0.1");
-            await _clientSocket.ConnectAsync(hostname, "4242");
+            var hostname = new HostName("192.168.1.11");
+            await _clientSocket.ConnectAsync(hostname, "8080");
             _connected = true;
             _dataReader = new DataReader(_clientSocket.InputStream)
             {
@@ -60,9 +62,11 @@ namespace Powermonitor.Common
         {
             if (!_connected || _clientSocket == null) return;
             uint s = await _dataReader.LoadAsync(4);
-            byte[] test = new byte[4];
-            _dataReader.ReadBytes(test);
-            uint size = BitConverter.ToUInt32(test, 0);
+            byte[] sizeBuff = new byte[4];
+            _dataReader.ReadBytes(sizeBuff);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(sizeBuff);
+            uint size = BitConverter.ToUInt32(sizeBuff, 0);
             uint totalRead = 0;
             string data = "";
             while (totalRead < size)
@@ -71,7 +75,6 @@ namespace Powermonitor.Common
                 data += _dataReader.ReadString(actual);
                 totalRead += actual;
             }
-//            string data = _dataReader.ReadString(s);
             _received.Add(data);
             ReadData();
         }
@@ -80,8 +83,10 @@ namespace Powermonitor.Common
         {
             var writer = new DataWriter(_clientSocket.OutputStream);
             byte[] header = BitConverter.GetBytes(message.Length);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(header);
             writer.WriteBytes(header);
-            writer.WriteString(message + "\r\n");
+            writer.WriteString(message);
             await writer.StoreAsync();
             await writer.FlushAsync();
             writer.DetachStream();
@@ -96,6 +101,25 @@ namespace Powermonitor.Common
                 String msg = _toSend.First();
                 SendRawMessage(msg);
                 _toSend.Remove(msg);
+            }
+        }
+
+        private void receivedMsgs(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (_received.Count > 0)
+            {
+                String msg = _received.First();
+                var jObj = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(msg);
+                foreach (var cmd in jObj)
+                {
+                    if (recvFuncs.Keys.Contains(cmd.Key))
+                    {
+                        var content = cmd.Value;
+                        Trame trame = new Trame(content);
+                        recvFuncs[cmd.Key].DynamicInvoke(trame);
+                    }
+                }
+                _received.Remove(msg);
             }
         }
 
@@ -139,8 +163,9 @@ namespace Powermonitor.Common
 
         private void getModules()
         {
-            JObject json = new JObject() { "cmd", "getModules" };
-            addMsg(json.ToString());
+            //JObject json = new JObject() { "cmd", "getModules" };
+            //addMsg(json.ToString());
+            addMsg("{\"cmd\":\"getModules\"}");
         }
         #endregion
     }
