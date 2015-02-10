@@ -32,13 +32,12 @@ namespace Powermonitor.View
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        Sockets socket;
+        Communication socket;
 
         public LoginView()
         {
             this.InitializeComponent();
-            ContentDialog tmp = new ContentDialog();
-            socket = new Sockets();
+            socket = new Communication();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
@@ -169,6 +168,7 @@ namespace Powermonitor.View
 
         private void bConnection_Click(object sender, RoutedEventArgs e)
         {
+           // socket.SendRawMessage("yolo");
             this.Frame.Navigate(typeof(ConfigurationView));
         }
     }

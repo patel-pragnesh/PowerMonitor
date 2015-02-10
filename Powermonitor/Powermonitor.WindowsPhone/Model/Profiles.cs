@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Powermonitor.Common
+namespace Powermonitor.Model
 {
-    class Protocol : Singleton<Protocol>
+    class Profiles
     {
-
     }
 }

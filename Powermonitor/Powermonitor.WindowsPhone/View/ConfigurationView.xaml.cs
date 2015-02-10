@@ -28,16 +28,13 @@ namespace Powermonitor.View
     /// </summary>
     public sealed partial class ConfigurationView : Page
     {
-        private Grid _activeOptions = null;
-        private TextBox _currentTBox = null;
-        private TextBlock _currentTBlock = null;
         private NavigationHelper navigationHelper;
         private ViewModelBase defaultViewModel = new ConfigurationViewModel();
 
         public ConfigurationView()
         {
             this.InitializeComponent();
-
+           // this.TopAppBar.Content = new TopAppBar();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
@@ -132,11 +129,6 @@ namespace Powermonitor.View
 
         private void gProfilItem_Holding(object sender, HoldingRoutedEventArgs e)
         {
-           /* Grid grid = (Grid)sender;
-            if (_activeOptions != null)
-                _activeOptions.Visibility = Visibility.Collapsed;
-            _activeOptions = grid.Children.Cast<FrameworkElement>().First(panel => panel.Name == "gProfilOptions") as Grid;
-            _activeOptions.Visibility = Visibility.Visible;*/
             FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(sender as FrameworkElement);
 
             flyoutBase.ShowAt(sender as FrameworkElement);
@@ -151,42 +143,53 @@ namespace Powermonitor.View
             }
         }
 
-        private async void ModuleListViewItem_Holding(object sender, HoldingRoutedEventArgs e)
+        private void ModuleListViewItem_Holding(object sender, HoldingRoutedEventArgs e)
         {
             if (e.HoldingState == Windows.UI.Input.HoldingState.Started)
             {
                 var tmp = (sender as ListViewItem).DataContext;
                 ModuleList.SelectedItem = tmp;
-               // await moduleOptionsDialog.ShowAsync();
+
+                FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(sender as FrameworkElement);
+
+                flyoutBase.ShowAt(sender as FrameworkElement);
             }
         }
 
         private void ProfilListViewItem_Holding(object sender, HoldingRoutedEventArgs e)
         {
-            var tmp = (sender as ListViewItem).DataContext;
-            ProfilList.SelectedItem = tmp;
+            if (e.HoldingState == Windows.UI.Input.HoldingState.Started)
+            {
+                var tmp = (sender as ListViewItem).DataContext;
+                ProfilList.SelectedItem = tmp;
+
+                FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(sender as FrameworkElement);
+
+                flyoutBase.ShowAt(sender as FrameworkElement);
+            }
         }
 
         private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            Pivot p = sender as Pivot;
+            if (p.SelectedIndex == 0)
+                commandBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            else if (p.SelectedIndex == 1)
+                commandBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         private async void bRename_Click(object sender, RoutedEventArgs e)
         {
-            moduleOptionsDialog.Hide();
             await moduleRenameDialog.ShowAsync();
         }
 
         private async void bModifyInternalProfile_Click(object sender, RoutedEventArgs e)
         {
-            moduleOptionsDialog.Hide();
             await moduleModifyInternalProfileDialog.ShowAsync();
         }
 
         private async void bChangeAssociatedProfile_Click(object sender, RoutedEventArgs e)
         {
-            moduleOptionsDialog.Hide();
             await moduleAssociatedProfileDialog.ShowAsync();
         }
 
@@ -205,14 +208,6 @@ namespace Powermonitor.View
             {
                 (DefaultViewModel as ConfigurationViewModel).rename(renameTextBox.Text);
             }
-        }
-
-        private void gModuleItem_Holding(object sender, HoldingRoutedEventArgs e)
-        {
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(sender as FrameworkElement);
-
-            flyoutBase.ShowAt(sender as FrameworkElement);
-
         }
     }
 }

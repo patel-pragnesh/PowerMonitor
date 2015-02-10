@@ -68,7 +68,6 @@
                                             <ContentControl x:Name="Title"
                                                     Margin="{ThemeResource ContentDialogTitleMargin}"
                                                     Content="{TemplateBinding Title}"
-                                                    ContentTemplate="{TemplateBinding TitleTemplate}"
                                                     FontSize="{StaticResource TextStyleExtraLargeFontSize}"
                                                     FontFamily="{ThemeResource PhoneFontFamilyNormal}"
                                                     FontWeight="SemiBold"
