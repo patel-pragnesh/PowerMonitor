@@ -101,6 +101,16 @@ namespace Powermonitor.ViewModel
             (_power.Series[1] as LineSeries).ItemsSource = Test3;
             (_power.Series[1] as LineSeries).IndependentValuePath = "Item1";
             (_power.Series[1] as LineSeries).DependentValuePath = "Item2";
+
+            _voltage.Series.Add(new LineSeries());
+            (_voltage.Series[0] as LineSeries).ItemsSource = Test3;
+            (_voltage.Series[0] as LineSeries).IndependentValuePath = "Item1";
+            (_voltage.Series[0] as LineSeries).DependentValuePath = "Item2";
+
+            _amperage.Series.Add(new LineSeries());
+            (_amperage.Series[0] as LineSeries).ItemsSource = Test3;
+            (_amperage.Series[0] as LineSeries).IndependentValuePath = "Item1";
+            (_amperage.Series[0] as LineSeries).DependentValuePath = "Item2";
         }
     }
 }

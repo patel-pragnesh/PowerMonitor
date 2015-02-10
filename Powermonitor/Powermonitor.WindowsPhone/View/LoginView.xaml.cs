@@ -169,7 +169,7 @@ namespace Powermonitor.View
         private void bConnection_Click(object sender, RoutedEventArgs e)
         {
            // socket.SendRawMessage("yolo");
-            this.Frame.Navigate(typeof(ConfigurationView));
+            this.Frame.Navigate(typeof(HomeView));
         }
     }
 }

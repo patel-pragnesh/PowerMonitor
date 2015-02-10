@@ -138,7 +138,7 @@
     <!-- AppBar -->
     <Page.BottomAppBar>
         <CommandBar x:Name="commandBar" Visibility="Collapsed">
-            <AppBarButton  Label="Nouveau" Icon="Add"/>
+            <AppBarButton  Label="Nouveau" Icon="Add" Click="bCreate_Click"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

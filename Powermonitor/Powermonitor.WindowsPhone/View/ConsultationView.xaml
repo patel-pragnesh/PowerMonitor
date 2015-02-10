@@ -51,12 +51,20 @@
             </Charting:Chart>-->
                 <DatePicker/>
                 <DatePicker/>
-                <Charting:Chart Name="Power" Height="300" Title="Puissance" Margin="0">
-                </Charting:Chart>
-                <Charting:Chart Name="Voltage" Height="300" Title="Tension" Margin="0">
-                </Charting:Chart>
-                <Charting:Chart Name="Amperage" Height="300" Title="Intensité" Margin="0">
-                </Charting:Chart>
+                <Pivot>
+                    <PivotItem>
+                        <Charting:Chart Name="Power" Height="300" Title="Puissance" Margin="0">
+                        </Charting:Chart>
+                    </PivotItem>
+                    <PivotItem>
+                        <Charting:Chart Name="Voltage" Height="300" Title="Tension" Margin="0">
+                        </Charting:Chart>
+                    </PivotItem>
+                    <PivotItem>
+                        <Charting:Chart Name="Amperage" Height="300" Title="Intensité" Margin="0">
+                        </Charting:Chart>
+                    </PivotItem>
+                </Pivot>
             </StackPanel>
         </ScrollViewer>
     </Grid>

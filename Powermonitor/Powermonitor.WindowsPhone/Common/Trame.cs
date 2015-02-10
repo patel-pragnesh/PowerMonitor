@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Powermonitor.Common
 {
-    class Trame
+    public class Trame
     {
         public Trame()
         {

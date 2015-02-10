@@ -15,7 +15,5 @@ namespace Powermonitor.Model
         {
             _modules = new ObservableCollection<Module>();
         }
-
-        private 
     }
 }
