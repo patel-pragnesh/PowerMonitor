@@ -136,13 +136,14 @@ namespace Powermonitor.ViewModel
         public ConfigurationViewModel()
         {
             Modules = ResourceManager.getInstance.Modules.ModuleList;
-            Profiles = new ObservableCollection<Profile>();
-            Profiles.Add(new Profile("Profil 1"));
-            Profiles.Add(new Profile("Profil 2"));
-            Profiles.Add(new Profile("Profil 3"));
-            Profiles.Add(new Profile("Profil 4"));
-            Profiles.Add(new Profile("Profil 5"));
-            Profiles.Add(new Profile("Profil 6"));
+            Profiles = ResourceManager.getInstance.Profiles.ProfileList;
+            //Profiles = new ObservableCollection<Profile>();
+            //Profiles.Add(new Profile("Profil 1"));
+            //Profiles.Add(new Profile("Profil 2"));
+            //Profiles.Add(new Profile("Profil 3"));
+            //Profiles.Add(new Profile("Profil 4"));
+            //Profiles.Add(new Profile("Profil 5"));
+            //Profiles.Add(new Profile("Profil 6"));
             //Modules = new ObservableCollection<Module>();
             //Modules.Add(new Module("module 1", true, new Profile("Profil 1")));
             //Modules.Add(new Module("module 2", false, new Profile("Profil 2")));

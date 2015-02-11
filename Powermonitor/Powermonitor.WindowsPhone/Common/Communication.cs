@@ -41,12 +41,13 @@ namespace Powermonitor.Common
             sendFuncs.Add("change_password", new Action<int, string>(changePassword));
             sendFuncs.Add("new_account", new Action<int, string, string>(newAccount));
             sendFuncs.Add("getModules", new Action(getModules));
+            sendFuncs.Add("getProfiles", new Action(getProfiles));
         }
         
        private async Task<bool> Connect()
         {
             if (_connected) return false;
-            var hostname = new HostName("192.168.1.11");
+            var hostname = new HostName("172.18.2.51");
             await _clientSocket.ConnectAsync(hostname, "8080");
             _connected = true;
             _dataReader = new DataReader(_clientSocket.InputStream)
@@ -108,6 +109,7 @@ namespace Powermonitor.Common
         {
             if (_received.Count > 0)
             {
+                var tmp = new DateTime();
                 String msg = _received.First();
                 var jObj = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(msg);
                 foreach (var cmd in jObj)
@@ -163,9 +165,12 @@ namespace Powermonitor.Common
 
         private void getModules()
         {
-            //JObject json = new JObject() { "cmd", "getModules" };
-            //addMsg(json.ToString());
             addMsg("{\"cmd\":\"getModules\"}");
+        }
+
+        private void getProfiles()
+        {
+            addMsg("{\"cmd\":\"getProfiles\"}");
         }
         #endregion
     }
