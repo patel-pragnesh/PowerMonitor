@@ -29,10 +29,13 @@ namespace Powermonitor.Model
         }
         #endregion
 
+        public UInt64 Id { get; private set; }
         public ObservableCollection<Alert> Alerts { get; private set; }
-        public Profile(String name)
+        public Profile(String name = "", UInt64 id = 0, ObservableCollection<Alert> alerts = null)
         {
             Name = name;
+            Id = id;
+            Alerts = alerts;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

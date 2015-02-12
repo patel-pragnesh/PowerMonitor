@@ -190,6 +190,7 @@ namespace Powermonitor.View
 
         private async void bChangeAssociatedProfile_Click(object sender, RoutedEventArgs e)
         {
+            AssociatedProfile_List.SelectedItem = null;
             await moduleAssociatedProfileDialog.ShowAsync();
         }
 
@@ -208,6 +209,11 @@ namespace Powermonitor.View
             {
                 (DefaultViewModel as ConfigurationViewModel).rename(renameTextBox.Text);
             }
+        }
+
+        private void AssociatedProfileListBox_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            AssociatedProfile_List.SelectedItem = (sender as ListBoxItem).DataContext;
         }
     }
 }

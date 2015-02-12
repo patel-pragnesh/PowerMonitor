@@ -42,12 +42,17 @@ namespace Powermonitor.Common
             sendFuncs.Add("new_account", new Action<int, string, string>(newAccount));
             sendFuncs.Add("getModules", new Action(getModules));
             sendFuncs.Add("getProfiles", new Action(getProfiles));
+            sendFuncs.Add("getInternalProfile", new Action<UInt64>(getInternalProfile));
+            sendFuncs.Add("renameModule", new Action<string, UInt64>(renameModule));
+            sendFuncs.Add("turnOnOff", new Action<bool, UInt64>(turnOnOff));
+            sendFuncs.Add("changeAssociatedProfile", new Action<UInt64, UInt64>(changeAssociatedProfile));
+            sendFuncs.Add("deleteProfile", new Action<UInt64>(deleteProfile));
         }
         
        private async Task<bool> Connect()
         {
             if (_connected) return false;
-            var hostname = new HostName("172.18.2.51");
+            var hostname = new HostName("192.168.1.11");
             await _clientSocket.ConnectAsync(hostname, "8080");
             _connected = true;
             _dataReader = new DataReader(_clientSocket.InputStream)
@@ -109,7 +114,6 @@ namespace Powermonitor.Common
         {
             if (_received.Count > 0)
             {
-                var tmp = new DateTime();
                 String msg = _received.First();
                 var jObj = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(msg);
                 foreach (var cmd in jObj)
@@ -171,6 +175,31 @@ namespace Powermonitor.Common
         private void getProfiles()
         {
             addMsg("{\"cmd\":\"getProfiles\"}");
+        }
+
+        private void getInternalProfile(UInt64 id)
+        {
+            addMsg("{\"cmd\":\"getInternalProfile\", \"id\":" + id + "}");
+        }
+
+        private void renameModule(string name, UInt64 id)
+        {
+            addMsg("{\"cmd\":\"renameModule\", \"name\":\"" + name + "\", \"id\":" + id + "}");
+        }
+
+        private void turnOnOff(bool status, UInt64 id)
+        {
+            addMsg("{\"cmd\":\"turnOnOff\", \"status\":" + status + ", \"id\":" + id + "}");
+        }
+
+        private void changeAssociatedProfile(UInt64 moduleId, UInt64 profileId)
+        {
+            addMsg("{\"cmd\":\"changeAssociatedProfile\", \"moduleId\":" + moduleId + ", \"profileId\":" + profileId + "}");
+        }
+
+        private void deleteProfile(UInt64 id)
+        {
+            addMsg("{\"cmd\":\"deleteProfile\", \"id\":" + id + "}");
         }
         #endregion
     }

@@ -69,6 +69,21 @@
             </ListViewItem>
         </DataTemplate>
         <!-- End Template Profiles-->
+
+        <!-- Begin Template Profiles-->
+        <DataTemplate x:Key="AssociatedProfileTemplate">
+            <ListBoxItem HorizontalContentAlignment="Stretch" Tapped="AssociatedProfileListBox_Tapped">
+                <!-- Main grid -->
+                <Grid Name="gProfileItem" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Grid Content -->
+                    <TextBlock Grid.Column="0" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
+                </Grid>
+            </ListBoxItem>
+        </DataTemplate>
+        <!-- End Template Profiles-->
     </Page.Resources>
     <!-- End Resources -->
 
@@ -78,6 +93,7 @@
             <!-- Begin Modules -->
             <PivotItem Header="Modules">
                 <StackPanel>
+                    <TextBlock Text="{Binding InternalProfile.Name}"/>
                     <ListView Height="440" x:Name="ModuleList" ItemsSource="{Binding Modules, Mode=OneWay}" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}" Margin="0,0,-0.333,0">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
@@ -105,8 +121,9 @@
 
                     <!-- ContentDialog change associated profile -->
                     <ContentDialog Style="{StaticResource FullScreenContentDialogStyle}" x:Name="moduleAssociatedProfileDialog" PrimaryButtonText="Accepter"
+                                   PrimaryButtonCommand="{Binding bSelectAssociatedProfile_Command}"
                                    SecondaryButtonText="Annuler">
-                            <ListBox ItemsSource="{Binding Profiles, Mode=OneWay}" ItemTemplate="{StaticResource ProfileTemplate}" Background="Transparent"></ListBox>
+                        <ListBox Name="AssociatedProfile_List" ItemsSource="{Binding Profiles, Mode=OneWay}" SelectedValue="{Binding SelectedAssociatedProfile, Mode=TwoWay}" ItemTemplate="{StaticResource AssociatedProfileTemplate}" Background="Transparent"></ListBox>
                     </ContentDialog>
                 </StackPanel>
             </PivotItem>
@@ -125,8 +142,8 @@
                     </ListView>
                     
                     <!-- ContentDialog confirmDelete -->
-                    <ContentDialog Name="confirmDelete" PrimaryButtonText="Accepter" SecondaryButtonText="Annuler"
-                                   Title="Confirmer la suppression">
+                    <ContentDialog Name="confirmDelete" PrimaryButtonText="Accepter" PrimaryButtonCommand="{Binding bDeleteProfile_Command}"
+                                   SecondaryButtonText="Annuler" Title="Confirmer la suppression">
                         <TextBlock TextWrapping="Wrap">Voulez vous vraiment supprimer ce profil de façon définitive ?</TextBlock>
                     </ContentDialog>
                 </StackPanel>

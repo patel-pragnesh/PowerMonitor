@@ -19,10 +19,16 @@ namespace Powermonitor.ViewModel
         public ObservableCollection<Profile> Profiles { get; private set; }
        // public TrulyObservableCollection<Module> Modules { get; private set; }
         public ObservableCollection<Module> Modules { get; private set; }
-        public ICommand bRename_Command { get { return new RelayCommand(renameCommand); } }
-        public ICommand bModifyAssiociatedProfil_Command { get { return new RelayCommand(modifyAssiociatedProfilCommand); } }
-        public ICommand bAcceptRename_Command { get { return new RelayCommand(acceptRenameCommand); } }
+        private Profile _internalProfile;
+        public Profile InternalProfile
+        {
+            get;
+            private set;
+        }
+
         public ICommand bTurnOnOff_Command { get { return new RelayCommand(turnOnOffCommand); } }
+        public ICommand bSelectAssociatedProfile_Command { get { return new RelayCommand(selectAssociatedProfileCommand); } }
+        public ICommand bDeleteProfile_Command { get { return new RelayCommand(deleteProfileCommand); } }
 
         #region IsKeyboardFocusWithin
         private bool _IsKeyboardFocusWithin;
@@ -42,78 +48,6 @@ namespace Powermonitor.ViewModel
 
         }
         #endregion
-        #region Test
-        private string _test;
-        public string Test
-        {
-            get
-            {
-                return _test;
-            }
-            set
-            {
-                if (value == _test)
-                    return;
-                _test= value;
-                RaisePropertyChanged("Test");
-            }
-
-        }
-#endregion
-        #region RenameStackVisibility
-        private string _renameStackVisibility;
-        public string RenameStackVisibility
-        {
-            get
-            {
-                return _renameStackVisibility;
-            }
-            set
-            {
-                if (value == _renameStackVisibility)
-                    return;
-                _renameStackVisibility = value;
-                RaisePropertyChanged("RenameStackVisibility");
-            }
-
-        }
-        #endregion#region RenameStackVisibility
-        #region ModifyAssiociatedProfilStackVisibility
-        private string _modifyAssiociatedProfilStackVisibility;
-        public string ModifyAssiociatedProfilStackVisibility
-        {
-            get
-            {
-                return _modifyAssiociatedProfilStackVisibility;
-            }
-            set
-            {
-                if (value == _modifyAssiociatedProfilStackVisibility)
-                    return;
-                _modifyAssiociatedProfilStackVisibility = value;
-                RaisePropertyChanged("ModifyAssiociatedProfilStackVisibility");
-            }
-
-        }
-        #endregion
-        #region RenameText
-        private string _renameText;
-        public string RenameText
-        {
-            get
-            {
-                return _renameText;
-            }
-            set
-            {
-                if (value == _renameText)
-                    return;
-                _renameText = value;
-                RaisePropertyChanged("RenameText");
-            }
-
-        }
-        #endregion
         #region SelectedModule
         private Module _selectedModule;
         public Module SelectedModule
@@ -129,72 +63,97 @@ namespace Powermonitor.ViewModel
                 _selectedModule = value;
                 RaisePropertyChanged("SelectedModule");
             }
-
         }
         #endregion
-
+        #region SelectedAssociatedProfile
+        private Profile _selectedAssociatedProfile;
+        public Profile SelectedAssociatedProfile
+        {
+            get
+            {
+                return _selectedAssociatedProfile;
+            }
+            set
+            {
+                if (value == _selectedAssociatedProfile)
+                    return;
+                _selectedAssociatedProfile = value;
+                RaisePropertyChanged("SelectedAssociatedProfile");
+            }
+        }
+        #endregion
+        #region SelectedProfile
+        private Profile _selectedProfile;
+        public Profile SelectedProfile
+        {
+            get
+            {
+                return _selectedProfile;
+            }
+            set
+            {
+                if (value == _selectedProfile)
+                    return;
+                _selectedProfile = value;
+                RaisePropertyChanged("SelectedProfile");
+            }
+        }
+        #endregion
         public ConfigurationViewModel()
         {
-            Modules = ResourceManager.getInstance.Modules.ModuleList;
+            ResourceManager.getInstance.InternalProfileHandler.PropertyChanged += InternalProfileHandler_PropertyChanged;
+            ResourceManager.getInstance.Profiles.PropertyChanged += Profiles_PropertyChanged;
             Profiles = ResourceManager.getInstance.Profiles.ProfileList;
-            //Profiles = new ObservableCollection<Profile>();
-            //Profiles.Add(new Profile("Profil 1"));
-            //Profiles.Add(new Profile("Profil 2"));
-            //Profiles.Add(new Profile("Profil 3"));
-            //Profiles.Add(new Profile("Profil 4"));
-            //Profiles.Add(new Profile("Profil 5"));
-            //Profiles.Add(new Profile("Profil 6"));
-            //Modules = new ObservableCollection<Module>();
-            //Modules.Add(new Module("module 1", true, new Profile("Profil 1")));
-            //Modules.Add(new Module("module 2", false, new Profile("Profil 2")));
-            //Modules.Add(new Module("module 3", false, new Profile("Profil 3")));
-            //Modules.Add(new Module("module 4", false, new Profile("Profil 4")));
-            //Modules.Add(new Module("module 5", false, new Profile("Profil 5")));
-            //Modules.Add(new Module("module 6", false, new Profile("Profil 6")));
-            //Modules.Add(new Module("module 7", false, new Profile("Profil 7")));
-            //Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
-            //Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
-            //Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
-            //Modules.Add(new Module("module 8", false, new Profile("Profil 8")));
-            Test = "sdfwsdf";
-            RenameStackVisibility = "Collapsed";
-            ModifyAssiociatedProfilStackVisibility = "Collapsed";
+            Modules = ResourceManager.getInstance.Modules.ModuleList;
+            InternalProfile = ResourceManager.getInstance.InternalProfileHandler.getProfile(1);
             SelectedModule = null;
-            RenameText = "";
+            SelectedAssociatedProfile = null;
         }
 
-        private void renameCommand()
+        private void Profiles_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (RenameStackVisibility == "Collapsed")
-                RenameStackVisibility = "Visible";
-            else
-                RenameStackVisibility = "Collapsed";
+            Profiles = ResourceManager.getInstance.Profiles.ProfileList;
+            RaisePropertyChanged("Profiles");
         }
 
-        private void acceptRenameCommand()
+        private void InternalProfileHandler_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (SelectedModule != null)
-                SelectedModule.Name = RenameText;
+            InternalProfile = ResourceManager.getInstance.InternalProfileHandler.getProfile(1);
+            RaisePropertyChanged("InternalProfile");
         }
 
         public void rename(string newName)
         {
             if (SelectedModule != null)
+            {
                 SelectedModule.Name = newName;
-        }
-
-        private void modifyAssiociatedProfilCommand()
-        {
-            if (ModifyAssiociatedProfilStackVisibility == "Collapsed")
-                ModifyAssiociatedProfilStackVisibility = "Visible";
-            else
-                ModifyAssiociatedProfilStackVisibility = "Collapsed";
+                Communication.getInstance.sendFuncs["renameModule"].DynamicInvoke(newName, SelectedModule.Id);
+            }
         }
 
         private void turnOnOffCommand()
         {
             if (SelectedModule != null)
+            {
                 SelectedModule.Status = !SelectedModule.Status;
+                Communication.getInstance.sendFuncs["turnOnOff"].DynamicInvoke(SelectedModule.Status, SelectedModule.Id);
+            }
+        }
+
+        private void selectAssociatedProfileCommand()
+        {
+            if (SelectedAssociatedProfile != null)
+            {
+                Communication.getInstance.sendFuncs["changeAssociatedProfile"].DynamicInvoke(SelectedModule.Id, SelectedAssociatedProfile.Id);
+            }
+        }
+
+        private void deleteProfileCommand()
+        {
+            if (SelectedProfile != null)
+            {
+                Communication.getInstance.sendFuncs["deleteProfile"].DynamicInvoke(SelectedProfile.Id);
+            }
         }
     }
 }

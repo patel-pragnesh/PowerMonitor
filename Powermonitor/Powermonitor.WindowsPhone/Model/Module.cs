@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Powermonitor.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -69,6 +70,8 @@ namespace Powermonitor.Model
         {
             get
             {
+                if (_profile == null)
+                    _profile = ResourceManager.getInstance.Profiles.getById(Id);
                 return _profile;
             }
             set
@@ -83,13 +86,17 @@ namespace Powermonitor.Model
         #endregion
         public UInt64 Id { get; private set; }
         public UInt64? DefaultProfile { get; private set; }
-        public UInt64 InterneProfile { get; private set; }
-        public Module(string name, bool status, Profile profile)
+        public UInt64 InternalProfile { get; private set; }
+
+        public Module(string name = "", bool status = false, UInt64 id = 0, UInt64? defaultProfile = null, UInt64 internalProfile = 0)
         {
             Name = name;
             Status = status;
             IsSelected = true;
-            Profile = profile;
+            Id = id;
+            DefaultProfile = defaultProfile;
+            InternalProfile = internalProfile;
+            _profile = null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

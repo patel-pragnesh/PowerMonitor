@@ -80,9 +80,9 @@ namespace Powermonitor.ViewModel
             _power = power;
             _voltage = voltage;
             _amperage = amperage;
-            Modules = new ObservableCollection<Module>();
-            Modules.Add(new Module("module 1", true, new Profile("test")));
-            Modules.Add(new Module("module 2", false, new Profile("test")));
+            //Modules = new ObservableCollection<Module>();
+            //Modules.Add(new Module("module 1", true, new Profile("test")));
+            //Modules.Add(new Module("module 2", false, new Profile("test")));
 
             ObservableCollection<Tuple<int, int>> Test2 = new ObservableCollection<Tuple<int, int>>();
             Test2.Add(new Tuple<int, int>(0, 30));
