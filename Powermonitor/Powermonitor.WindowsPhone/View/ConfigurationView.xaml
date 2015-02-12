@@ -93,7 +93,6 @@
             <!-- Begin Modules -->
             <PivotItem Header="Modules">
                 <StackPanel>
-                    <TextBlock Text="{Binding InternalProfile.Name}"/>
                     <ListView Height="440" x:Name="ModuleList" ItemsSource="{Binding Modules, Mode=OneWay}" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}" Margin="0,0,-0.333,0">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">

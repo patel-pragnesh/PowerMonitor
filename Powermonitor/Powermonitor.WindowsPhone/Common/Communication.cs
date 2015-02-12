@@ -17,22 +17,18 @@ namespace Powermonitor.Common
 {
     public class Communication : Singleton<Communication>
     {
-        private readonly StreamSocket _clientSocket;
-        private bool _connected;
-        private DataReader _dataReader;
+        private Socket _socket;
         private ObservableCollection<String> _toSend;
-        private ObservableCollection<String> _received;
         public Dictionary<string, Delegate> sendFuncs { get; private set; }
         private Dictionary<string, Func<Trame, bool>> recvFuncs;
 
         public Communication()
         {
-            _clientSocket = new StreamSocket();
-            this.Connect();
+            _socket = new Socket();
+            _socket.Connect();
             _toSend = new ObservableCollection<string>();
             _toSend.CollectionChanged += sendMsgs;
-            _received = new ObservableCollection<string>();
-            _received.CollectionChanged += receivedMsgs;
+            _socket.Received.CollectionChanged += receivedMsgs;
             sendFuncs = new Dictionary<string, Delegate>();
             recvFuncs = new Dictionary<string, Func<Trame, bool>>();
 
@@ -48,73 +44,22 @@ namespace Powermonitor.Common
             sendFuncs.Add("changeAssociatedProfile", new Action<UInt64, UInt64>(changeAssociatedProfile));
             sendFuncs.Add("deleteProfile", new Action<UInt64>(deleteProfile));
         }
-        
-       private async Task<bool> Connect()
-        {
-            if (_connected) return false;
-            var hostname = new HostName("192.168.1.11");
-            await _clientSocket.ConnectAsync(hostname, "8080");
-            _connected = true;
-            _dataReader = new DataReader(_clientSocket.InputStream)
-            {
-                InputStreamOptions = InputStreamOptions.Partial
-            };
-            ReadData();
-            return true;
-
-        }
-
-        async private void ReadData()
-        {
-            if (!_connected || _clientSocket == null) return;
-            uint s = await _dataReader.LoadAsync(4);
-            byte[] sizeBuff = new byte[4];
-            _dataReader.ReadBytes(sizeBuff);
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(sizeBuff);
-            uint size = BitConverter.ToUInt32(sizeBuff, 0);
-            uint totalRead = 0;
-            string data = "";
-            while (totalRead < size)
-            {
-                uint actual = await _dataReader.LoadAsync(size - totalRead);
-                data += _dataReader.ReadString(actual);
-                totalRead += actual;
-            }
-            _received.Add(data);
-            ReadData();
-        }
-
-        async private void SendRawMessage(string message)
-        {
-            var writer = new DataWriter(_clientSocket.OutputStream);
-            byte[] header = BitConverter.GetBytes(message.Length);
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(header);
-            writer.WriteBytes(header);
-            writer.WriteString(message);
-            await writer.StoreAsync();
-            await writer.FlushAsync();
-            writer.DetachStream();
-           //_clientSocket.Dispose();
-            //_connected = false;
-        }
 
         private void sendMsgs(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (_toSend.Count > 0)
             {
                 String msg = _toSend.First();
-                SendRawMessage(msg);
+                _socket.SendRawMessage(msg);
                 _toSend.Remove(msg);
             }
         }
 
         private void receivedMsgs(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (_received.Count > 0)
+            if (_socket.Received.Count > 0)
             {
-                String msg = _received.First();
+                String msg = _socket.Received.First();
                 var jObj = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(msg);
                 foreach (var cmd in jObj)
                 {
@@ -125,7 +70,7 @@ namespace Powermonitor.Common
                         recvFuncs[cmd.Key].DynamicInvoke(trame);
                     }
                 }
-                _received.Remove(msg);
+                _socket.Received.Remove(msg);
             }
         }
 
