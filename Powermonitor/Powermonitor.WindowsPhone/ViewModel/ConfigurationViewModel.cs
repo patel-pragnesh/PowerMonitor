@@ -135,8 +135,7 @@ namespace Powermonitor.ViewModel
         {
             if (SelectedModule != null)
             {
-                SelectedModule.Status = !SelectedModule.Status;
-                Communication.getInstance.sendFuncs["turnOnOff"].DynamicInvoke(SelectedModule.Status, SelectedModule.Id);
+                //SelectedModule.Status = !SelectedModule.Status;
             }
         }
 

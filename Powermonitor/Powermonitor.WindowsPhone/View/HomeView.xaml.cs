@@ -28,12 +28,12 @@ namespace Powermonitor.View
     public sealed partial class HomeView : Page
     {
         private NavigationHelper navigationHelper;
-        private ViewModelBase defaultViewModel = new HomeViewModel();
+        private ViewModelBase defaultViewModel;
 
         public HomeView()
         {
             this.InitializeComponent();
-
+            defaultViewModel = new HomeViewModel(Power, Voltage, Amperage);
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;

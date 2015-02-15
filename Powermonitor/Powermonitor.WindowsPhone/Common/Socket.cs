@@ -55,6 +55,7 @@ namespace Powermonitor.Common
                 data += _dataReader.ReadString(actual);
                 totalRead += actual;
             }
+            System.Diagnostics.Debug.WriteLine("Received : " + data);
             Received.Add(data);
             ReadData();
         }
@@ -69,6 +70,7 @@ namespace Powermonitor.Common
             writer.WriteString(message);
             await writer.StoreAsync();
             await writer.FlushAsync();
+            System.Diagnostics.Debug.WriteLine("Sent : header = " + BitConverter.ToString(header) + " | body = " + message);
             writer.DetachStream();
             //_clientSocket.Dispose();
             //_connected = false;

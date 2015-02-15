@@ -41,6 +41,7 @@ namespace Powermonitor.Model
                 if (value == _status)
                     return;
                 _status = value;
+                Communication.getInstance.sendFuncs["turnOnOff"].DynamicInvoke(_status, Id);
                 RaisePropertyChanged("Status");
             }
 
@@ -91,7 +92,7 @@ namespace Powermonitor.Model
         public Module(string name = "", bool status = false, UInt64 id = 0, UInt64? defaultProfile = null, UInt64 internalProfile = 0)
         {
             Name = name;
-            Status = status;
+            _status = status;
             IsSelected = true;
             Id = id;
             DefaultProfile = defaultProfile;
