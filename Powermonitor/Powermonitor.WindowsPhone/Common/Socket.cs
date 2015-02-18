@@ -26,7 +26,7 @@ namespace Powermonitor.Common
         public async Task<bool> Connect()
         {
             if (_connected) return false;
-            var hostname = new HostName("192.168.1.11");
+            var hostname = new HostName("172.18.3.135");
             await _clientSocket.ConnectAsync(hostname, "8080");
             _connected = true;
             _dataReader = new DataReader(_clientSocket.InputStream)
