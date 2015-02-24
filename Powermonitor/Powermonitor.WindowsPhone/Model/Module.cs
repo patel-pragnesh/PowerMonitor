@@ -71,8 +71,8 @@ namespace Powermonitor.Model
         {
             get
             {
-                if (_profile == null)
-                    _profile = ResourceManager.getInstance.Profiles.getById(Id);
+                //if (_profile == null)
+                  //  _profile = ResourceManager.getInstance.Profiles.getById(Id);
                 return _profile;
             }
             set

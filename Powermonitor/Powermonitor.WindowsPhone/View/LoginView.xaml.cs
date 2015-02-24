@@ -21,6 +21,7 @@ using Windows.Networking;
 using Windows.Storage.Streams;
 using Windows.UI.Popups;
 using System.Text;
+using Powermonitor.ViewModel;
 
 // Pour en savoir plus sur le modèle d'élément Page de base, consultez la page http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -32,7 +33,7 @@ namespace Powermonitor.View
     public sealed partial class LoginView : Page
     {
         private NavigationHelper navigationHelper;
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private ViewModelBase defaultViewModel;
 
         public LoginView()
         {
@@ -42,7 +43,8 @@ namespace Powermonitor.View
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             Communication com = Communication.getInstance;
             ResourceManager res = ResourceManager.getInstance;
-           // com.sendFuncs["getModules"].DynamicInvoke();
+            defaultViewModel = this.DataContext as ViewModelBase;
+            // com.sendFuncs["getModules"].DynamicInvoke();
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace Powermonitor.View
         /// Obtient le modèle d'affichage pour ce <see cref="Page"/>.
         /// Cela peut être remplacé par un modèle d'affichage fortement typé.
         /// </summary>
-        public ObservableDictionary DefaultViewModel
+        public ViewModelBase DefaultViewModel
         {
             get { return this.defaultViewModel; }
         }
@@ -170,8 +172,9 @@ namespace Powermonitor.View
 
         private void bConnection_Click(object sender, RoutedEventArgs e)
         {
+            (DefaultViewModel as LoginViewModel).login(email.Text, password.Text);
             //socket.addMsg("yolo");
-            this.Frame.Navigate(typeof(HomeView));
+            //this.Frame.Navigate(typeof(HomeView));
         }
     }
 }

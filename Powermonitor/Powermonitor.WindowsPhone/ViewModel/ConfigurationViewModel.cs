@@ -11,25 +11,49 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight;
 using Windows.UI.Xaml.Controls;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Powermonitor.ViewModel
 {
     public class ConfigurationViewModel : ViewModelBase
     {
-        public ObservableCollection<Profile> Profiles { get; private set; }
-       // public TrulyObservableCollection<Module> Modules { get; private set; }
-        public ObservableCollection<Module> Modules { get; private set; }
-        private Profile _internalProfile;
-        public Profile InternalProfile
+        #region Profiles
+        private ObservableCollection<Profile> _profiles;
+        public ObservableCollection<Profile> Profiles
         {
-            get;
-            private set;
+            get
+            {
+                return _profiles;
+            }
+            set
+            {
+                if (value == _profiles)
+                    return;
+                _profiles = value;
+                RaisePropertyChanged("Profiles");
+            }
+
         }
+        #endregion
+        #region Modules
+        private ObservableCollection<Module> _modules;
+        public ObservableCollection<Module> Modules
+        {
+            get
+            {
+                return _modules;
+            }
+            set
+            {
+                if (value == _modules)
+                    return;
+                _modules = value;
+                RaisePropertyChanged("Modules");
+            }
 
-        public ICommand bTurnOnOff_Command { get { return new RelayCommand(turnOnOffCommand); } }
-        public ICommand bSelectAssociatedProfile_Command { get { return new RelayCommand(selectAssociatedProfileCommand); } }
-        public ICommand bDeleteProfile_Command { get { return new RelayCommand(deleteProfileCommand); } }
-
+        }
+        #endregion
         #region IsKeyboardFocusWithin
         private bool _IsKeyboardFocusWithin;
         public bool IsKeyboardFocusWithin
@@ -99,26 +123,61 @@ namespace Powermonitor.ViewModel
             }
         }
         #endregion
+
+        private Profile _internalProfile;
+        public Profile InternalProfile
+        {
+            get;
+            private set;
+        }
+
+        public ICommand bTurnOnOff_Command { get { return new RelayCommand(turnOnOffCommand); } }
+        public ICommand bSelectAssociatedProfile_Command { get { return new RelayCommand(selectAssociatedProfileCommand); } }
+        public ICommand bDeleteProfile_Command { get { return new RelayCommand(deleteProfileCommand); } }
+
         public ConfigurationViewModel()
         {
-            ResourceManager.getInstance.InternalProfileHandler.PropertyChanged += InternalProfileHandler_PropertyChanged;
-            ResourceManager.getInstance.Profiles.PropertyChanged += Profiles_PropertyChanged;
-            Profiles = ResourceManager.getInstance.Profiles.ProfileList;
-            Modules = ResourceManager.getInstance.Modules.ModuleList;
-            InternalProfile = ResourceManager.getInstance.InternalProfileHandler.getProfile(1);
+            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<string, string>)getModulesCallback);
+            Communication.getInstance.sendFuncs["getProfiles"].DynamicInvoke((Action<string, string>)getProfilesCallback);
+            Profiles = null;
+            Modules = null;
+            InternalProfile = null;
             SelectedModule = null;
             SelectedAssociatedProfile = null;
         }
 
-        private void Profiles_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void getModulesCallback(string request, string response)
         {
-            Profiles = ResourceManager.getInstance.Profiles.ProfileList;
-            RaisePropertyChanged("Profiles");
+            var json = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(response);
+            Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(json["Modules"].ToString()));
+        }
+
+        private void getProfilesCallback(string request, string response)
+        {
+            var json = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(response);
+            Profiles = new ObservableCollection<Profile>(JsonConvert.DeserializeObject<List<Profile>>(json["Profiles"].ToString()));
+        }
+
+        private void deleteProfileCallback(string request, string response)
+        {
+            var jsonResponse = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(response);
+            var jsonRequest = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(request);
+            var code = jsonResponse["returnCode"].ToObject<UInt64>();
+            Profile save = null;
+            if (code == 0)
+            {
+                foreach (var profile in Profiles) {
+                    if (profile.Id == jsonRequest["id"].ToObject<UInt64>())
+                        save = profile;
+                }
+                if (save != null)
+                    Profiles.Remove(save);
+            }
         }
 
         private void InternalProfileHandler_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            InternalProfile = ResourceManager.getInstance.InternalProfileHandler.getProfile(1);
+            //InternalProfile = ResourceManager.getInstance.InternalProfileHandler.getProfile(1);
             RaisePropertyChanged("InternalProfile");
         }
 
@@ -151,7 +210,7 @@ namespace Powermonitor.ViewModel
         {
             if (SelectedProfile != null)
             {
-                Communication.getInstance.sendFuncs["deleteProfile"].DynamicInvoke(SelectedProfile.Id);
+                Communication.getInstance.sendFuncs["deleteProfile"].DynamicInvoke((Action<string, string>)deleteProfileCallback, SelectedProfile.Id);
             }
         }
     }

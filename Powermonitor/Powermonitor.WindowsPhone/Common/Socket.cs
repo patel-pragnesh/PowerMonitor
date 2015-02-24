@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Networking;
 using Windows.Networking.Sockets;
@@ -26,8 +27,18 @@ namespace Powermonitor.Common
         public async Task<bool> Connect()
         {
             if (_connected) return false;
-            var hostname = new HostName("172.18.3.135");
-            await _clientSocket.ConnectAsync(hostname, "8080");
+            var hostname = new HostName("172.18.3.53");
+            CancellationTokenSource cts = new CancellationTokenSource();
+            try
+            {
+                cts.CancelAfter(1000);
+                await _clientSocket.ConnectAsync(hostname, "8080").AsTask(cts.Token);
+            }
+            catch (TaskCanceledException)
+            {
+                _connected = false;
+                return false;
+            }
             _connected = true;
             _dataReader = new DataReader(_clientSocket.InputStream)
             {
@@ -40,28 +51,30 @@ namespace Powermonitor.Common
 
         async private void ReadData()
         {
-            if (!_connected || _clientSocket == null) return;
-            uint s = await _dataReader.LoadAsync(4);
-            byte[] sizeBuff = new byte[4];
-            _dataReader.ReadBytes(sizeBuff);
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(sizeBuff);
-            uint size = BitConverter.ToUInt32(sizeBuff, 0);
-            uint totalRead = 0;
-            string data = "";
-            while (totalRead < size)
+            while (_connected || _clientSocket != null)
             {
-                uint actual = await _dataReader.LoadAsync(size - totalRead);
-                data += _dataReader.ReadString(actual);
-                totalRead += actual;
+                uint s = await _dataReader.LoadAsync(4);
+                byte[] sizeBuff = new byte[4];
+                _dataReader.ReadBytes(sizeBuff);
+                if (BitConverter.IsLittleEndian)
+                    Array.Reverse(sizeBuff);
+                uint size = BitConverter.ToUInt32(sizeBuff, 0);
+                uint totalRead = 0;
+                string data = "";
+                while (totalRead < size)
+                {
+                    uint actual = await _dataReader.LoadAsync(size - totalRead);
+                    data += _dataReader.ReadString(actual);
+                    totalRead += actual;
+                }
+                System.Diagnostics.Debug.WriteLine("Received : " + data);
+                Received.Add(data);
             }
-            System.Diagnostics.Debug.WriteLine("Received : " + data);
-            Received.Add(data);
-            ReadData();
         }
 
         async public void SendRawMessage(string message)
         {
+            if (!_connected) return;
             var writer = new DataWriter(_clientSocket.OutputStream);
             byte[] header = BitConverter.GetBytes(message.Length);
             if (BitConverter.IsLittleEndian)

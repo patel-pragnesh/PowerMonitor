@@ -1,4 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Powermonitor.Common;
 using Powermonitor.Model;
 using System;
@@ -80,6 +82,7 @@ namespace Powermonitor.ViewModel
             _power = power;
             _voltage = voltage;
             _amperage = amperage;
+            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<string, string>)getModulesCallback);
             //Modules = new ObservableCollection<Module>();
             //Modules.Add(new Module("module 1", true, new Profile("test")));
             //Modules.Add(new Module("module 2", false, new Profile("test")));
@@ -111,6 +114,12 @@ namespace Powermonitor.ViewModel
             (_amperage.Series[0] as LineSeries).ItemsSource = Test3;
             (_amperage.Series[0] as LineSeries).IndependentValuePath = "Item1";
             (_amperage.Series[0] as LineSeries).DependentValuePath = "Item2";
+        }
+
+        private void getModulesCallback(string request, string response)
+        {
+            var json = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(response);
+            Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(json["Modules"].ToString()));
         }
     }
 }

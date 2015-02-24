@@ -7,6 +7,8 @@ using Microsoft.Practices.ServiceLocation;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight;
 using Powermonitor.ViewModel;
+using GalaSoft.MvvmLight.Views;
+using Powermonitor.View;
 
 namespace Powermonitor
 {
@@ -16,11 +18,14 @@ namespace Powermonitor
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
+            SimpleIoc.Default.Register<INavigationService>(() => new NavigationService());
+
             SimpleIoc.Default.Register<ConfigurationViewModel>();
             SimpleIoc.Default.Register<ConsultationViewModel>();
             SimpleIoc.Default.Register<CreateProfilViewModel>();
             SimpleIoc.Default.Register<HomeViewModel>();
             SimpleIoc.Default.Register<LoginViewModel>();
+            (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("Home", typeof(HomeView));
         }
 
         public ConfigurationViewModel ConfigurationVM
