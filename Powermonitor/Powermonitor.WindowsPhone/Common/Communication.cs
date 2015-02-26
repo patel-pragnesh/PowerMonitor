@@ -22,31 +22,39 @@ namespace Powermonitor.Common
         public Dictionary<string, Delegate> sendFuncs { get; private set; }
         private Dictionary<string, Func<Trame, bool>> recvFuncs;
         private Queue<Request> sentRequests;
-        private Session _session;
+        public Session Session { get; private set; }
         public Communication()
         {
-            _session = new Session();
+            Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+            /*if (roamingSettings.Values.ContainsKey("session"))
+                Session = JsonConvert.DeserializeObject<Session>(roamingSettings.Values["session"].ToString());
+            else*/
+                Session = new Session();
             _socket = new Socket();
-            _socket.Connect();
-            _socket.Received.CollectionChanged += receivedMsgs;
+            _socket.Received.CollectionChanged += ReceivedMsgs;
             sendFuncs = new Dictionary<string, Delegate>();
             recvFuncs = new Dictionary<string, Func<Trame, bool>>();
             sentRequests = new Queue<Request>();
 
-            sendFuncs.Add("login", new Action<Action<JObject, JObject>, string, string>(login));
-            sendFuncs.Add("change_username", new Action<Action<JObject, JObject>, int, string>(changeUsername));
-            sendFuncs.Add("change_password", new Action<Action<JObject, JObject>, int, string>(changePassword));
-            sendFuncs.Add("new_account", new Action<Action<JObject, JObject>, int, string, string>(newAccount));
-            sendFuncs.Add("getModules", new Action<Action<JObject, JObject>>(getModules));
-            sendFuncs.Add("getProfiles", new Action<Action<JObject, JObject>>(getProfiles));
-            sendFuncs.Add("getInternalProfile", new Action<Action<JObject, JObject>, UInt64>(getInternalProfile));
-            sendFuncs.Add("renameModule", new Action<Action<JObject, JObject>, string, UInt64>(renameModule));
-            sendFuncs.Add("turnOnOff", new Action<Action<JObject, JObject>, bool, UInt64>(turnOnOff));
-            sendFuncs.Add("changeAssociatedProfile", new Action<Action<JObject, JObject>, UInt64, UInt64>(changeAssociatedProfile));
-            sendFuncs.Add("deleteProfile", new Action<Action<JObject, JObject>, UInt64>(deleteProfile));
+            sendFuncs.Add("login", new Action<Action<JObject, JObject>, string, string>(Login));
+            sendFuncs.Add("change_username", new Action<Action<JObject, JObject>, int, string>(ChangeUsername));
+            sendFuncs.Add("change_password", new Action<Action<JObject, JObject>, int, string>(ChangePassword));
+            sendFuncs.Add("new_account", new Action<Action<JObject, JObject>, int, string, string>(NewAccount));
+            sendFuncs.Add("getModules", new Action<Action<JObject, JObject>>(GetModules));
+            sendFuncs.Add("getProfiles", new Action<Action<JObject, JObject>>(GetProfiles));
+            sendFuncs.Add("getInternalProfile", new Action<Action<JObject, JObject>, UInt64>(GetInternalProfile));
+            sendFuncs.Add("renameModule", new Action<Action<JObject, JObject>, string, UInt64>(RenameModule));
+            sendFuncs.Add("turnOnOff", new Action<Action<JObject, JObject>, bool, UInt64>(TurnOnOff));
+            sendFuncs.Add("changeAssociatedProfile", new Action<Action<JObject, JObject>, UInt64, UInt64>(ChangeAssociatedProfile));
+            sendFuncs.Add("deleteProfile", new Action<Action<JObject, JObject>, UInt64>(DeleteProfile));
         }
 
-        private void receivedMsgs(object sender, NotifyCollectionChangedEventArgs e)
+        async public Task<bool> Connect()
+        {
+            return await _socket.Connect();
+        }
+
+        private void ReceivedMsgs(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (_socket.Received.Count > 0)
             {
@@ -54,22 +62,27 @@ namespace Powermonitor.Common
                 //var jObj = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(msg);
                 var jObj = JsonConvert.DeserializeObject<JObject>(msg);
                 if (jObj["session"] != null)
-                    _session = JsonConvert.DeserializeObject<Session>(jObj["session"].ToString());
+                {
+                    string sessionStr = jObj["session"].ToString();
+                    Session = JsonConvert.DeserializeObject<Session>(sessionStr);
+                    Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+                    roamingSettings.Values["session"] = sessionStr;
+                }
                 Request req = sentRequests.Dequeue();
                 req.Callback.DynamicInvoke(req.Message, jObj);
                 _socket.Received.Remove(msg);
             }
         }
 
-        private void addMsg(Action<JObject, JObject> callback, JObject json)
+        private void AddMsg(Action<JObject, JObject> callback, JObject json)
         {
-            if (!_session.isEmpty())
-                json.Add("session", JsonConvert.SerializeObject(_session));
+            if (!Session.IsEmpty())
+                json.Add(Session);
             _socket.SendRawMessage(json.ToString());
             sentRequests.Enqueue(new Request(json, callback));
         }
 
-        public bool addFunc(string key, Func<Trame, bool> f)
+        public bool AddFunc(string key, Func<Trame, bool> f)
         {
             if (recvFuncs.Keys.Contains(key))
                 return false;
@@ -78,70 +91,70 @@ namespace Powermonitor.Common
         }
 
         #region SendCmds
-        private void login(Action<JObject, JObject> callback, string email, string password)
+        private void Login(Action<JObject, JObject> callback, string email, string password)
         {
             JObject json = new JObject() { { "cmd", "login" }, { "email", email }, { "password", password } };
-            addMsg(callback, json);
+            AddMsg(callback, json);
         }
 
-        private void changeUsername(Action<JObject, JObject> callback, int userid, string username)
+        private void ChangeUsername(Action<JObject, JObject> callback, int userid, string username)
         {
             JObject json = new JObject() { { "cmd", "change_username" }, { "userid", userid }, { "username", username } };
-            addMsg(callback, json);
+            AddMsg(callback, json);
         }
 
-        private void changePassword(Action<JObject, JObject> callback, int userid, string password)
+        private void ChangePassword(Action<JObject, JObject> callback, int userid, string password)
         {
             JObject json = new JObject() { { "cmd", "change_password" }, { "userid", userid }, { "password", password } };
-            addMsg(callback, json);
+            AddMsg(callback, json);
         }
 
-        private void newAccount(Action<JObject, JObject> callback, int userid, string username, string password)
+        private void NewAccount(Action<JObject, JObject> callback, int userid, string username, string password)
         {
             JObject json = new JObject() { { "cmd", "new_account" }, { "userid", userid }, { "username", username }, { "password", password } };
-            addMsg(callback, json);
+            AddMsg(callback, json);
         }
 
-        private void getModules(Action<JObject, JObject> callback)
+        private void GetModules(Action<JObject, JObject> callback)
         {
             JObject json = new JObject() { { "cmd", "getModules" } };
-            addMsg(callback, json);
+            AddMsg(callback, json);
         }
 
-        private void getProfiles(Action<JObject, JObject> callback)
+        private void GetProfiles(Action<JObject, JObject> callback)
         {
             JObject json = new JObject() { { "cmd", "getProfiles" } };
-            addMsg(callback, json);
+            AddMsg(callback, json);
         }
 
-        private void getInternalProfile(Action<JObject, JObject> callback, UInt64 id)
+        private void GetInternalProfile(Action<JObject, JObject> callback, UInt64 id)
         {
             JObject json = new JObject() { { "cmd", "getInternalProfile" }, { "id", id } };
-            addMsg(callback, json);
+            AddMsg(callback, json);
         }
 
-        private void renameModule(Action<JObject, JObject> callback, string name, UInt64 id)
+        private void RenameModule(Action<JObject, JObject> callback, string name, UInt64 id)
         {
             JObject json = new JObject() { { "cmd", "renameModule" }, { "name", name }, { "id", id } };
-            addMsg(callback, json);
+            AddMsg(callback, json);
         }
 
-        private void turnOnOff(Action<JObject, JObject> callback, bool status, UInt64 id)
+        private void TurnOnOff(Action<JObject, JObject> callback, bool status, UInt64 id)
         {
             JObject json = new JObject() { { "cmd", "turnOnOff" }, { "status", status }, { "id", id } };
-            addMsg(callback, json);
+            AddMsg(callback, json);
         }
 
-        private void changeAssociatedProfile(Action<JObject, JObject> callback, UInt64 moduleId, UInt64 profileId)
+        private void ChangeAssociatedProfile(Action<JObject, JObject> callback, UInt64 moduleId, UInt64 profileId)
         {
             JObject json = new JObject() { { "cmd", "changeAssociatedProfile" }, { "moduleId", moduleId }, { "profileId", profileId } };
-            addMsg(callback, json);
+            AddMsg(callback, json);
         }
 
-        private void deleteProfile(Action<JObject, JObject> callback, UInt64 id)
+        private void DeleteProfile(Action<JObject, JObject> callback, UInt64 id)
         {
             JObject json = new JObject() { { "cmd", "deleteProfile" }, { "id", id } };
-            addMsg(callback, json);
+            AddMsg(callback, json);
         }
         #endregion
     }

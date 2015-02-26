@@ -22,6 +22,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Popups;
 using System.Text;
 using Powermonitor.ViewModel;
+using GalaSoft.MvvmLight.Messaging;
 
 // Pour en savoir plus sur le modèle d'élément Page de base, consultez la page http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -41,10 +42,14 @@ namespace Powermonitor.View
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            Communication com = Communication.getInstance;
-            ResourceManager res = ResourceManager.getInstance;
             defaultViewModel = this.DataContext as ViewModelBase;
+            Messenger.Default.Register<string>(this, FailedLogin);
             // com.sendFuncs["getModules"].DynamicInvoke();
+        }
+
+        private async void FailedLogin(string s)
+        {
+            await loginError.ShowAsync();
         }
 
         /// <summary>
@@ -172,9 +177,14 @@ namespace Powermonitor.View
 
         private void bConnection_Click(object sender, RoutedEventArgs e)
         {
-            (DefaultViewModel as LoginViewModel).login(email.Text, password.Text);
+            (DefaultViewModel as LoginViewModel).Login(email.Text, password.Password);
             //socket.addMsg("yolo");
             //this.Frame.Navigate(typeof(HomeView));
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            (DefaultViewModel as LoginViewModel).GoToHomeIfConnected();
         }
     }
 }

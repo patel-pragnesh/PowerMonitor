@@ -194,12 +194,12 @@ namespace Powermonitor.View
             await moduleAssociatedProfileDialog.ShowAsync();
         }
 
-        private void renameDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
+        private void RenameDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
         {
             renameTextBox.Text = (ModuleList.SelectedItem as Module).Name;
         }
 
-        private void renameDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void RenameDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             if (renameTextBox.Text.Count() == 0)
             {
@@ -207,7 +207,7 @@ namespace Powermonitor.View
             }
             else
             {
-                (DefaultViewModel as ConfigurationViewModel).rename(renameTextBox.Text);
+                (DefaultViewModel as ConfigurationViewModel).Rename(renameTextBox.Text);
             }
         }
 

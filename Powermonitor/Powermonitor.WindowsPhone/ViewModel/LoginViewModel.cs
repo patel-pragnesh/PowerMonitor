@@ -22,15 +22,23 @@ namespace Powermonitor.ViewModel
             _nav = navigationService;
         }
 
-        public void login(string email, string password)
+        public void GoToHomeIfConnected()
         {
-            Communication.getInstance.sendFuncs["login"].DynamicInvoke((Action<JObject, JObject>)loginCallback, email, password);
+          //  if (!Communication.getInstance.Session.isEmpty())
+            //    _nav.NavigateTo("Home");
         }
 
-        private void loginCallback(JObject request, JObject response)
+        public void Login(string email, string password)
+        {
+            Communication.getInstance.sendFuncs["login"].DynamicInvoke((Action<JObject, JObject>)LoginCallback, email, password);
+        }
+
+        private void LoginCallback(JObject request, JObject response)
         {
             if (response["returnCode"].Value<UInt64>() == 0)
                 _nav.NavigateTo("Home");
+            else
+                MessengerInstance.Send("test");
         }
     }
 }

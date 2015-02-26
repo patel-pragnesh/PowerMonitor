@@ -25,7 +25,7 @@ namespace Powermonitor.ViewModel
             _power = power;
             _voltage = voltage;
             _amperage = amperage;
-            bConfigurer_Command = new RelayCommand(configurer_Command);
+            bConfigurer_Command = new RelayCommand(Configurer_Command);
 
             ObservableCollection<Tuple<int, int>> Test2 = new ObservableCollection<Tuple<int, int>>();
             Test2.Add(new Tuple<int, int>(0, 30));
@@ -56,7 +56,7 @@ namespace Powermonitor.ViewModel
             (_amperage.Series[0] as LineSeries).DependentValuePath = "Item2";
         }
 
-        private void configurer_Command()
+        private void Configurer_Command()
         {
         }
     }

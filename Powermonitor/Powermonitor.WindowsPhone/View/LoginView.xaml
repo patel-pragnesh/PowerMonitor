@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    Loaded="Page_Loaded"
     DataContext="{Binding LoginVM, Source={StaticResource Locator}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -43,9 +44,13 @@
             <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Compte :</TextBlock>
             <TextBox Name="email" Grid.Column="1" Grid.Row="0" Text="alexis.mestag@epitech.eu"></TextBox>
             <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Mot de passe :</TextBlock>
-            <TextBox Name="password" Grid.Column="1" Grid.Row="1" Text="alexis"></TextBox>
+            <PasswordBox Name="password" Grid.Column="1" Grid.Row="1" Password="alexis"/>
             <Button Grid.ColumnSpan="2" Grid.Row="2" Style="{StaticResource Buttons}" Click="bConnection_Click">Connexion</Button>
             <Button Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource Buttons}">Mot de passe oublié</Button>
+
+            <ContentDialog x:Name="loginError" PrimaryButtonText="OK">
+                <TextBlock TextWrapping="Wrap">Identifiant ou mot de passe incorrect</TextBlock>
+            </ContentDialog>
         </Grid>
     </Grid>
 </Page>

@@ -27,7 +27,7 @@ namespace Powermonitor.Common
         public async Task<bool> Connect()
         {
             if (_connected) return false;
-            var hostname = new HostName("172.18.3.53");
+            var hostname = new HostName("172.18.2.171");
             CancellationTokenSource cts = new CancellationTokenSource();
             try
             {

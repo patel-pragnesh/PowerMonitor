@@ -131,14 +131,14 @@ namespace Powermonitor.ViewModel
             private set;
         }
 
-        public ICommand bTurnOnOff_Command { get { return new RelayCommand(turnOnOffCommand); } }
-        public ICommand bSelectAssociatedProfile_Command { get { return new RelayCommand(selectAssociatedProfileCommand); } }
-        public ICommand bDeleteProfile_Command { get { return new RelayCommand(deleteProfileCommand); } }
+        public ICommand bTurnOnOff_Command { get { return new RelayCommand(TurnOnOffCommand); } }
+        public ICommand bSelectAssociatedProfile_Command { get { return new RelayCommand(SelectAssociatedProfileCommand); } }
+        public ICommand bDeleteProfile_Command { get { return new RelayCommand(DeleteProfileCommand); } }
 
         public ConfigurationViewModel()
         {
-            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<string, string>)getModulesCallback);
-            Communication.getInstance.sendFuncs["getProfiles"].DynamicInvoke((Action<string, string>)getProfilesCallback);
+            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
+            Communication.getInstance.sendFuncs["getProfiles"].DynamicInvoke((Action<JObject, JObject>)GetProfilesCallback);
             Profiles = null;
             Modules = null;
             InternalProfile = null;
@@ -146,28 +146,24 @@ namespace Powermonitor.ViewModel
             SelectedAssociatedProfile = null;
         }
 
-        private void getModulesCallback(string request, string response)
+        private void GetModulesCallback(JObject request, JObject response)
         {
-            var json = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(response);
-            Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(json["Modules"].ToString()));
+            Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["Modules"].ToString()));
         }
 
-        private void getProfilesCallback(string request, string response)
+        private void GetProfilesCallback(JObject request, JObject response)
         {
-            var json = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(response);
-            Profiles = new ObservableCollection<Profile>(JsonConvert.DeserializeObject<List<Profile>>(json["Profiles"].ToString()));
+            Profiles = new ObservableCollection<Profile>(JsonConvert.DeserializeObject<List<Profile>>(response["Profiles"].ToString()));
         }
 
-        private void deleteProfileCallback(string request, string response)
+        private void DeleteProfileCallback(JObject request, JObject response)
         {
-            var jsonResponse = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(response);
-            var jsonRequest = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(request);
-            var code = jsonResponse["returnCode"].ToObject<UInt64>();
+            var code = response["returnCode"].ToObject<UInt64>();
             Profile save = null;
             if (code == 0)
             {
                 foreach (var profile in Profiles) {
-                    if (profile.Id == jsonRequest["id"].ToObject<UInt64>())
+                    if (profile.Id == request["id"].ToObject<UInt64>())
                         save = profile;
                 }
                 if (save != null)
@@ -181,7 +177,7 @@ namespace Powermonitor.ViewModel
             RaisePropertyChanged("InternalProfile");
         }
 
-        public void rename(string newName)
+        public void Rename(string newName)
         {
             if (SelectedModule != null)
             {
@@ -190,7 +186,7 @@ namespace Powermonitor.ViewModel
             }
         }
 
-        private void turnOnOffCommand()
+        private void TurnOnOffCommand()
         {
             if (SelectedModule != null)
             {
@@ -198,7 +194,7 @@ namespace Powermonitor.ViewModel
             }
         }
 
-        private void selectAssociatedProfileCommand()
+        private void SelectAssociatedProfileCommand()
         {
             if (SelectedAssociatedProfile != null)
             {
@@ -206,11 +202,11 @@ namespace Powermonitor.ViewModel
             }
         }
 
-        private void deleteProfileCommand()
+        private void DeleteProfileCommand()
         {
             if (SelectedProfile != null)
             {
-                Communication.getInstance.sendFuncs["deleteProfile"].DynamicInvoke((Action<string, string>)deleteProfileCallback, SelectedProfile.Id);
+                Communication.getInstance.sendFuncs["deleteProfile"].DynamicInvoke((Action<JObject, JObject>)DeleteProfileCallback, SelectedProfile.Id);
             }
         }
     }

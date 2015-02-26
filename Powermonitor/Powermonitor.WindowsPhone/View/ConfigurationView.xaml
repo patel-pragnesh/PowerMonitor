@@ -102,9 +102,9 @@
                         </ListView.ItemContainerStyle>
                     </ListView>
                     <!-- ContentDialog rename -->
-                    <ContentDialog x:Name="moduleRenameDialog" PrimaryButtonText="Renommer" PrimaryButtonClick="renameDialog_PrimaryButtonClick"
+                    <ContentDialog x:Name="moduleRenameDialog" PrimaryButtonText="Renommer" PrimaryButtonClick="RenameDialog_PrimaryButtonClick"
                                    SecondaryButtonText="Annuler"
-                                   Opened="renameDialog_Opened">
+                                   Opened="RenameDialog_Opened">
                         <StackPanel>
                             <TextBox KeyDown="TextBox_KeyDown" Name="renameTextBox"></TextBox>
                         </StackPanel>

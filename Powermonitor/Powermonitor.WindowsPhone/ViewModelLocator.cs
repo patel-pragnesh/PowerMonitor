@@ -20,12 +20,22 @@ namespace Powermonitor
 
             SimpleIoc.Default.Register<INavigationService>(() => new NavigationService());
 
+            SimpleIoc.Default.Register<InitViewModel>();
             SimpleIoc.Default.Register<ConfigurationViewModel>();
             SimpleIoc.Default.Register<ConsultationViewModel>();
             SimpleIoc.Default.Register<CreateProfilViewModel>();
             SimpleIoc.Default.Register<HomeViewModel>();
             SimpleIoc.Default.Register<LoginViewModel>();
+            (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("Init", typeof(InitView));
+            (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("Login", typeof(LoginView));
             (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("Home", typeof(HomeView));
+            (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("Configuration", typeof(ConfigurationView));
+            (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("Consultation", typeof(ConsultationView));
+        }
+
+        public InitViewModel InitVM
+        {
+            get { return ServiceLocator.Current.GetInstance<InitViewModel>(); }
         }
 
         public ConfigurationViewModel ConfigurationVM

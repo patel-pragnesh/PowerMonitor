@@ -8,14 +8,14 @@ namespace Powermonitor.Model
 {
     public class Session
     {
-        public string token { get; private set; }
-        public UInt64 userId { get; private set; }
+        public string token { get; set; }
+        public UInt64 userId { get; set; }
         public Session(string t = "", UInt64 u = 0)
         {
             token = t;
             userId = u;
         }
 
-        public bool isEmpty() { return token.Length > 0; }
+        public bool IsEmpty() { return token.Length == 0; }
     }
 }
