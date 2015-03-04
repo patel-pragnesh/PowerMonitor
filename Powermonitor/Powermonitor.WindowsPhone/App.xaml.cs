@@ -96,7 +96,7 @@ namespace Powermonitor
                 // Quand la pile de navigation n'est pas restaurée, accédez à la première page,
                 // puis configurez la nouvelle page en transmettant les informations requises en tant que
                 // paramètre
-                if (!rootFrame.Navigate(typeof(InitView), e.Arguments))
+                if (!rootFrame.Navigate(typeof(ScheduleView), e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }

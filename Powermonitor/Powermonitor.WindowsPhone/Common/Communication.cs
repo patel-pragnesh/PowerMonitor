@@ -26,9 +26,9 @@ namespace Powermonitor.Common
         public Communication()
         {
             Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
-            /*if (roamingSettings.Values.ContainsKey("session"))
+            if (roamingSettings.Values.ContainsKey("session"))
                 Session = JsonConvert.DeserializeObject<Session>(roamingSettings.Values["session"].ToString());
-            else*/
+            else
                 Session = new Session();
             _socket = new Socket();
             _socket.Received.CollectionChanged += ReceivedMsgs;
@@ -71,15 +71,26 @@ namespace Powermonitor.Common
                 Request req = sentRequests.Dequeue();
                 req.Callback.DynamicInvoke(req.Message, jObj);
                 _socket.Received.Remove(msg);
+                SendRemainingMessages();
+            }
+        }
+
+        private void SendRemainingMessages()
+        {
+            if (sentRequests.Count > 0)
+            {
+                sentRequests.ElementAt(0).Message["session"] = JObject.FromObject(Session);
+                _socket.SendRawMessage(sentRequests.ElementAt(0).Message.ToString());
             }
         }
 
         private void AddMsg(Action<JObject, JObject> callback, JObject json)
         {
             if (!Session.IsEmpty())
-                json.Add(Session);
-            _socket.SendRawMessage(json.ToString());
+                json["session"] = JObject.FromObject(Session);
             sentRequests.Enqueue(new Request(json, callback));
+            if (sentRequests.Count == 1)
+                _socket.SendRawMessage(json.ToString());
         }
 
         public bool AddFunc(string key, Func<Trame, bool> f)

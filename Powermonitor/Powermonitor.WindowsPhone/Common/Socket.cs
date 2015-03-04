@@ -27,11 +27,11 @@ namespace Powermonitor.Common
         public async Task<bool> Connect()
         {
             if (_connected) return false;
-            var hostname = new HostName("172.18.2.171");
+            var hostname = new HostName("62.4.24.188");
             CancellationTokenSource cts = new CancellationTokenSource();
             try
             {
-                cts.CancelAfter(1000);
+                cts.CancelAfter(5000);
                 await _clientSocket.ConnectAsync(hostname, "8080").AsTask(cts.Token);
             }
             catch (TaskCanceledException)

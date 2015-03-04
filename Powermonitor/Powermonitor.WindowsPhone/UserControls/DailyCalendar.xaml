@@ -1,0 +1,33 @@
+﻿<UserControl
+    x:Class="Powermonitor.UserControls.DailyCalendar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Powermonitor.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Loaded="UserControl_Loaded">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="TimeTemplate">
+            <Border Name="TimeBorder" BorderBrush="Black" BorderThickness="0,0,1,1" Grid.Column="0" HorizontalAlignment="Stretch" Height="50">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding}"></TextBlock>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="EventTemplate">
+            <Border Name="EventBorder" BorderBrush="Black" BorderThickness="0,0,0,1" Grid.Column="2" HorizontalAlignment="Stretch" Height="50">
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel HorizontalAlignment="Stretch" Grid.Column="0" Name="TimeStackPanel">
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Stretch" Grid.Column="1" Name="EventStackPanel">
+        </StackPanel>
+    </Grid>
+</UserControl>

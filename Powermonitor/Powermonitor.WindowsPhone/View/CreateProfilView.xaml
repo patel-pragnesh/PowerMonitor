@@ -29,7 +29,7 @@
 
         <!--TODO: le contenu doit être placé dans la grille suivante-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-
+            <Button Click="Button_Click">planning</Button>
         </Grid>
     </Grid>
 </Page>

@@ -82,7 +82,7 @@ namespace Powermonitor.ViewModel
             _power = power;
             _voltage = voltage;
             _amperage = amperage;
-            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<string, string>)GetModulesCallback);
+            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
             //Modules = new ObservableCollection<Module>();
             //Modules.Add(new Module("module 1", true, new Profile("test")));
             //Modules.Add(new Module("module 2", false, new Profile("test")));
@@ -116,10 +116,9 @@ namespace Powermonitor.ViewModel
             (_amperage.Series[0] as LineSeries).DependentValuePath = "Item2";
         }
 
-        private void GetModulesCallback(string request, string response)
+        private void GetModulesCallback(JObject request, JObject response)
         {
-            var json = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(response);
-            Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(json["Modules"].ToString()));
+            Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["Modules"].ToString()));
         }
     }
 }

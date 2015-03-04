@@ -11,7 +11,7 @@ namespace Powermonitor.Common
         private static readonly Dictionary<UInt64, string> _errors = new Dictionary<UInt64, string>()
         {
             { 404, "Id incorrect" },
-            { 1100, "Ce profil est associé à un module esclave"}
+            { 1, "Ce profil est associé à un module esclave"}
         };
 
         public static string GetErrorMessage(UInt64 code)

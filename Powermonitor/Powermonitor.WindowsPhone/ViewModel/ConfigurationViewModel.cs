@@ -148,7 +148,8 @@ namespace Powermonitor.ViewModel
 
         private void GetModulesCallback(JObject request, JObject response)
         {
-            Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["Modules"].ToString()));
+            if (response["returnCode"] == null)
+                Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["Modules"].ToString()));
         }
 
         private void GetProfilesCallback(JObject request, JObject response)
@@ -162,13 +163,16 @@ namespace Powermonitor.ViewModel
             Profile save = null;
             if (code == 0)
             {
-                foreach (var profile in Profiles) {
+                foreach (var profile in Profiles)
+                {
                     if (profile.Id == request["id"].ToObject<UInt64>())
                         save = profile;
                 }
                 if (save != null)
                     Profiles.Remove(save);
             }
+            else
+                MessengerInstance.Send(Errors.GetErrorMessage(1));
         }
 
         private void InternalProfileHandler_PropertyChanged(object sender, PropertyChangedEventArgs e)

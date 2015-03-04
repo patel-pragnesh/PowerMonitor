@@ -96,58 +96,6 @@ namespace Powermonitor.View
         {
         }
 
-        private async void Send_Click(object sender, RoutedEventArgs e)
-        {
-           // socket.addMsg("lolxd");
-      /*      if (!connected)
-            {
-                StatusText.Text = "Must be connected to send!";
-                return;
-            }
-
-            UInt32 len = 0; // Gets the UTF-8 string length.
-
-            try
-            {
-                OutputView.Text = "";
-                StatusText.Text = "Trying to send data ...";
-
-                // add a newline to the text to send
-                string sendData = SendText.Text + Environment.NewLine;
-                DataWriter writer = new DataWriter(_socket.OutputStream);
-                len = writer.MeasureString(sendData); // Gets the UTF-8 string length.
-
-                // Call StoreAsync method to store the data to a backing stream
-                await writer.StoreAsync();
-
-                StatusText.Text = "Data was sent" + Environment.NewLine;
-
-                // detach the stream and close it
-                writer.DetachStream();
-                writer.Dispose();
-
-            }
-            catch (Exception exception)
-            {
-                // If this is an unknown status, 
-                // it means that the error is fatal and retry will likely fail.
-                if (SocketError.GetStatus(exception.HResult) == SocketErrorStatus.Unknown)
-                {
-                    throw;
-                }
-
-                StatusText.Text = "Send data or receive failed with error: " + exception.Message;
-                // Could retry the connection, but for this simple example
-                // just close the socket.
-
-                closing = true;
-                _socket.Dispose();
-                _socket = null;
-                connected = false;
-
-            }*/
-        }
-
         #region Inscription de NavigationHelper
 
         /// <summary>
@@ -178,8 +126,6 @@ namespace Powermonitor.View
         private void bConnection_Click(object sender, RoutedEventArgs e)
         {
             (DefaultViewModel as LoginViewModel).Login(email.Text, password.Password);
-            //socket.addMsg("yolo");
-            //this.Frame.Navigate(typeof(HomeView));
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

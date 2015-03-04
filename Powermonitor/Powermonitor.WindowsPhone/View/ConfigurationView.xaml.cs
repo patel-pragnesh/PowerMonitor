@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using Powermonitor.Common;
 using Powermonitor.Model;
 using Powermonitor.ViewModel;
@@ -39,6 +40,13 @@ namespace Powermonitor.View
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             LayoutRoot.DataContext = DefaultViewModel;
+            Messenger.Default.Register<string>(this, HandleError);
+        }
+
+        async private void HandleError(string msg)
+        {
+            errorMsg.Text = msg;
+            await error.ShowAsync();
         }
 
         /// <summary>

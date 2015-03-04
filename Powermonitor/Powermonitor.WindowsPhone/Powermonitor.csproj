@@ -99,7 +99,11 @@
     <Compile Include="Model\Module.cs" />
     <Compile Include="Model\Profile.cs" />
     <Compile Include="Model\Session.cs" />
+    <Compile Include="Model\TimeSlot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\DailyCalendar.xaml.cs">
+      <DependentUpon>DailyCalendar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModel\ConfigurationViewModel.cs" />
     <Compile Include="ViewModel\ConsultationViewModel.cs" />
@@ -108,6 +112,7 @@
     <Compile Include="ViewModel\InitViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\ModifyProfil.cs" />
+    <Compile Include="ViewModel\ScheduleViewModel.cs" />
     <Compile Include="View\InitView.xaml.cs">
       <DependentUpon>InitView.xaml</DependentUpon>
     </Compile>
@@ -128,6 +133,9 @@
     </Compile>
     <Compile Include="View\ModifyProfilView.xaml.cs">
       <DependentUpon>ModifyProfilView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ScheduleView.xaml.cs">
+      <DependentUpon>ScheduleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TurnOnOffView.xaml.cs">
       <DependentUpon>TurnOnOffView.xaml</DependentUpon>
@@ -155,6 +163,10 @@
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="UserControls\DailyCalendar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\InitView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -180,6 +192,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ModifyProfilView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ScheduleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

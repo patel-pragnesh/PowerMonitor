@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Powermonitor.ViewModel
 {
-    public class ModifyProfil : ViewModelBase
+    public class ModifyProfilViewModel : ViewModelBase
     {
         #region Profil
         private Profile _profil;
@@ -28,7 +28,7 @@ namespace Powermonitor.ViewModel
 
         }
         #endregion
-        public ModifyProfil()
+        public ModifyProfilViewModel()
         {
 
         }

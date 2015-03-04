@@ -145,6 +145,10 @@
                                    SecondaryButtonText="Annuler" Title="Confirmer la suppression">
                         <TextBlock TextWrapping="Wrap">Voulez vous vraiment supprimer ce profil de façon définitive ?</TextBlock>
                     </ContentDialog>
+                    
+                    <ContentDialog Name="error" PrimaryButtonText="Accepter" Title="Erreur">
+                        <TextBlock TextWrapping="Wrap" Name="errorMsg"></TextBlock>
+                    </ContentDialog>
                 </StackPanel>
             </PivotItem>
             <!-- End Profiles -->
