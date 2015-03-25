@@ -32,7 +32,7 @@ namespace Powermonitor.Common
             try
             {
                 cts.CancelAfter(5000);
-                await _clientSocket.ConnectAsync(hostname, "8080").AsTask(cts.Token);
+                await _clientSocket.ConnectAsync(hostname, "4242").AsTask(cts.Token);
             }
             catch (TaskCanceledException)
             {

@@ -10,17 +10,23 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="TimeTemplate">
-            <Border Name="TimeBorder" BorderBrush="Black" BorderThickness="0,0,1,1" Grid.Column="0" HorizontalAlignment="Stretch" Height="50">
+            <Border Tapped="TimeBorder_Tapped" Name="TimeBorder" Background="Transparent" BorderBrush="Black" BorderThickness="0,0,1,1" Grid.Column="0" HorizontalAlignment="Stretch" Height="50">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding}"></TextBlock>
             </Border>
         </DataTemplate>
         <DataTemplate x:Key="EventTemplate">
-            <Border Name="EventBorder" BorderBrush="Black" BorderThickness="0,0,0,1" Grid.Column="2" HorizontalAlignment="Stretch" Height="50">
+            <Border Tapped="EventBorder_Tapped" Name="EventBorder" Background="Transparent" BorderBrush="Black" BorderThickness="0,0,0,1" Grid.Column="2" HorizontalAlignment="Stretch" Height="50">
             </Border>
         </DataTemplate>
     </UserControl.Resources>
     
     <Grid>
+        <FlyoutBase.AttachedFlyout>
+            <MenuFlyout>
+                <MenuFlyoutItem x:Name="bRename" Text="Modifier"/>
+                <MenuFlyoutItem x:Name="bChangeAssociatedProfile" Text="Supprimer"/>
+            </MenuFlyout>
+        </FlyoutBase.AttachedFlyout>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="5*"/>
@@ -29,5 +35,14 @@
         </StackPanel>
         <StackPanel HorizontalAlignment="Stretch" Grid.Column="1" Name="EventStackPanel">
         </StackPanel>
+
+        <ContentDialog Name="ChooseTimeDialog" Title="Choisir une période de temps"
+                       PrimaryButtonText="Accepter" PrimaryButtonClick="ChooseTimeDialog_PrimaryButtonClick"
+                       SecondaryButtonText="Annuler">
+            <StackPanel>
+                <TimePicker Header="Début" Name="BeginTimePicker"></TimePicker>
+                <TimePicker Header="Fin" Name="EndTimePicker"></TimePicker>
+            </StackPanel>
+        </ContentDialog>
     </Grid>
 </UserControl>

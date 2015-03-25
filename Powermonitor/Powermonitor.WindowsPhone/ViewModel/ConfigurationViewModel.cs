@@ -148,13 +148,14 @@ namespace Powermonitor.ViewModel
 
         private void GetModulesCallback(JObject request, JObject response)
         {
-            if (response["returnCode"] == null)
+            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
                 Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["Modules"].ToString()));
         }
 
         private void GetProfilesCallback(JObject request, JObject response)
         {
-            Profiles = new ObservableCollection<Profile>(JsonConvert.DeserializeObject<List<Profile>>(response["Profiles"].ToString()));
+            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
+                Profiles = new ObservableCollection<Profile>(JsonConvert.DeserializeObject<List<Profile>>(response["Profiles"].ToString()));
         }
 
         private void DeleteProfileCallback(JObject request, JObject response)

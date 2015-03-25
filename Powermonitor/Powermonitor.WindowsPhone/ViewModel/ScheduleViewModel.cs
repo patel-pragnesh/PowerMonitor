@@ -41,9 +41,13 @@ namespace Powermonitor.ViewModel
         public ScheduleViewModel()
         {
             ModifyViewModel = new ModifyProfilViewModel();
-            TimeSlots = new Dictionary<string, ObservableCollection<TimeSlot>>();
+            //TimeSlots = new Dictionary<string, ObservableCollection<TimeSlot>>();
+        }
+
+        public void Init()
+        {
             TimeSlots.Add("Monday", new ObservableCollection<TimeSlot>() { new TimeSlot() });
-            TimeSlots.Add("Tuesday", new ObservableCollection<TimeSlot>() { new TimeSlot(UnixTimeStampToDateTime(1425309000).Ticks, UnixTimeStampToDateTime(1425413700).Ticks) });
+            TimeSlots.Add("Tuesday", new ObservableCollection<TimeSlot>() { new TimeSlot(UnixTimeStampToDateTime(1425309000).Ticks, UnixTimeStampToDateTime(1425316800).Ticks) });
             TimeSlots.Add("Wednesday", new ObservableCollection<TimeSlot>() { new TimeSlot() });
             TimeSlots.Add("Thursday", new ObservableCollection<TimeSlot>() { new TimeSlot() });
             TimeSlots.Add("Friday", new ObservableCollection<TimeSlot>() { new TimeSlot() });

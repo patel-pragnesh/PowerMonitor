@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight;
 using Powermonitor.ViewModel;
+using System.Collections.ObjectModel;
+using Powermonitor.Model;
 
 // Pour en savoir plus sur le modèle d'élément Page de base, consultez la page http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -29,7 +31,7 @@ namespace Powermonitor.View
     {
         private NavigationHelper navigationHelper;
         private ViewModelBase defaultViewModel = new CreateProfilViewModel();
-
+        Dictionary<string, ObservableCollection<TimeSlot>> test;
         public CreateProfilView ()
         {
             this.InitializeComponent();
@@ -37,6 +39,7 @@ namespace Powermonitor.View
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            test = new Dictionary<string, ObservableCollection<TimeSlot>>();
         }
 
         /// <summary>
@@ -112,7 +115,7 @@ namespace Powermonitor.View
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ScheduleView));
+            this.Frame.Navigate(typeof(ScheduleView), test);
         }
     }
 }

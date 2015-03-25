@@ -9,34 +9,14 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Page.Resources>
-        <DataTemplate x:Key="testTemplate">
-            <ListViewItem HorizontalContentAlignment="Stretch">
-                <Grid  HorizontalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="5*"/>
-                    </Grid.ColumnDefinitions>
-                    <Rectangle Grid.Column="0" HorizontalAlignment="Stretch" Fill="Transparent" Stroke="Black" Height="50">
-                    </Rectangle>
-                    <TextBlock Grid.Column="0"  HorizontalAlignment="Center" VerticalAlignment="Center">TEST</TextBlock>
-                    <Rectangle Grid.Column="1" Stroke="Black" Height="50" HorizontalAlignment="Stretch"></Rectangle>
-                </Grid>
-            </ListViewItem>
-        </DataTemplate>
-    </Page.Resources>
-    
     <Grid x:Name="LayoutRoot" Style="{StaticResource BackgroundColor}">
         <Pivot Title="{StaticResource ApplicationTitle}">
             <PivotItem Header="Lundi">
-                <ListView Name="list" ItemTemplate="{StaticResource testTemplate}">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                </ListView>
+                <Border BorderBrush="Black" BorderThickness="0,1,0,0">
+                    <ScrollViewer>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Monday]}"></uc:DailyCalendar>
+                    </ScrollViewer>
+                </Border>
             </PivotItem>
             <PivotItem Header="Mardi" Margin="0,22.5,0,0">
                 <Border BorderBrush="Black" BorderThickness="0,1,0,0">
@@ -46,19 +26,46 @@
                 </Border>
             </PivotItem>
             <PivotItem Header="Mercredi">
+                <Border BorderBrush="Black" BorderThickness="0,1,0,0">
+                    <ScrollViewer>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlot[Wednesday]}"></uc:DailyCalendar>
+                    </ScrollViewer>
+                </Border>
             </PivotItem>
             <PivotItem Header="Jeudi">
-
+                <Border BorderBrush="Black" BorderThickness="0,1,0,0">
+                    <ScrollViewer>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Thursday]}"></uc:DailyCalendar>
+                    </ScrollViewer>
+                </Border>
             </PivotItem>
             <PivotItem Header="Vendredi">
-
+                <Border BorderBrush="Black" BorderThickness="0,1,0,0">
+                    <ScrollViewer>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Friday]}"></uc:DailyCalendar>
+                    </ScrollViewer>
+                </Border>
             </PivotItem>
             <PivotItem Header="Samedi">
-
+                <Border BorderBrush="Black" BorderThickness="0,1,0,0">
+                    <ScrollViewer>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Saturday]}"></uc:DailyCalendar>
+                    </ScrollViewer>
+                </Border>
             </PivotItem>
             <PivotItem Header="Dimanche">
-
+                <Border BorderBrush="Black" BorderThickness="0,1,0,0">
+                    <ScrollViewer>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Sunday]}"></uc:DailyCalendar>
+                    </ScrollViewer>
+                </Border>
             </PivotItem>
         </Pivot>
     </Grid>
+    
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Label="Enregistrer" Icon="Save" Click="AppBarButton_Click"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

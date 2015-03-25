@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using Powermonitor.Common;
+using Powermonitor.Model;
 using Powermonitor.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -108,6 +109,8 @@ namespace Powermonitor.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+            (DataContext as ScheduleViewModel).TimeSlots = e.Parameter as Dictionary<string, ObservableCollection<TimeSlot>>;
+            (DataContext as ScheduleViewModel).Init();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -116,5 +119,10 @@ namespace Powermonitor.View
         }
 
         #endregion
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.GoBack();
+        }
     }
 }
