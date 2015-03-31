@@ -45,7 +45,7 @@ namespace Powermonitor.Common
             sendFuncs.Add("getInternalProfile", new Action<Action<JObject, JObject>, UInt64>(GetInternalProfile));
             sendFuncs.Add("renameModule", new Action<Action<JObject, JObject>, string, UInt64>(RenameModule));
             sendFuncs.Add("turnOnOff", new Action<Action<JObject, JObject>, bool, UInt64>(TurnOnOff));
-            sendFuncs.Add("changeAssociatedProfile", new Action<Action<JObject, JObject>, UInt64, UInt64>(ChangeAssociatedProfile));
+            sendFuncs.Add("updateModuleDefaultProfile", new Action<Action<JObject, JObject>, UInt64, UInt64?>(UpdateModuleDefaultProfile));
             sendFuncs.Add("deleteProfile", new Action<Action<JObject, JObject>, UInt64>(DeleteProfile));
         }
 
@@ -156,9 +156,9 @@ namespace Powermonitor.Common
             AddMsg(callback, json);
         }
 
-        private void ChangeAssociatedProfile(Action<JObject, JObject> callback, UInt64 moduleId, UInt64 profileId)
+        private void UpdateModuleDefaultProfile(Action<JObject, JObject> callback, UInt64 moduleId, UInt64? profileId)
         {
-            JObject json = new JObject() { { "cmd", "changeAssociatedProfile" }, { "moduleId", moduleId }, { "profileId", profileId } };
+            JObject json = new JObject() { { "cmd", "updateModuleDefaultProfile" }, { "id", moduleId }, { "defaultProfileId", profileId } };
             AddMsg(callback, json);
         }
 

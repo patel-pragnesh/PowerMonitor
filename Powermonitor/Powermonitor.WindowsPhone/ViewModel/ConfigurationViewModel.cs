@@ -89,20 +89,20 @@ namespace Powermonitor.ViewModel
             }
         }
         #endregion
-        #region SelectedAssociatedProfile
-        private Profile _selectedAssociatedProfile;
-        public Profile SelectedAssociatedProfile
+        #region SelectedDefaultProfile
+        private Profile _selectedDefaultProfile;
+        public Profile SelectedDefaultProfile
         {
             get
             {
-                return _selectedAssociatedProfile;
+                return _selectedDefaultProfile;
             }
             set
             {
-                if (value == _selectedAssociatedProfile)
+                if (value == _selectedDefaultProfile)
                     return;
-                _selectedAssociatedProfile = value;
-                RaisePropertyChanged("SelectedAssociatedProfile");
+                _selectedDefaultProfile = value;
+                RaisePropertyChanged("SelectedDefaultProfile");
             }
         }
         #endregion
@@ -132,7 +132,7 @@ namespace Powermonitor.ViewModel
         }
 
         public ICommand bTurnOnOff_Command { get { return new RelayCommand(TurnOnOffCommand); } }
-        public ICommand bSelectAssociatedProfile_Command { get { return new RelayCommand(SelectAssociatedProfileCommand); } }
+        public ICommand bSelectDefaultProfile_Command { get { return new RelayCommand(SelectDefaultProfileCommand); } }
         public ICommand bDeleteProfile_Command { get { return new RelayCommand(DeleteProfileCommand); } }
 
         public ConfigurationViewModel()
@@ -143,19 +143,38 @@ namespace Powermonitor.ViewModel
             Modules = null;
             InternalProfile = null;
             SelectedModule = null;
-            SelectedAssociatedProfile = null;
+            SelectedDefaultProfile = null;
         }
 
         private void GetModulesCallback(JObject request, JObject response)
         {
             if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
-                Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["Modules"].ToString()));
+                Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["modules"].ToString()));
         }
 
         private void GetProfilesCallback(JObject request, JObject response)
         {
             if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
-                Profiles = new ObservableCollection<Profile>(JsonConvert.DeserializeObject<List<Profile>>(response["Profiles"].ToString()));
+                Profiles = new ObservableCollection<Profile>(JsonConvert.DeserializeObject<List<Profile>>(response["profiles"].ToString()));
+        }
+
+        private void TurnOnOffCallback(JObject request, JObject response)
+        {
+            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
+                SelectedModule.Status = !SelectedModule.Status;
+        }
+
+        private void RenameModuleCallback(JObject request, JObject response)
+        {
+            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
+                Modules.First(m => m.Id == request["id"].ToObject<UInt64>()).Name = request["name"].ToString();
+        }
+
+        private void UpdateModuleDefaultProfileCallback(JObject request, JObject response)
+        {
+            var id = request["defaultProfileId"].ToObject<UInt64?>();
+            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
+                Modules.First(m => m.Id == request["id"].ToObject<UInt64>()).DefaultProfile = id == null ? null : Profiles.First(p => p.Id == request["defaultProfileId"].ToObject<UInt64?>());
         }
 
         private void DeleteProfileCallback(JObject request, JObject response)
@@ -186,8 +205,7 @@ namespace Powermonitor.ViewModel
         {
             if (SelectedModule != null)
             {
-                SelectedModule.Name = newName;
-                Communication.getInstance.sendFuncs["renameModule"].DynamicInvoke(newName, SelectedModule.Id);
+                Communication.getInstance.sendFuncs["renameModule"].DynamicInvoke((Action<JObject, JObject>)RenameModuleCallback, newName, SelectedModule.Id);
             }
         }
 
@@ -195,15 +213,16 @@ namespace Powermonitor.ViewModel
         {
             if (SelectedModule != null)
             {
+                //Communication.getInstance.sendFuncs["turnOnOff"].DynamicInvoke((Action<JObject, JObject>)TurnOnOffCallback);
                 //SelectedModule.Status = !SelectedModule.Status;
             }
         }
 
-        private void SelectAssociatedProfileCommand()
+        private void SelectDefaultProfileCommand()
         {
-            if (SelectedAssociatedProfile != null)
+            if (SelectedDefaultProfile != null)
             {
-                Communication.getInstance.sendFuncs["changeAssociatedProfile"].DynamicInvoke(SelectedModule.Id, SelectedAssociatedProfile.Id);
+                Communication.getInstance.sendFuncs["updateModuleDefaultProfile"].DynamicInvoke((Action<JObject, JObject>)UpdateModuleDefaultProfileCallback, SelectedModule.Id, SelectedDefaultProfile.Id);
             }
         }
 
@@ -213,6 +232,11 @@ namespace Powermonitor.ViewModel
             {
                 Communication.getInstance.sendFuncs["deleteProfile"].DynamicInvoke((Action<JObject, JObject>)DeleteProfileCallback, SelectedProfile.Id);
             }
+        }
+
+        public void DissociateProfile()
+        {
+            Communication.getInstance.sendFuncs["updateModuleDefaultProfile"].DynamicInvoke((Action<JObject, JObject>)UpdateModuleDefaultProfileCallback, SelectedModule.Id, null);
         }
     }
 }

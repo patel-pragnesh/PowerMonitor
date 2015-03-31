@@ -30,7 +30,7 @@ namespace Powermonitor.View
     public sealed partial class CreateProfilView : Page
     {
         private NavigationHelper navigationHelper;
-        private ViewModelBase defaultViewModel = new CreateProfilViewModel();
+        private ViewModelBase defaultViewModel = new CreateProfileViewModel();
         Dictionary<string, ObservableCollection<TimeSlot>> test;
         public CreateProfilView ()
         {

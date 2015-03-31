@@ -196,10 +196,15 @@ namespace Powermonitor.View
             await moduleModifyInternalProfileDialog.ShowAsync();
         }
 
-        private async void bChangeAssociatedProfile_Click(object sender, RoutedEventArgs e)
+        private async void bChangeDefaultProfile_Click(object sender, RoutedEventArgs e)
         {
-            AssociatedProfile_List.SelectedItem = null;
-            await moduleAssociatedProfileDialog.ShowAsync();
+            DefaultProfile_List.SelectedItem = null;
+            await moduleDefaultProfileDialog.ShowAsync();
+        }
+
+        private void bDissociatDefaultProfile_Click(object sender, RoutedEventArgs e)
+        {
+            (DefaultViewModel as ConfigurationViewModel).DissociateProfile();
         }
 
         private void RenameDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
@@ -219,9 +224,19 @@ namespace Powermonitor.View
             }
         }
 
-        private void AssociatedProfileListBox_Tapped(object sender, TappedRoutedEventArgs e)
+        private void DefaultProfileListBox_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            AssociatedProfile_List.SelectedItem = (sender as ListBoxItem).DataContext;
+            DefaultProfile_List.SelectedItem = (sender as ListBoxItem).DataContext;
+        }
+
+        private void ToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            var toto = (sender as ToggleButton).IsChecked;
+        }
+
+        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

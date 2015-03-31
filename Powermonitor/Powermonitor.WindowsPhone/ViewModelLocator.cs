@@ -23,7 +23,7 @@ namespace Powermonitor
             SimpleIoc.Default.Register<InitViewModel>();
             SimpleIoc.Default.Register<ConfigurationViewModel>();
             SimpleIoc.Default.Register<ConsultationViewModel>();
-            SimpleIoc.Default.Register<CreateProfilViewModel>();
+            SimpleIoc.Default.Register<CreateProfileViewModel>();
             SimpleIoc.Default.Register<HomeViewModel>();
             SimpleIoc.Default.Register<LoginViewModel>();
             SimpleIoc.Default.Register<ScheduleViewModel>();
@@ -50,9 +50,9 @@ namespace Powermonitor
             get { return ServiceLocator.Current.GetInstance<ConsultationViewModel>(); }
         }
 
-        public CreateProfilViewModel CreateProfilVM
+        public CreateProfileViewModel CreateProfilVM
         {
-            get { return ServiceLocator.Current.GetInstance<CreateProfilViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<CreateProfileViewModel>(); }
         }
 
         public HomeViewModel HomeVM

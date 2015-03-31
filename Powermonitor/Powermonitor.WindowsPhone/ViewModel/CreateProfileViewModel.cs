@@ -9,9 +9,9 @@ using GalaSoft.MvvmLight;
 
 namespace Powermonitor.ViewModel
 {
-    public class CreateProfilViewModel : ViewModelBase
+    public class CreateProfileViewModel : ViewModelBase
     {
-        public CreateProfilViewModel()
+        public CreateProfileViewModel()
         {
         }
     }

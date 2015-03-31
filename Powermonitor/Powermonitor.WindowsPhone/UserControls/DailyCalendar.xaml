@@ -24,7 +24,7 @@
         <FlyoutBase.AttachedFlyout>
             <MenuFlyout>
                 <MenuFlyoutItem x:Name="bRename" Text="Modifier"/>
-                <MenuFlyoutItem x:Name="bChangeAssociatedProfile" Text="Supprimer"/>
+                <MenuFlyoutItem x:Name="bChangeDefaultProfile" Text="Supprimer"/>
             </MenuFlyout>
         </FlyoutBase.AttachedFlyout>
         <Grid.ColumnDefinitions>

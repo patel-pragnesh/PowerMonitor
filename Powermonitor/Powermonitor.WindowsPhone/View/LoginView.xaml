@@ -42,9 +42,9 @@
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Compte :</TextBlock>
-            <TextBox Name="email" Grid.Column="1" Grid.Row="0" Text="alexis.mestag@epitech.eu"></TextBox>
+            <TextBox Name="email" Grid.Column="1" Grid.Row="0" Text="guillaume.marescaux@epitech.eu"></TextBox>
             <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Mot de passe :</TextBlock>
-            <PasswordBox Name="password" Grid.Column="1" Grid.Row="1" Password="alexis"/>
+            <PasswordBox Name="password" Grid.Column="1" Grid.Row="1" Password="guillaume"/>
             <Button Grid.ColumnSpan="2" Grid.Row="2" Style="{StaticResource Buttons}" Click="bConnection_Click">Connexion</Button>
             <Button Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource Buttons}">Mot de passe oublié</Button>
 

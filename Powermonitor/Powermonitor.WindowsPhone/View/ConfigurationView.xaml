@@ -22,7 +22,8 @@
                     <MenuFlyout>
                         <MenuFlyoutItem x:Name="bRename" Text="Renommer" Click="bRename_Click" />
                         <MenuFlyoutItem x:Name="bModifyInternalProfile" Click="bModifyInternalProfile_Click" Text="Modifier le profil interne"/>
-                        <MenuFlyoutItem x:Name="bChangeAssociatedProfile" Click="bChangeAssociatedProfile_Click" Text="Changer le profil associé"/>
+                        <MenuFlyoutItem x:Name="bChangeDefaultProfile" Click="bChangeDefaultProfile_Click" Text="Changer le profil associé"/>
+                        <MenuFlyoutItem x:Name="bDissociatDefaultProfile" Click="bDissociatDefaultProfile_Click" Text="Dissocier le profil associé"/>
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
 
@@ -39,9 +40,9 @@
                     <!-- Grid Content -->
                     <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
         				<TextBlock x:Name="ModuleName" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
-        				<TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="{Binding Profile.Name}"/>
+        				<TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="{Binding DefaultProfile.Name}"/>
         			</StackPanel>
-        			<ToggleSwitch Grid.Row="0" Grid.Column="1" IsOn="{Binding Status, Mode=TwoWay}" OffContent="Off" OnContent="On"/>
+        			<ToggleSwitch Grid.Row="0" Grid.Column="1" IsOn="{Binding Status}" OffContent="Off" OnContent="On"/>
                 </Grid>
         	</ListViewItem>
         </DataTemplate>
@@ -71,8 +72,8 @@
         <!-- End Template Profiles-->
 
         <!-- Begin Template Profiles-->
-        <DataTemplate x:Key="AssociatedProfileTemplate">
-            <ListBoxItem HorizontalContentAlignment="Stretch" Tapped="AssociatedProfileListBox_Tapped">
+        <DataTemplate x:Key="DefaultProfileTemplate">
+            <ListBoxItem HorizontalContentAlignment="Stretch" Tapped="DefaultProfileListBox_Tapped">
                 <!-- Main grid -->
                 <Grid Name="gProfileItem" HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
@@ -119,10 +120,10 @@
                     </ContentDialog>
 
                     <!-- ContentDialog change associated profile -->
-                    <ContentDialog Style="{StaticResource FullScreenContentDialogStyle}" x:Name="moduleAssociatedProfileDialog" PrimaryButtonText="Accepter"
-                                   PrimaryButtonCommand="{Binding bSelectAssociatedProfile_Command}"
+                    <ContentDialog Style="{StaticResource FullScreenContentDialogStyle}" x:Name="moduleDefaultProfileDialog" PrimaryButtonText="Accepter"
+                                   PrimaryButtonCommand="{Binding bSelectDefaultProfile_Command}"
                                    SecondaryButtonText="Annuler">
-                        <ListBox Name="AssociatedProfile_List" ItemsSource="{Binding Profiles, Mode=OneWay}" SelectedValue="{Binding SelectedAssociatedProfile, Mode=TwoWay}" ItemTemplate="{StaticResource AssociatedProfileTemplate}" Background="Transparent"></ListBox>
+                        <ListBox Name="DefaultProfile_List" ItemsSource="{Binding Profiles, Mode=OneWay}" SelectedValue="{Binding SelectedDefaultProfile, Mode=TwoWay}" ItemTemplate="{StaticResource DefaultProfileTemplate}" Background="Transparent"/>
                     </ContentDialog>
                 </StackPanel>
             </PivotItem>

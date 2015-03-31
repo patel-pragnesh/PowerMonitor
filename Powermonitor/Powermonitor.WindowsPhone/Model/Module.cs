@@ -41,7 +41,6 @@ namespace Powermonitor.Model
                 if (value == _status)
                     return;
                 _status = value;
-                Communication.getInstance.sendFuncs["turnOnOff"].DynamicInvoke(_status, Id);
                 RaisePropertyChanged("Status");
             }
 
@@ -66,30 +65,28 @@ namespace Powermonitor.Model
         }
         #endregion
         #region Profile
-        private Profile _profile;
-        public Profile Profile
+        private Profile _defaultProfile;
+        public Profile DefaultProfile
         {
             get
             {
-                //if (_profile == null)
-                  //  _profile = ResourceManager.getInstance.Profiles.getById(Id);
-                return _profile;
+                return _defaultProfile;
             }
             set
             {
-                if (value == _profile)
+                if (value == _defaultProfile)
                     return;
-                _profile = value;
-                RaisePropertyChanged("Profile");
+                _defaultProfile = value;
+                RaisePropertyChanged("DefaultProfile");
             }
 
         }
         #endregion
         public UInt64 Id { get; private set; }
-        public UInt64? DefaultProfile { get; private set; }
+        //public UInt64? DefaultProfile { get; private set; }
         public UInt64 InternalProfile { get; private set; }
 
-        public Module(string name = "", bool status = false, UInt64 id = 0, UInt64? defaultProfile = null, UInt64 internalProfile = 0)
+        public Module(string name = "", bool status = false, UInt64 id = 0, Profile defaultProfile = null, UInt64 internalProfile = 0)
         {
             Name = name;
             _status = status;
@@ -97,7 +94,6 @@ namespace Powermonitor.Model
             Id = id;
             DefaultProfile = defaultProfile;
             InternalProfile = internalProfile;
-            _profile = null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

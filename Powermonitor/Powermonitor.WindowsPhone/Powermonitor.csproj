@@ -88,7 +88,6 @@
     <Compile Include="Common\Helper.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
-    <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\Request.cs" />
     <Compile Include="Common\ResourceManager.cs" />
     <Compile Include="Common\Singleton.cs" />
@@ -108,7 +107,7 @@
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModel\ConfigurationViewModel.cs" />
     <Compile Include="ViewModel\ConsultationViewModel.cs" />
-    <Compile Include="ViewModel\CreateProfilViewModel.cs" />
+    <Compile Include="ViewModel\CreateProfileViewModel.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
     <Compile Include="ViewModel\InitViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
@@ -126,8 +125,8 @@
     <Compile Include="View\ConsultationView.xaml.cs">
       <DependentUpon>ConsultationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\CreateProfilView.xaml.cs">
-      <DependentUpon>CreateProfilView.xaml</DependentUpon>
+    <Compile Include="View\CreateProfileView.xaml.cs">
+      <DependentUpon>CreateProfileView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
@@ -184,7 +183,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\CreateProfilView.xaml">
+    <Page Include="View\CreateProfileView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
