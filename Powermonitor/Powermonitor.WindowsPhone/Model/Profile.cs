@@ -28,13 +28,32 @@ namespace Powermonitor.Model
 
         }
         #endregion
+        #region Polling
+        private uint _polling;
+        public uint Polling
+        {
+            get
+            {
+                return _polling;
+            }
+            set
+            {
+                if (value == _polling)
+                    return;
+                _polling = value;
+                RaisePropertyChanged("Polling");
+            }
+
+        }
+        #endregion
 
         public UInt64 Id { get; private set; }
         public ObservableCollection<Alert> Alerts { get; private set; }
-        public Profile(String name = "", UInt64 id = 0, ObservableCollection<Alert> alerts = null)
+        public Profile(String name = "", UInt64 id = 0, uint polling = 1, ObservableCollection<Alert> alerts = null)
         {
             Name = name;
             Id = id;
+            Polling = polling;
             Alerts = alerts;
         }
 

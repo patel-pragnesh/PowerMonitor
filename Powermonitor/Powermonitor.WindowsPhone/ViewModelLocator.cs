@@ -26,12 +26,14 @@ namespace Powermonitor
             SimpleIoc.Default.Register<CreateProfileViewModel>();
             SimpleIoc.Default.Register<HomeViewModel>();
             SimpleIoc.Default.Register<LoginViewModel>();
+            SimpleIoc.Default.Register<ModifyProfileViewModel>();
             SimpleIoc.Default.Register<ScheduleViewModel>();
             (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("Init", typeof(InitView));
             (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("Login", typeof(LoginView));
             (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("Home", typeof(HomeView));
             (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("Configuration", typeof(ConfigurationView));
             (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("Consultation", typeof(ConsultationView));
+            (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("ModifyProfile", typeof(ModifyProfilView));
             (SimpleIoc.Default.GetInstance<INavigationService>() as NavigationService).Configure("Schedule", typeof(ScheduleView));
         }
 
@@ -64,6 +66,12 @@ namespace Powermonitor
         {
             get { return ServiceLocator.Current.GetInstance<LoginViewModel>(); }
         }
+
+        public ModifyProfileViewModel ModifyProfileVM
+        {
+            get { return ServiceLocator.Current.GetInstance<ModifyProfileViewModel>(); }
+        }
+
 
         public ScheduleViewModel ScheduleVM
         {

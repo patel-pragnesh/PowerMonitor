@@ -49,6 +49,7 @@ namespace Powermonitor.View
 
         private async void FailedLogin(string s)
         {
+            loginError.Hide();
             await loginError.ShowAsync();
         }
 

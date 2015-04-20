@@ -13,11 +13,14 @@ using GalaSoft.MvvmLight;
 using Windows.UI.Xaml.Controls;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using GalaSoft.MvvmLight.Views;
 
 namespace Powermonitor.ViewModel
 {
     public class ConfigurationViewModel : ViewModelBase
     {
+        INavigationService _nav;
+
         #region Profiles
         private ObservableCollection<Profile> _profiles;
         public ObservableCollection<Profile> Profiles
@@ -134,8 +137,9 @@ namespace Powermonitor.ViewModel
         public ICommand bTurnOnOff_Command { get { return new RelayCommand(TurnOnOffCommand); } }
         public ICommand bSelectDefaultProfile_Command { get { return new RelayCommand(SelectDefaultProfileCommand); } }
         public ICommand bDeleteProfile_Command { get { return new RelayCommand(DeleteProfileCommand); } }
+        public ICommand bModify_Command { get { return new RelayCommand(ModifyCommand); } }
 
-        public ConfigurationViewModel()
+        public ConfigurationViewModel(INavigationService navigationService)
         {
             Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
             Communication.getInstance.sendFuncs["getProfiles"].DynamicInvoke((Action<JObject, JObject>)GetProfilesCallback);
@@ -144,30 +148,47 @@ namespace Powermonitor.ViewModel
             InternalProfile = null;
             SelectedModule = null;
             SelectedDefaultProfile = null;
+            _nav = navigationService;
+        }
+
+        private void HandleError(JObject response)
+        {
+            var code = response["returnCode"].ToObject<UInt64>();
+            if (code == 0x103 || code == 0x104)
+                this._nav.NavigateTo("Login");
+            MessengerInstance.Send(Errors.GetErrorMessage(code));
         }
 
         private void GetModulesCallback(JObject request, JObject response)
         {
             if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
                 Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["modules"].ToString()));
+            else
+                HandleError(response);
         }
 
         private void GetProfilesCallback(JObject request, JObject response)
         {
             if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
                 Profiles = new ObservableCollection<Profile>(JsonConvert.DeserializeObject<List<Profile>>(response["profiles"].ToString()));
+            else
+                HandleError(response);
         }
 
         private void TurnOnOffCallback(JObject request, JObject response)
         {
             if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
                 SelectedModule.Status = !SelectedModule.Status;
+            else
+                HandleError(response);
         }
 
         private void RenameModuleCallback(JObject request, JObject response)
         {
             if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
                 Modules.First(m => m.Id == request["id"].ToObject<UInt64>()).Name = request["name"].ToString();
+            else
+                HandleError(response);
         }
 
         private void UpdateModuleDefaultProfileCallback(JObject request, JObject response)
@@ -175,6 +196,8 @@ namespace Powermonitor.ViewModel
             var id = request["defaultProfileId"].ToObject<UInt64?>();
             if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
                 Modules.First(m => m.Id == request["id"].ToObject<UInt64>()).DefaultProfile = id == null ? null : Profiles.First(p => p.Id == request["defaultProfileId"].ToObject<UInt64?>());
+            else
+                HandleError(response);
         }
 
         private void DeleteProfileCallback(JObject request, JObject response)
@@ -192,7 +215,7 @@ namespace Powermonitor.ViewModel
                     Profiles.Remove(save);
             }
             else
-                MessengerInstance.Send(Errors.GetErrorMessage(1));
+                HandleError(response);
         }
 
         private void InternalProfileHandler_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -213,7 +236,7 @@ namespace Powermonitor.ViewModel
         {
             if (SelectedModule != null)
             {
-                //Communication.getInstance.sendFuncs["turnOnOff"].DynamicInvoke((Action<JObject, JObject>)TurnOnOffCallback);
+                Communication.getInstance.sendFuncs["turnOnOff"].DynamicInvoke((Action<JObject, JObject>)TurnOnOffCallback, !SelectedModule.Status, SelectedModule.Id);
                 //SelectedModule.Status = !SelectedModule.Status;
             }
         }
@@ -237,6 +260,12 @@ namespace Powermonitor.ViewModel
         public void DissociateProfile()
         {
             Communication.getInstance.sendFuncs["updateModuleDefaultProfile"].DynamicInvoke((Action<JObject, JObject>)UpdateModuleDefaultProfileCallback, SelectedModule.Id, null);
+        }
+
+        public void ModifyCommand()
+        {
+            ModifyProfileViewModel.ToUpdate = SelectedProfile;
+            _nav.NavigateTo("ModifyProfile");
         }
     }
 }

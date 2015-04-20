@@ -11,19 +11,6 @@ namespace Powermonitor.ViewModel
 {
     public class ScheduleViewModel : ViewModelBase
     {
-        private ModifyProfilViewModel _ModifyViewModel;
-        public ModifyProfilViewModel ModifyViewModel {
-            get
-            {
-                return _ModifyViewModel;
-            }
-            set
-            {
-                _ModifyViewModel = value;
-                RaisePropertyChanged("ModifyViewModel");
-            }
-        }
-
         private Dictionary<string, ObservableCollection<TimeSlot>> _timeSlots;
         public Dictionary<string, ObservableCollection<TimeSlot>> TimeSlots
         {
@@ -40,7 +27,6 @@ namespace Powermonitor.ViewModel
 
         public ScheduleViewModel()
         {
-            ModifyViewModel = new ModifyProfilViewModel();
             //TimeSlots = new Dictionary<string, ObservableCollection<TimeSlot>>();
         }
 

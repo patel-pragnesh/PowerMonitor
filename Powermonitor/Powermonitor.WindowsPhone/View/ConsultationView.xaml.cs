@@ -35,12 +35,11 @@ namespace Powermonitor.View
         public ConsultationView()
         {
             this.InitializeComponent();
-            defaultViewModel = new ConsultationViewModel(Power, Voltage, Amperage);
-            
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            DataContext = DefaultViewModel;
+            defaultViewModel = this.DataContext as ViewModelBase;
+            (defaultViewModel as ConsultationViewModel).SetGraphs(Power, Voltage, Amperage);
         }
     
         /// <summary>

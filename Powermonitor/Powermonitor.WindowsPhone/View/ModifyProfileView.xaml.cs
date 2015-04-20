@@ -1,6 +1,9 @@
-﻿using Powermonitor.Common;
+﻿using GalaSoft.MvvmLight;
+using Powermonitor.Common;
+using Powermonitor.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -26,7 +29,8 @@ namespace Powermonitor.View
     public sealed partial class ModifyProfilView : Page
     {
         private NavigationHelper navigationHelper;
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private ViewModelBase defaultViewModel;
+        Dictionary<string, ObservableCollection<TimeSlot>> test;
 
         public ModifyProfilView()
         {
@@ -35,6 +39,8 @@ namespace Powermonitor.View
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            defaultViewModel = this.DataContext as ViewModelBase;
+            test = new Dictionary<string, ObservableCollection<TimeSlot>>();
         }
 
         /// <summary>
@@ -49,7 +55,7 @@ namespace Powermonitor.View
         /// Obtient le modèle d'affichage pour ce <see cref="Page"/>.
         /// Cela peut être remplacé par un modèle d'affichage fortement typé.
         /// </summary>
-        public ObservableDictionary DefaultViewModel
+        public ViewModelBase DefaultViewModel
         {
             get { return this.defaultViewModel; }
         }
@@ -108,5 +114,9 @@ namespace Powermonitor.View
 
         #endregion
 
+        private void bSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(ScheduleView), test);
+        }
     }
 }

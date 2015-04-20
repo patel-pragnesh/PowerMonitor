@@ -9,18 +9,34 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight;
 using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 using System.Collections.ObjectModel;
+using GalaSoft.MvvmLight.Views;
+using Newtonsoft.Json.Linq;
 
 namespace Powermonitor.ViewModel
 {
     public class HomeViewModel : ViewModelBase
     {
+        INavigationService _nav;
         public ICommand bConsulter_Command { get; set; }
         public ICommand bConfigurer_Command { get; set; }
 
         private Chart _power;
         private Chart _voltage;
         private Chart _amperage;
-        public HomeViewModel(Chart power, Chart voltage, Chart amperage)
+        public HomeViewModel(INavigationService navigationService)
+        {
+            _nav = navigationService;
+        }
+
+        private void HandleError(JObject response)
+        {
+            var code = response["returnCode"].ToObject<UInt64>();
+            if (code == 0x103 || code == 0x104)
+                this._nav.NavigateTo("Login");
+            MessengerInstance.Send(Errors.GetErrorMessage(code));
+        }
+
+        public void SetGraphs(Chart power, Chart voltage, Chart amperage)
         {
             _power = power;
             _voltage = voltage;

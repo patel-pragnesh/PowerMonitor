@@ -33,10 +33,11 @@ namespace Powermonitor.View
         public HomeView()
         {
             this.InitializeComponent();
-            defaultViewModel = new HomeViewModel(Power, Voltage, Amperage);
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            defaultViewModel = this.DataContext as ViewModelBase;
+            (defaultViewModel as HomeViewModel).SetGraphs(Power, Voltage, Amperage);
         }
 
         /// <summary>

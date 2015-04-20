@@ -30,7 +30,7 @@ namespace Powermonitor.View
     public sealed partial class ConfigurationView : Page
     {
         private NavigationHelper navigationHelper;
-        private ViewModelBase defaultViewModel = new ConfigurationViewModel();
+        private ViewModelBase defaultViewModel;
 
         public ConfigurationView()
         {
@@ -39,6 +39,7 @@ namespace Powermonitor.View
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            defaultViewModel = this.DataContext as ViewModelBase;
             LayoutRoot.DataContext = DefaultViewModel;
             Messenger.Default.Register<string>(this, HandleError);
         }
@@ -164,6 +165,12 @@ namespace Powermonitor.View
             }
         }
 
+        private void ModuleListViewItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            //var tmp = (sender as ListViewItem).DataContext;
+            //ModuleList.SelectedItem = tmp;
+        }
+
         private void ProfileListViewItem_Holding(object sender, HoldingRoutedEventArgs e)
         {
             if (e.HoldingState == Windows.UI.Input.HoldingState.Started)
@@ -231,12 +238,8 @@ namespace Powermonitor.View
 
         private void ToggleButton_Click(object sender, RoutedEventArgs e)
         {
-            var toto = (sender as ToggleButton).IsChecked;
-        }
-
-        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
-        {
-
+            var tmp = (((sender as ToggleButton).Parent as Grid).Parent as ListViewItem).DataContext;
+            ModuleList.SelectedItem = tmp;
         }
     }
 }

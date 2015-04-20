@@ -7,6 +7,7 @@
     xmlns:Controls="using:WinRTXamlToolkit.Controls"
     x:Class="Powermonitor.View.ModifyProfilView"
     mc:Ignorable="d"
+    DataContext="{Binding ModifyProfileVM, Source={StaticResource Locator}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
@@ -33,18 +34,21 @@
 		<!-- Panneau Titre -->
 		<StackPanel Grid.Row="0" Margin="19,0,0,0">
 			<TextBlock Text="{StaticResource ApplicationTitle}" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-			<TextBlock Text="Modifier" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+			<TextBlock Text="{Binding Title}" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
 		</StackPanel>
 
         <!--TODO: le contenu doit être placé dans la grille suivante-->
 		<Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
 			<StackPanel>
-				<TextBox/>
-                <Controls:NumericUpDown SmallChange="1"/>
-                <ListBox ItemsSource="{Binding Profil.Alerts, Mode=OneWay}" ItemTemplate="{StaticResource AlertTemplate}"/>
+                <TextBlock Text="Nom du profil"/>
+                <TextBox Text="{Binding Profile.Name}"/>
+                <TextBlock Text="Polling"/>
+                <Controls:NumericUpDown SmallChange="1" Minimum="1" Maximum="60" Value="{Binding Profile.Polling}" ValueFormat="F0"/>
+                <ListBox ItemsSource="{Binding Profile.Alerts, Mode=OneWay}" ItemTemplate="{StaticResource AlertTemplate}"/>
                 <Button Name="bCreateAlert" Style="{StaticResource Buttons}">Créer une alerte</Button>
                 <Button Name="bModifyAlert" Style="{StaticResource Buttons}">Modifier une alerte</Button>
                 <Button Name="bDeleteAlert" Style="{StaticResource Buttons}">Supprimer une alerte</Button>
+                <Button Name="bSchedule" Style="{StaticResource Buttons}" Click="bSchedule_Click">Planning</Button>
             </StackPanel>
 		</Grid>
 	</Grid>

@@ -8,6 +8,7 @@ namespace Powermonitor.Model
 {
     public class Alert
     {
+
         public Alert()
         {
 
