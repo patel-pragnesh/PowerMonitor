@@ -111,6 +111,7 @@ namespace Powermonitor.View
         /// les gestionnaires d'événements qui ne peuvent pas annuler la requête de navigation.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            (this.DefaultViewModel as ConfigurationViewModel).Refresh();
             this.navigationHelper.OnNavigatedTo(e);
         }
 
@@ -123,7 +124,7 @@ namespace Powermonitor.View
 
         private void bCreate_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(CreateProfilView));
+            this.Frame.Navigate(typeof(CreateProfileView));
         }
 
         private async void bDelete_Click(object sender, RoutedEventArgs e)
@@ -133,7 +134,7 @@ namespace Powermonitor.View
 
         private void bModify_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ModifyProfilView));
+            this.Frame.Navigate(typeof(ModifyProfileView));
         }
 
         private void gProfilItem_Holding(object sender, HoldingRoutedEventArgs e)
@@ -198,11 +199,6 @@ namespace Powermonitor.View
             await moduleRenameDialog.ShowAsync();
         }
 
-        private async void bModifyInternalProfile_Click(object sender, RoutedEventArgs e)
-        {
-            await moduleModifyInternalProfileDialog.ShowAsync();
-        }
-
         private async void bChangeDefaultProfile_Click(object sender, RoutedEventArgs e)
         {
             DefaultProfile_List.SelectedItem = null;
@@ -221,14 +217,7 @@ namespace Powermonitor.View
 
         private void RenameDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            if (renameTextBox.Text.Count() == 0)
-            {
-                args.Cancel = true;
-            }
-            else
-            {
-                (DefaultViewModel as ConfigurationViewModel).Rename(renameTextBox.Text);
-            }
+            (DefaultViewModel as ConfigurationViewModel).Rename(renameTextBox.Text);
         }
 
         private void DefaultProfileListBox_Tapped(object sender, TappedRoutedEventArgs e)

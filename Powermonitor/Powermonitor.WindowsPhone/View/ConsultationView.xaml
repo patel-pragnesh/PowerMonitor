@@ -19,7 +19,7 @@
         </DataTemplate>
     </Page.Resources>
     
-    <Grid x:Name="LayoutRoot" Style="{StaticResource BackgroundColor}">
+    <Grid x:Name="LayoutRoot">
 
         <Grid.ChildrenTransitions>
             <TransitionCollection>

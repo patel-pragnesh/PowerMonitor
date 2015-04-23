@@ -84,16 +84,16 @@ namespace Powermonitor.Model
         #endregion
         public UInt64 Id { get; private set; }
         //public UInt64? DefaultProfile { get; private set; }
-        public UInt64 InternalProfile { get; private set; }
+        public UInt64 InternalProfileId { get; private set; }
 
-        public Module(string name = "", bool status = false, UInt64 id = 0, Profile defaultProfile = null, UInt64 internalProfile = 0)
+        public Module(string name = "", bool status = false, UInt64 id = 0, Profile defaultProfile = null, UInt64 internalProfileId = 0)
         {
             Name = name;
             _status = status;
             IsSelected = true;
             Id = id;
             DefaultProfile = defaultProfile;
-            InternalProfile = internalProfile;
+            InternalProfileId = internalProfileId;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

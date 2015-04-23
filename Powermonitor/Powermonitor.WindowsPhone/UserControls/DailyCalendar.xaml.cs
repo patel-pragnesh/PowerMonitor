@@ -1,4 +1,7 @@
-﻿using Powermonitor.Model;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Powermonitor.Common;
+using Powermonitor.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,12 +27,11 @@ namespace Powermonitor.UserControls
 {
     public sealed partial class DailyCalendar : UserControl
     {
-        private readonly int BorderHeight = 50; 
+        private readonly int BorderHeight = 50;
+        private UInt64 current;
         public DailyCalendar()
         {
             this.InitializeComponent();
-            //this.DataContext = this;
-            //var yolo = this.DataContext;
             DataTemplate TimeTemplate = Resources["TimeTemplate"] as DataTemplate;
             DataTemplate EventTemplate = Resources["EventTemplate"] as DataTemplate;
             for (int i = 0; i < 24; ++i)
@@ -44,39 +46,7 @@ namespace Powermonitor.UserControls
                 TimeStackPanel.Children.Add(newTime);
                 EventStackPanel.Children.Add(newEvent);
             }
-        }
-
-        private void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
-        {
-            if (args.NewValue != null && args.NewValue.GetType() == typeof(ObservableCollection<TimeSlot>))
-            {
-                var children = this.EventStackPanel.Children;
-                foreach (TimeSlot ts in args.NewValue as ObservableCollection<TimeSlot>)
-                {
-                    foreach (Border e in children)
-                    {
-                        var toto = e.Name;
-                        var titi = ts.DateBeginning.Hour.ToString();
-                        if (e.Name == ts.DateBeginning.Hour.ToString())
-                        {
-                            int hourDiff = (ts.DateEnd.Hour - ts.DateBeginning.Hour);
-                            if (hourDiff > 0)
-                            {
-                                int newHeight = (int)(((ts.DateEnd - ts.DateBeginning).TotalMinutes * BorderHeight) / 60);
-                                e.Height = newHeight;
-                            }
-                            e.Child = new Rectangle()
-                            {
-                                Height = (int)(((ts.DateEnd - ts.DateBeginning).TotalMinutes * e.Height) / 60),
-                                Width = e.Width,
-                                Fill = new SolidColorBrush(Colors.Blue),
-                                Margin = new Thickness(0, (int)((ts.DateBeginning.Minute * e.Height) / 60), 0, 0),
-                                VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Top
-                            };
-                        }
-                    }
-                }
-            }
+            current = 0;
         }
 
         private void EmptyPlanning()
@@ -92,18 +62,18 @@ namespace Powermonitor.UserControls
         private void SetPlanning()
         {
             var children = this.EventStackPanel.Children;
-            foreach (TimeSlot ts in DataContext as ObservableCollection<TimeSlot>)
+            foreach (TimeSlot ts in (DataContext as TimeSlotsContainer).TimeSlots)
             {
                 foreach (Border e in children)
                 {
-                    if (e.Name == ts.DateBeginning.Hour.ToString())
+                    if (e.Name == ts.Beg.AsHours().ToString())
                     {
-                        int hourDiff = (ts.DateEnd.Hour - ts.DateBeginning.Hour);
+                        int hourDiff = (ts.End.AsHours() - ts.Beg.AsHours());
                         double oldHeight = e.Height;
                         if (hourDiff > 0)
                         {
                             int current = int.Parse(e.Name);
-                            int newHeight = (int)(((ts.DateEnd - ts.DateBeginning).TotalMinutes * e.Height) / 60) + (int)((ts.DateBeginning.Minute * oldHeight) / 60);
+                            int newHeight = (int)(((ts.End.Minute - ts.Beg.Minute) * e.Height) / 60) + (int)((ts.Beg.MinutesInHour() * oldHeight) / 60);
                             (children.ElementAt(current + hourDiff) as Border).Height = e.Height - (newHeight % e.Height);
                             for (int i = current + 1; i < current + hourDiff; ++i)
                                 (children.ElementAt(i) as Border).Height = 0;
@@ -111,16 +81,24 @@ namespace Powermonitor.UserControls
                         }
                         e.Child = new Rectangle()
                         {
-                            Height = (int)(((ts.DateEnd - ts.DateBeginning).TotalMinutes * oldHeight) / 60),
+                            Name = ts.Id.ToString(),
+                            Height = (int)(((ts.End.Minute - ts.Beg.Minute) * oldHeight) / 60),
                             Width = e.Width,
                             Fill = new SolidColorBrush(Colors.Blue),
-                            Margin = new Thickness(0, (int)((ts.DateBeginning.Minute * oldHeight) / 60), 0, 0),
+                            Margin = new Thickness(0, (int)((ts.Beg.MinutesInHour() * oldHeight) / 60), 0, 0),
                             VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Top,
                         };
-                        e.Child.Tapped += Child_Tapped;
+                        e.Child.Holding += Child_Holding;
                     }
                 }
             }
+        }
+
+        private void Child_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            current = UInt64.Parse((sender as Rectangle).Name);
+            Communication.getInstance.sendFuncs["deleteTimeSlot"].DynamicInvoke((Action<JObject, JObject>)DeleteTimeSlotCallback, current);
+            //FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout((((sender as FrameworkElement).Parent as FrameworkElement).Parent as FrameworkElement).Parent as FrameworkElement);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs rea)
@@ -131,15 +109,9 @@ namespace Powermonitor.UserControls
             }
         }
 
-        private void Child_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout((((sender as FrameworkElement).Parent as FrameworkElement).Parent as FrameworkElement).Parent as FrameworkElement);
-
-          //  flyoutBase.ShowAt((sender as FrameworkElement).Parent as FrameworkElement);
-        }
-
         async private void TimeBorder_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            current = 0;
             await ChooseTimeDialog.ShowAsync();
         }
 
@@ -147,6 +119,10 @@ namespace Powermonitor.UserControls
         {
             Border b = sender as Border;
             int h = int.Parse(b.Name);
+            if (b.Child == null)
+                current = 0;
+            else
+                current = UInt64.Parse((b.Child as Rectangle).Name);
             BeginTimePicker.Time = new TimeSpan(h, 0, 0);
             EndTimePicker.Time = new TimeSpan(h + 1, 0, 0);
             await ChooseTimeDialog.ShowAsync();
@@ -154,19 +130,64 @@ namespace Powermonitor.UserControls
 
         private void ChooseTimeDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            EmptyPlanning();
-            DateTime tmp = GetNextWeekday(DateTime.Now, DayOfWeek.Tuesday);
-            DateTime b = new DateTime(tmp.Year, tmp.Month, tmp.Day, BeginTimePicker.Time.Hours, BeginTimePicker.Time.Minutes, 0);
-            DateTime e = new DateTime(tmp.Year, tmp.Month, tmp.Day, EndTimePicker.Time.Hours, EndTimePicker.Time.Minutes, 0);
-            (DataContext as ObservableCollection<TimeSlot>).Add(new TimeSlot(b.Ticks, e.Ticks));
-            SetPlanning();
+            TimeSlotsContainer container = (DataContext as TimeSlotsContainer);
+            if (current == 0)
+                Communication.getInstance.sendFuncs["addTimeSlot"].DynamicInvoke((Action<JObject, JObject>)AddTimeSlotCallback,
+                    container.ProfileId, new Time(container.DayOfWeek, (int)BeginTimePicker.Time.TotalMinutes), new Time(container.DayOfWeek, (int)EndTimePicker.Time.TotalMinutes));
+            else
+                Communication.getInstance.sendFuncs["updateTimeSlot"].DynamicInvoke((Action<JObject, JObject>)UpdateTimeSlotCallback,
+                    current, new Time(container.DayOfWeek, (int)BeginTimePicker.Time.TotalMinutes), new Time(container.DayOfWeek, (int)EndTimePicker.Time.TotalMinutes));
+            //DateTime tmp = GetNextWeekday(DateTime.Now, DayOfWeek.Tuesday);
+            //DateTime b = new DateTime(tmp.Year, tmp.Month, tmp.Day, BeginTimePicker.Time.Hours, BeginTimePicker.Time.Minutes, 0);
+            //DateTime e = new DateTime(tmp.Year, tmp.Month, tmp.Day, EndTimePicker.Time.Hours, EndTimePicker.Time.Minutes, 0);
+            //(DataContext as ObservableCollection<TimeSlot>).Add(new TimeSlot(b.Ticks, e.Ticks));
+        }
+        private void AddTimeSlotCallback(JObject request, JObject response)
+        {
+            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
+            {
+                TimeSlotsContainer container = (DataContext as TimeSlotsContainer);
+                EmptyPlanning();
+                container.TimeSlots.Add(new TimeSlot(response["id"].ToObject<UInt64>(),
+                    JsonConvert.DeserializeObject<Time>(request["beg"].ToString()),
+                    JsonConvert.DeserializeObject<Time>(request["end"].ToString())));
+                SetPlanning();
+            }
+            //else
+            //    HandleError(response);
         }
 
-        public static DateTime GetNextWeekday(DateTime start, DayOfWeek day)
+        private void UpdateTimeSlotCallback(JObject request, JObject response)
         {
-            // The (... + 7) % 7 ensures we end up with a value in the range [0, 6]
-            int daysToAdd = ((int)day - (int)start.DayOfWeek + 7) % 7;
-            return start.AddDays(daysToAdd);
+            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
+            {
+                TimeSlotsContainer container = (DataContext as TimeSlotsContainer);
+                EmptyPlanning();
+                container.TimeSlots.RemoveAll(ts => ts.Id == request["id"].ToObject<UInt64>());
+                container.TimeSlots.Add(new TimeSlot(request["id"].ToObject<UInt64>(),
+                    JsonConvert.DeserializeObject<Time>(request["beg"].ToString()),
+                    JsonConvert.DeserializeObject<Time>(request["end"].ToString())));
+                SetPlanning();
+            }
+            //else
+            //    HandleError(response);
+        }
+
+        private void DeleteTimeSlotCallback(JObject request, JObject response)
+        {
+            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
+            {
+                TimeSlotsContainer container = (DataContext as TimeSlotsContainer);
+                EmptyPlanning();
+                container.TimeSlots.RemoveAll(ts => ts.Id == request["id"].ToObject<UInt64>());
+            }
+            //else
+            //    HandleError(response);
+        }
+
+        private void confirmDelete_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+
         }
     }
 }

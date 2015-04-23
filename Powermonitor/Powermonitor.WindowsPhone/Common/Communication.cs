@@ -42,11 +42,16 @@ namespace Powermonitor.Common
             sendFuncs.Add("new_account", new Action<Action<JObject, JObject>, int, string, string>(NewAccount));
             sendFuncs.Add("getModules", new Action<Action<JObject, JObject>>(GetModules));
             sendFuncs.Add("getProfiles", new Action<Action<JObject, JObject>>(GetProfiles));
+            sendFuncs.Add("getProfile", new Action<Action<JObject, JObject>, UInt64>(GetProfile));
             sendFuncs.Add("getInternalProfile", new Action<Action<JObject, JObject>, UInt64>(GetInternalProfile));
             sendFuncs.Add("renameModule", new Action<Action<JObject, JObject>, string, UInt64>(RenameModule));
             sendFuncs.Add("turnOnOff", new Action<Action<JObject, JObject>, bool, UInt64>(TurnOnOff));
             sendFuncs.Add("updateModuleDefaultProfile", new Action<Action<JObject, JObject>, UInt64, UInt64?>(UpdateModuleDefaultProfile));
             sendFuncs.Add("deleteProfile", new Action<Action<JObject, JObject>, UInt64>(DeleteProfile));
+            sendFuncs.Add("addProfile", new Action<Action<JObject, JObject>, string, int>(AddProfile));
+            sendFuncs.Add("addTimeSlot", new Action<Action<JObject, JObject>, UInt64, Time, Time>(AddTimeSlot));
+            sendFuncs.Add("deleteTimeSlot", new Action<Action<JObject, JObject>, UInt64>(DeleteTimeSlot));
+            sendFuncs.Add("updateTimeSlot", new Action<Action<JObject, JObject>, UInt64, Time, Time>(UpdateTimeSlot));
         }
 
         async public Task<bool> Connect()
@@ -56,7 +61,7 @@ namespace Powermonitor.Common
 
         private void ReceivedMsgs(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (_socket.Received.Count > 0)
+            if (_socket.Received.Count > 0 && e.Action == NotifyCollectionChangedAction.Add)
             {
                 String msg = _socket.Received.First();
                 //var jObj = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(msg);
@@ -68,9 +73,10 @@ namespace Powermonitor.Common
                     Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
                     roamingSettings.Values["session"] = sessionStr;
                 }
-                Request req = sentRequests.Dequeue();
+                Request req = sentRequests.ElementAt(0);
                 req.Callback.DynamicInvoke(req.Message, jObj);
                 _socket.Received.Remove(msg);
+                sentRequests.Dequeue();
                 SendRemainingMessages();
             }
         }
@@ -138,6 +144,12 @@ namespace Powermonitor.Common
             AddMsg(callback, json);
         }
 
+        private void GetProfile(Action<JObject, JObject> callback, UInt64 id)
+        {
+            JObject json = new JObject() { { "cmd", "getProfile" }, { "id", id } };
+            AddMsg(callback, json);
+        }
+
         private void GetInternalProfile(Action<JObject, JObject> callback, UInt64 id)
         {
             JObject json = new JObject() { { "cmd", "getInternalProfile" }, { "id", id } };
@@ -165,6 +177,30 @@ namespace Powermonitor.Common
         private void DeleteProfile(Action<JObject, JObject> callback, UInt64 id)
         {
             JObject json = new JObject() { { "cmd", "deleteProfile" }, { "id", id } };
+            AddMsg(callback, json);
+        }
+
+        private void AddProfile(Action<JObject, JObject> callback, string name, int polling)
+        {
+            JObject json = new JObject() { { "cmd", "addProfile" }, { "name", name }, { "polling", polling } };
+            AddMsg(callback, json);
+        }
+
+        private void AddTimeSlot(Action<JObject, JObject> callback, UInt64 profileId, Time beg, Time end)
+        {
+            JObject json = new JObject() { { "cmd", "addTimeSlot" }, { "profileId", profileId }, { "beg", JObject.FromObject(beg) }, { "end", JObject.FromObject(end) } };
+            AddMsg(callback, json);
+        }
+
+        private void DeleteTimeSlot(Action<JObject, JObject> callback, UInt64 timeslotId)
+        {
+            JObject json = new JObject() { { "cmd", "deleteTimeSlot" }, { "id", timeslotId } };
+            AddMsg(callback, json);
+        }
+
+        private void UpdateTimeSlot(Action<JObject, JObject> callback, UInt64 timeslotId, Time beg, Time end)
+        {
+            JObject json = new JObject() { { "cmd", "updateTimeSlot" }, { "id", timeslotId }, { "beg", JObject.FromObject(beg) }, { "end", JObject.FromObject(end) } };
             AddMsg(callback, json);
         }
         #endregion

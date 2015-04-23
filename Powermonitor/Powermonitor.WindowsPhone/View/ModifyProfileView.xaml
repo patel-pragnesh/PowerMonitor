@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Controls="using:WinRTXamlToolkit.Controls"
-    x:Class="Powermonitor.View.ModifyProfilView"
+    x:Class="Powermonitor.View.ModifyProfileView"
     mc:Ignorable="d"
     DataContext="{Binding ModifyProfileVM, Source={StaticResource Locator}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -13,12 +13,22 @@
     <Page.Resources>
         <DataTemplate x:Key="AlertTemplate">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Path=Name}"/>
+                <ComboBox>
+                    <ComboBoxItem>
+                        Volt
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        Watt
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        Ampère
+                    </ComboBoxItem>
+                </ComboBox>
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
     
-    <Grid x:Name="LayoutRoot" Style="{StaticResource BackgroundColor}">
+    <Grid x:Name="LayoutRoot">
 
 		<Grid.ChildrenTransitions>
 			<TransitionCollection>
@@ -34,7 +44,7 @@
 		<!-- Panneau Titre -->
 		<StackPanel Grid.Row="0" Margin="19,0,0,0">
 			<TextBlock Text="{StaticResource ApplicationTitle}" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-			<TextBlock Text="{Binding Title}" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+			<TextBlock Text="Modifier" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
 		</StackPanel>
 
         <!--TODO: le contenu doit être placé dans la grille suivante-->
@@ -45,11 +55,35 @@
                 <TextBlock Text="Polling"/>
                 <Controls:NumericUpDown SmallChange="1" Minimum="1" Maximum="60" Value="{Binding Profile.Polling}" ValueFormat="F0"/>
                 <ListBox ItemsSource="{Binding Profile.Alerts, Mode=OneWay}" ItemTemplate="{StaticResource AlertTemplate}"/>
-                <Button Name="bCreateAlert" Style="{StaticResource Buttons}">Créer une alerte</Button>
-                <Button Name="bModifyAlert" Style="{StaticResource Buttons}">Modifier une alerte</Button>
-                <Button Name="bDeleteAlert" Style="{StaticResource Buttons}">Supprimer une alerte</Button>
-                <Button Name="bSchedule" Style="{StaticResource Buttons}" Click="bSchedule_Click">Planning</Button>
             </StackPanel>
-		</Grid>
+
+            <!-- ContentDialog confirmDelete -->
+            <ContentDialog Name="addAlerteDialog" PrimaryButtonText="Accepter"
+                           PrimaryButtonClick="addAlerteDialog_PrimaryButtonClick"
+                           SecondaryButtonText="Annuler" Title="Ajouter une alerte">
+                <StackPanel>
+                    <TextBlock Text="Valeur"/>
+                    <Controls:NumericUpDown SmallChange="1" Minimum="1" Maximum="60" ValueFormat="F0"/>
+                    <ComboBox Header="Unité" SelectedIndex="0">
+                        <ComboBoxItem>
+                            Volt
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            Watt
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            Ampère
+                        </ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+            </ContentDialog>
+        </Grid>
 	</Grid>
+    
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Label="Gérer les timeslots" Icon="Calendar" Command="{Binding bSchedule_Command}"/>
+            <AppBarButton Name="bAddAlerte" Label="Ajouter une alerte" Icon="Add" Click="bAddAlerte_Click"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

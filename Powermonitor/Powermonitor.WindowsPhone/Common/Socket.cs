@@ -28,6 +28,7 @@ namespace Powermonitor.Common
         {
             if (_connected) return false;
             var hostname = new HostName("62.4.24.188");
+            //var hostname = new HostName("192.168.1.12");
             CancellationTokenSource cts = new CancellationTokenSource();
             try
             {

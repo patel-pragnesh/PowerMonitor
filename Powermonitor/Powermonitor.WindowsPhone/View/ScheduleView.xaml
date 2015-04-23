@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid x:Name="LayoutRoot" Style="{StaticResource BackgroundColor}">
+    <Grid x:Name="LayoutRoot">
         <Pivot Title="{StaticResource ApplicationTitle}">
             <PivotItem Header="Lundi">
                 <Border BorderBrush="Black" BorderThickness="0,1,0,0">
@@ -62,10 +62,4 @@
             </PivotItem>
         </Pivot>
     </Grid>
-    
-    <Page.BottomAppBar>
-        <CommandBar>
-            <AppBarButton Label="Enregistrer" Icon="Save" Click="AppBarButton_Click"/>
-        </CommandBar>
-    </Page.BottomAppBar>
 </Page>

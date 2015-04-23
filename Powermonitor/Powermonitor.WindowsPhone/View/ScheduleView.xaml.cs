@@ -31,7 +31,6 @@ namespace Powermonitor.View
     {
         private NavigationHelper navigationHelper;
         private ViewModelBase defaultViewModel;
-        public ObservableCollection<String> test;
 
         public ScheduleView()
         {
@@ -40,9 +39,6 @@ namespace Powermonitor.View
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            test = new ObservableCollection<string>();
-            test.Add("toto");
-            test.Add("titi");
             defaultViewModel = new ScheduleViewModel();
             this.DataContext = DefaultViewModel;
         }
@@ -108,9 +104,8 @@ namespace Powermonitor.View
         /// handlers that cannot cancel the navigation request.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            (this.DefaultViewModel as ScheduleViewModel).Refresh();
             this.navigationHelper.OnNavigatedTo(e);
-            (DataContext as ScheduleViewModel).TimeSlots = e.Parameter as Dictionary<string, ObservableCollection<TimeSlot>>;
-            (DataContext as ScheduleViewModel).Init();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -119,10 +114,5 @@ namespace Powermonitor.View
         }
 
         #endregion
-
-        private void AppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.GoBack();
-        }
     }
 }

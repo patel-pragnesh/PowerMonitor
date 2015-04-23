@@ -10,7 +10,7 @@
     DataContext="{Binding LoginVM, Source={StaticResource Locator}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid x:Name="LayoutRoot" Style="{StaticResource BackgroundColor}">
+    <Grid x:Name="LayoutRoot">
 
         <Grid.ChildrenTransitions>
             <TransitionCollection>
@@ -26,7 +26,7 @@
         <!-- Panneau Titre -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
             <TextBlock Text="{StaticResource ApplicationTitle}" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-            <TextBlock Text="Login" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            <TextBlock Text="Login" Margin="0,-6.5,0,26.5" Style="{StaticResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
 
         <!--TODO: le contenu doit être placé dans la grille suivante-->
@@ -45,8 +45,8 @@
             <TextBox Name="email" Grid.Column="1" Grid.Row="0" Text="guillaume.marescaux@epitech.eu"></TextBox>
             <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Mot de passe :</TextBlock>
             <PasswordBox Name="password" Grid.Column="1" Grid.Row="1" Password="guillaume"/>
-            <Button Grid.ColumnSpan="2" Grid.Row="2" Style="{StaticResource Buttons}" Click="bConnection_Click">Connexion</Button>
-            <Button Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource Buttons}">Mot de passe oublié</Button>
+            <Button Grid.ColumnSpan="2" Grid.Row="2" Click="bConnection_Click">Connexion</Button>
+            <Button Grid.ColumnSpan="2" Grid.Row="3">Mot de passe oublié</Button>
 
             <ContentDialog x:Name="loginError" PrimaryButtonText="OK">
                 <TextBlock TextWrapping="Wrap">Identifiant ou mot de passe incorrect</TextBlock>

@@ -26,13 +26,12 @@ namespace Powermonitor.View
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
-    public sealed partial class ModifyProfilView : Page
+    public sealed partial class ModifyProfileView : Page
     {
         private NavigationHelper navigationHelper;
         private ViewModelBase defaultViewModel;
-        Dictionary<string, ObservableCollection<TimeSlot>> test;
 
-        public ModifyProfilView()
+        public ModifyProfileView()
         {
             this.InitializeComponent();
 
@@ -40,7 +39,6 @@ namespace Powermonitor.View
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             defaultViewModel = this.DataContext as ViewModelBase;
-            test = new Dictionary<string, ObservableCollection<TimeSlot>>();
         }
 
         /// <summary>
@@ -116,7 +114,17 @@ namespace Powermonitor.View
 
         private void bSchedule_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ScheduleView), test);
+            this.Frame.Navigate(typeof(ScheduleView));
+        }
+
+        async private void bAddAlerte_Click(object sender, RoutedEventArgs e)
+        {
+            await addAlerteDialog.ShowAsync();
+        }
+
+        private void addAlerteDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+
         }
     }
 }

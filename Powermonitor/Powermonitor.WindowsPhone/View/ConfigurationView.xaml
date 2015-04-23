@@ -22,7 +22,7 @@
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout>
                         <MenuFlyoutItem x:Name="bRename" Text="Renommer" Click="bRename_Click" />
-                        <MenuFlyoutItem x:Name="bModifyInternalProfile" Click="bModifyInternalProfile_Click" Text="Modifier le profil interne"/>
+                        <MenuFlyoutItem x:Name="bModifyInternalProfile" Command="{Binding ElementName=LayoutRoot, Path=DataContext.bModifyInternalProfile_Command}" CommandParameter="{Binding}" Text="Modifier le profil interne"/>
                         <MenuFlyoutItem x:Name="bChangeDefaultProfile" Click="bChangeDefaultProfile_Click" Text="Changer le profil associé"/>
                         <MenuFlyoutItem x:Name="bDissociatDefaultProfile" Click="bDissociatDefaultProfile_Click" Text="Dissocier le profil associé"/>
                     </MenuFlyout>
@@ -211,7 +211,7 @@
     </Page.Resources>
     <!-- End Resources -->
 
-    <Grid x:Name="LayoutRoot" Style="{StaticResource BackgroundColor}">
+    <Grid x:Name="LayoutRoot">
         <!--Contrôle Pivot-->
         <Pivot Title="{StaticResource ApplicationTitle}" SelectionChanged="Pivot_SelectionChanged">
             <!-- Begin Modules -->

@@ -1,15 +1,19 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Views;
 using Powermonitor.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Powermonitor.ViewModel
 {
     public class ModifyProfileViewModel : ViewModelBase
     {
+        INavigationService _nav;
         public static Profile ToUpdate;
         #region Profile
         private Profile _profile;
@@ -30,36 +34,18 @@ namespace Powermonitor.ViewModel
         }
         #endregion
 
-        #region Title
-        private string _Title;
-        public string Title
-        {
-            get
-            {
-                return _Title;
-            }
-            set
-            {
-                if (value == _Title)
-                    return;
-                _Title = value;
-                RaisePropertyChanged("Title");
-            }
+        public ICommand bSchedule_Command { get { return new RelayCommand(ScheduleCommand); } }
 
-        }
-        #endregion
-        public ModifyProfileViewModel()
+        public ModifyProfileViewModel(INavigationService navigationService)
         {
-            if (ToUpdate == null)
-            {
-                Profile = new Profile();
-                Title = "Créer";
-            }
-            else
-            {
-                Profile = ToUpdate;
-                Title = "Modifier";
-            }
+            Profile = ToUpdate;
+            _nav = navigationService;
+        }
+
+        private void ScheduleCommand()
+        {
+            ScheduleViewModel.ToUpdate = Profile;
+            this._nav.NavigateTo("Schedule");
         }
     }
 }

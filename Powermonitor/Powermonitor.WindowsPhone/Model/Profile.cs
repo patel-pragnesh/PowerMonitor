@@ -49,12 +49,14 @@ namespace Powermonitor.Model
 
         public UInt64 Id { get; private set; }
         public ObservableCollection<Alert> Alerts { get; private set; }
-        public Profile(String name = "", UInt64 id = 0, uint polling = 1, ObservableCollection<Alert> alerts = null)
+        public ObservableCollection<TimeSlot> TimeSlots { get; private set; }
+        public Profile(String name = "", UInt64 id = 0, uint polling = 1, ObservableCollection<Alert> alerts = null, ObservableCollection<TimeSlot> timeslots = null)
         {
             Name = name;
             Id = id;
             Polling = polling;
             Alerts = alerts;
+            TimeSlots = timeslots;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

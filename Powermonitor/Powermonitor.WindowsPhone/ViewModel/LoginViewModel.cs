@@ -24,8 +24,8 @@ namespace Powermonitor.ViewModel
 
         public void GoToHomeIfConnected()
         {
-            if (!Communication.getInstance.Session.IsEmpty())
-                _nav.NavigateTo("Home");
+            //if (!Communication.getInstance.Session.IsEmpty())
+            //    _nav.NavigateTo("Home");
         }
 
         public void Login(string email, string password)

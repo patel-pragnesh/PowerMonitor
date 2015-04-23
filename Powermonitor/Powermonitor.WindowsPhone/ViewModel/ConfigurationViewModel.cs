@@ -138,17 +138,22 @@ namespace Powermonitor.ViewModel
         public ICommand bSelectDefaultProfile_Command { get { return new RelayCommand(SelectDefaultProfileCommand); } }
         public ICommand bDeleteProfile_Command { get { return new RelayCommand(DeleteProfileCommand); } }
         public ICommand bModify_Command { get { return new RelayCommand(ModifyCommand); } }
+        public ICommand bModifyInternalProfile_Command { get { return new RelayCommand(ModifyInternalProfileCommand); } }
 
         public ConfigurationViewModel(INavigationService navigationService)
         {
-            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
-            Communication.getInstance.sendFuncs["getProfiles"].DynamicInvoke((Action<JObject, JObject>)GetProfilesCallback);
             Profiles = null;
             Modules = null;
             InternalProfile = null;
             SelectedModule = null;
             SelectedDefaultProfile = null;
             _nav = navigationService;
+        }
+
+        public void Refresh()
+        {
+            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
+            Communication.getInstance.sendFuncs["getProfiles"].DynamicInvoke((Action<JObject, JObject>)GetProfilesCallback);
         }
 
         private void HandleError(JObject response)
@@ -159,9 +164,71 @@ namespace Powermonitor.ViewModel
             MessengerInstance.Send(Errors.GetErrorMessage(code));
         }
 
+        private void InternalProfileHandler_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            //InternalProfile = ResourceManager.getInstance.InternalProfileHandler.getProfile(1);
+            RaisePropertyChanged("InternalProfile");
+        }
+
+        public void Rename(string newName)
+        {
+            if (SelectedModule != null)
+            {
+                if (newName.Count() == 0)
+                    MessengerInstance.Send("Nom incorrect");
+                else
+                    Communication.getInstance.sendFuncs["renameModule"].DynamicInvoke((Action<JObject, JObject>)RenameModuleCallback, newName, SelectedModule.Id);
+            }
+        }
+
+        #region Commands
+
+        private void TurnOnOffCommand()
+        {
+            if (SelectedModule != null)
+            {
+                Communication.getInstance.sendFuncs["turnOnOff"].DynamicInvoke((Action<JObject, JObject>)TurnOnOffCallback, !SelectedModule.Status, SelectedModule.Id);
+                //SelectedModule.Status = !SelectedModule.Status;
+            }
+        }
+
+        private void SelectDefaultProfileCommand()
+        {
+            if (SelectedDefaultProfile != null)
+            {
+                Communication.getInstance.sendFuncs["updateModuleDefaultProfile"].DynamicInvoke((Action<JObject, JObject>)UpdateModuleDefaultProfileCallback, SelectedModule.Id, SelectedDefaultProfile.Id);
+            }
+        }
+
+        private void DeleteProfileCommand()
+        {
+            if (SelectedProfile != null)
+            {
+                Communication.getInstance.sendFuncs["deleteProfile"].DynamicInvoke((Action<JObject, JObject>)DeleteProfileCallback, SelectedProfile.Id);
+            }
+        }
+
+        public void DissociateProfile()
+        {
+            Communication.getInstance.sendFuncs["updateModuleDefaultProfile"].DynamicInvoke((Action<JObject, JObject>)UpdateModuleDefaultProfileCallback, SelectedModule.Id, null);
+        }
+
+        public void ModifyCommand()
+        {
+            Communication.getInstance.sendFuncs["getProfile"].DynamicInvoke((Action<JObject, JObject>)GetProfileCallback, SelectedProfile.Id);
+        }
+
+        public void ModifyInternalProfileCommand()
+        {
+            Communication.getInstance.sendFuncs["getProfile"].DynamicInvoke((Action<JObject, JObject>)GetProfileCallback, SelectedModule.InternalProfileId);
+        }
+        #endregion
+
+        #region Callbacks
+
         private void GetModulesCallback(JObject request, JObject response)
         {
-            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
+            if ((response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0) && response["modules"] != null)
                 Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["modules"].ToString()));
             else
                 HandleError(response);
@@ -169,7 +236,7 @@ namespace Powermonitor.ViewModel
 
         private void GetProfilesCallback(JObject request, JObject response)
         {
-            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
+            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0 && response["profiles"] != null)
                 Profiles = new ObservableCollection<Profile>(JsonConvert.DeserializeObject<List<Profile>>(response["profiles"].ToString()));
             else
                 HandleError(response);
@@ -218,54 +285,18 @@ namespace Powermonitor.ViewModel
                 HandleError(response);
         }
 
-        private void InternalProfileHandler_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void GetProfileCallback(JObject request, JObject response)
         {
-            //InternalProfile = ResourceManager.getInstance.InternalProfileHandler.getProfile(1);
-            RaisePropertyChanged("InternalProfile");
-        }
-
-        public void Rename(string newName)
-        {
-            if (SelectedModule != null)
+            var code = response["returnCode"].ToObject<UInt64>();
+            if (code == 0)
             {
-                Communication.getInstance.sendFuncs["renameModule"].DynamicInvoke((Action<JObject, JObject>)RenameModuleCallback, newName, SelectedModule.Id);
+                Profile tmp = JsonConvert.DeserializeObject<Profile>(response["profile"].ToString()); ;
+                ModifyProfileViewModel.ToUpdate = tmp;
+                _nav.NavigateTo("ModifyProfile");
             }
+            else
+                HandleError(response);
         }
-
-        private void TurnOnOffCommand()
-        {
-            if (SelectedModule != null)
-            {
-                Communication.getInstance.sendFuncs["turnOnOff"].DynamicInvoke((Action<JObject, JObject>)TurnOnOffCallback, !SelectedModule.Status, SelectedModule.Id);
-                //SelectedModule.Status = !SelectedModule.Status;
-            }
-        }
-
-        private void SelectDefaultProfileCommand()
-        {
-            if (SelectedDefaultProfile != null)
-            {
-                Communication.getInstance.sendFuncs["updateModuleDefaultProfile"].DynamicInvoke((Action<JObject, JObject>)UpdateModuleDefaultProfileCallback, SelectedModule.Id, SelectedDefaultProfile.Id);
-            }
-        }
-
-        private void DeleteProfileCommand()
-        {
-            if (SelectedProfile != null)
-            {
-                Communication.getInstance.sendFuncs["deleteProfile"].DynamicInvoke((Action<JObject, JObject>)DeleteProfileCallback, SelectedProfile.Id);
-            }
-        }
-
-        public void DissociateProfile()
-        {
-            Communication.getInstance.sendFuncs["updateModuleDefaultProfile"].DynamicInvoke((Action<JObject, JObject>)UpdateModuleDefaultProfileCallback, SelectedModule.Id, null);
-        }
-
-        public void ModifyCommand()
-        {
-            ModifyProfileViewModel.ToUpdate = SelectedProfile;
-            _nav.NavigateTo("ModifyProfile");
-        }
+        #endregion
     }
 }

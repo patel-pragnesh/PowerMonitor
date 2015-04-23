@@ -44,5 +44,11 @@
                 <TimePicker Header="Fin" Name="EndTimePicker"></TimePicker>
             </StackPanel>
         </ContentDialog>
+
+        <!-- ContentDialog confirmDelete -->
+        <ContentDialog Name="confirmDelete" PrimaryButtonText="Accepter" PrimaryButtonClick="confirmDelete_PrimaryButtonClick"
+                                   SecondaryButtonText="Annuler" Title="Confirmer la suppression">
+            <TextBlock TextWrapping="Wrap">Voulez vous vraiment supprimer ce profil de façon définitive ?</TextBlock>
+        </ContentDialog>
     </Grid>
 </UserControl>
