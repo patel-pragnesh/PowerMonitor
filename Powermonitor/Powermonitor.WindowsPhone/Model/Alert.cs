@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Powermonitor.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,17 @@ namespace Powermonitor.Model
         [JsonProperty("unitId")]
         public UInt64 UnitId { get; private set; }
         [JsonProperty("value")]
-        public int Value { get; private set; }
+        public double Value { get; private set; }
+        [JsonIgnore]
+        public string UnitName
+        {
+            get
+            {
+                return Units.units.ElementAt((int)this.UnitId - 1);
+            }
+        }
 
-        public Alert(UInt64 id = 0, UInt64 unitId = 0, int value = 0)
+        public Alert(UInt64 id = 0, UInt64 unitId = 0, double value = 0)
         {
             Id = id;
             UnitId = unitId;

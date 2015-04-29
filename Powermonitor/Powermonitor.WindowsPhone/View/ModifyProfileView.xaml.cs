@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using Powermonitor.Common;
 using Powermonitor.Model;
+using Powermonitor.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -117,14 +118,14 @@ namespace Powermonitor.View
             this.Frame.Navigate(typeof(ScheduleView));
         }
 
-        async private void bAddAlerte_Click(object sender, RoutedEventArgs e)
+        async private void bAddAlert_Click(object sender, RoutedEventArgs e)
         {
-            await addAlerteDialog.ShowAsync();
+            await addAlertDialog.ShowAsync();
         }
 
-        private void addAlerteDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void addAlertDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-
+            (this.DataContext as ModifyProfileViewModel).addAlert(double.Parse(this.valueInput.Text), this.unitInput.SelectedIndex + 1);
         }
     }
 }

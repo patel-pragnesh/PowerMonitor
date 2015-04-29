@@ -127,13 +127,6 @@ namespace Powermonitor.ViewModel
         }
         #endregion
 
-        private Profile _internalProfile;
-        public Profile InternalProfile
-        {
-            get;
-            private set;
-        }
-
         public ICommand bTurnOnOff_Command { get { return new RelayCommand(TurnOnOffCommand); } }
         public ICommand bSelectDefaultProfile_Command { get { return new RelayCommand(SelectDefaultProfileCommand); } }
         public ICommand bDeleteProfile_Command { get { return new RelayCommand(DeleteProfileCommand); } }
@@ -144,7 +137,6 @@ namespace Powermonitor.ViewModel
         {
             Profiles = null;
             Modules = null;
-            InternalProfile = null;
             SelectedModule = null;
             SelectedDefaultProfile = null;
             _nav = navigationService;

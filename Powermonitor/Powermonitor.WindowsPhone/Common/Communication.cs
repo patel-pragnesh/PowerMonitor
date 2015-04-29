@@ -52,6 +52,7 @@ namespace Powermonitor.Common
             sendFuncs.Add("addTimeSlot", new Action<Action<JObject, JObject>, UInt64, Time, Time>(AddTimeSlot));
             sendFuncs.Add("deleteTimeSlot", new Action<Action<JObject, JObject>, UInt64>(DeleteTimeSlot));
             sendFuncs.Add("updateTimeSlot", new Action<Action<JObject, JObject>, UInt64, Time, Time>(UpdateTimeSlot));
+            sendFuncs.Add("addAlert", new Action<Action<JObject, JObject>, UInt64, double, UInt64>(AddAlert));
         }
 
         async public Task<bool> Connect()
@@ -201,6 +202,12 @@ namespace Powermonitor.Common
         private void UpdateTimeSlot(Action<JObject, JObject> callback, UInt64 timeslotId, Time beg, Time end)
         {
             JObject json = new JObject() { { "cmd", "updateTimeSlot" }, { "id", timeslotId }, { "beg", JObject.FromObject(beg) }, { "end", JObject.FromObject(end) } };
+            AddMsg(callback, json);
+        }
+
+        private void AddAlert(Action<JObject, JObject> callback, UInt64 profileId, double value, UInt64 unitId)
+        {
+            JObject json = new JObject() { { "cmd", "addAlert" }, { "profileId", profileId }, { "value", value }, { "unitId", unitId } };
             AddMsg(callback, json);
         }
         #endregion

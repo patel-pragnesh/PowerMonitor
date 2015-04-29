@@ -133,7 +133,7 @@ namespace Powermonitor.ViewModel
 
         private void GetModulesCallback(JObject request, JObject response)
         {
-            Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["Modules"].ToString()));
+            Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["modules"].ToString()));
         }
     }
 }

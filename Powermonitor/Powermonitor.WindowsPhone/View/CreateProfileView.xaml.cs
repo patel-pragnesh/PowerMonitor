@@ -31,7 +31,6 @@ namespace Powermonitor.View
     {
         private NavigationHelper navigationHelper;
         private ViewModelBase defaultViewModel;
-        Dictionary<string, ObservableCollection<TimeSlot>> test;
         public CreateProfileView ()
         {
             this.InitializeComponent();

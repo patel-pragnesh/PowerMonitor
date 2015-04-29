@@ -35,7 +35,7 @@
                 <TextBlock HorizontalAlignment="Center">Nom du profil</TextBlock>
                 <TextBox Text="{Binding Name, Mode=TwoWay}"></TextBox>
                 <TextBlock HorizontalAlignment="Center">Variable de polling</TextBlock>
-                <Controls:NumericUpDown SmallChange="1" Minimum="1" Maximum="60" Value="{Binding Polling, Mode=TwoWay}" ValueFormat="F0"/>
+                <TextBox InputScope="Number" Text="{Binding Polling, Mode=TwoWay}"/>
             </StackPanel>
         </Grid>
     </Grid>
