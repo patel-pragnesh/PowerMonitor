@@ -130,8 +130,8 @@ namespace Powermonitor.ViewModel
         public ICommand bTurnOnOff_Command { get { return new RelayCommand(TurnOnOffCommand); } }
         public ICommand bSelectDefaultProfile_Command { get { return new RelayCommand(SelectDefaultProfileCommand); } }
         public ICommand bDeleteProfile_Command { get { return new RelayCommand(DeleteProfileCommand); } }
-        public ICommand bModify_Command { get { return new RelayCommand(ModifyCommand); } }
-        public ICommand bModifyInternalProfile_Command { get { return new RelayCommand(ModifyInternalProfileCommand); } }
+        public ICommand bUpdate_Command { get { return new RelayCommand(UpdateCommand); } }
+        public ICommand bUpdateInternalProfile_Command { get { return new RelayCommand(UpdateInternalProfileCommand); } }
 
         public ConfigurationViewModel(INavigationService navigationService)
         {
@@ -205,12 +205,12 @@ namespace Powermonitor.ViewModel
             Communication.getInstance.sendFuncs["updateModuleDefaultProfile"].DynamicInvoke((Action<JObject, JObject>)UpdateModuleDefaultProfileCallback, SelectedModule.Id, null);
         }
 
-        public void ModifyCommand()
+        public void UpdateCommand()
         {
             Communication.getInstance.sendFuncs["getProfile"].DynamicInvoke((Action<JObject, JObject>)GetProfileCallback, SelectedProfile.Id);
         }
 
-        public void ModifyInternalProfileCommand()
+        public void UpdateInternalProfileCommand()
         {
             Communication.getInstance.sendFuncs["getProfile"].DynamicInvoke((Action<JObject, JObject>)GetProfileCallback, SelectedModule.InternalProfileId);
         }
@@ -283,8 +283,8 @@ namespace Powermonitor.ViewModel
             if (code == 0)
             {
                 Profile tmp = JsonConvert.DeserializeObject<Profile>(response["profile"].ToString()); ;
-                ModifyProfileViewModel.ToUpdate = tmp;
-                _nav.NavigateTo("ModifyProfile");
+                UpdateProfileViewModel.ToUpdate = tmp;
+                _nav.NavigateTo("UpdateProfile");
             }
             else
                 HandleError(response);

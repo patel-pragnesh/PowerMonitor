@@ -14,49 +14,49 @@
             <PivotItem Header="Lundi">
                 <Border BorderBrush="Black" BorderThickness="0,1,0,0">
                     <ScrollViewer>
-                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Monday]}"></uc:DailyCalendar>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Monday], Mode=TwoWay}"></uc:DailyCalendar>
                     </ScrollViewer>
                 </Border>
             </PivotItem>
             <PivotItem Header="Mardi" Margin="0,22.5,0,0">
                 <Border BorderBrush="Black" BorderThickness="0,1,0,0">
                     <ScrollViewer>
-                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Tuesday]}"></uc:DailyCalendar>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Tuesday], Mode=TwoWay}"></uc:DailyCalendar>
                     </ScrollViewer>
                 </Border>
             </PivotItem>
             <PivotItem Header="Mercredi">
                 <Border BorderBrush="Black" BorderThickness="0,1,0,0">
                     <ScrollViewer>
-                        <uc:DailyCalendar DataContext="{Binding TimeSlot[Wednesday]}"></uc:DailyCalendar>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlot[Wednesday], Mode=TwoWay}"></uc:DailyCalendar>
                     </ScrollViewer>
                 </Border>
             </PivotItem>
             <PivotItem Header="Jeudi">
                 <Border BorderBrush="Black" BorderThickness="0,1,0,0">
                     <ScrollViewer>
-                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Thursday]}"></uc:DailyCalendar>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Thursday], Mode=TwoWay}"></uc:DailyCalendar>
                     </ScrollViewer>
                 </Border>
             </PivotItem>
             <PivotItem Header="Vendredi">
                 <Border BorderBrush="Black" BorderThickness="0,1,0,0">
                     <ScrollViewer>
-                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Friday]}"></uc:DailyCalendar>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Friday], Mode=TwoWay}"></uc:DailyCalendar>
                     </ScrollViewer>
                 </Border>
             </PivotItem>
             <PivotItem Header="Samedi">
                 <Border BorderBrush="Black" BorderThickness="0,1,0,0">
                     <ScrollViewer>
-                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Saturday]}"></uc:DailyCalendar>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Saturday], Mode=TwoWay}"></uc:DailyCalendar>
                     </ScrollViewer>
                 </Border>
             </PivotItem>
             <PivotItem Header="Dimanche">
                 <Border BorderBrush="Black" BorderThickness="0,1,0,0">
                     <ScrollViewer>
-                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Sunday]}"></uc:DailyCalendar>
+                        <uc:DailyCalendar DataContext="{Binding TimeSlots[Sunday], Mode=TwoWay}"></uc:DailyCalendar>
                     </ScrollViewer>
                 </Border>
             </PivotItem>

@@ -132,9 +132,9 @@ namespace Powermonitor.View
             await confirmDelete.ShowAsync();
         }
 
-        private void bModify_Click(object sender, RoutedEventArgs e)
+        private void bUpdate_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ModifyProfileView));
+            this.Frame.Navigate(typeof(UpdateProfileView));
         }
 
         private void gProfilItem_Holding(object sender, HoldingRoutedEventArgs e)

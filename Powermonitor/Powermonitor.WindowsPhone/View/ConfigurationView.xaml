@@ -22,7 +22,7 @@
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout>
                         <MenuFlyoutItem x:Name="bRename" Text="Renommer" Click="bRename_Click" />
-                        <MenuFlyoutItem x:Name="bModifyInternalProfile" Command="{Binding ElementName=LayoutRoot, Path=DataContext.bModifyInternalProfile_Command}" CommandParameter="{Binding}" Text="Modifier le profil interne"/>
+                        <MenuFlyoutItem x:Name="bUpdateInternalProfile" Command="{Binding ElementName=LayoutRoot, Path=DataContext.bUpdateInternalProfile_Command}" CommandParameter="{Binding}" Text="Modifier le profil interne"/>
                         <MenuFlyoutItem x:Name="bChangeDefaultProfile" Click="bChangeDefaultProfile_Click" Text="Changer le profil associé"/>
                         <MenuFlyoutItem x:Name="bDissociatDefaultProfile" Click="bDissociatDefaultProfile_Click" Text="Dissocier le profil associé"/>
                     </MenuFlyout>
@@ -177,7 +177,7 @@
                 <!-- Menu -->
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem x:Name="bModify" Command="{Binding ElementName=LayoutRoot, Path=DataContext.bModify_Command}" Text="Modifier"/>
+                        <MenuFlyoutItem x:Name="bUpdate" Command="{Binding ElementName=LayoutRoot, Path=DataContext.bUpdate_Command}" Text="Modifier"/>
                         <MenuFlyoutItem x:Name="bDelete" Click="bDelete_Click" Text="Supprimer"/>
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
@@ -235,8 +235,8 @@
                         </StackPanel>
                     </ContentDialog>
 
-                    <!-- ContentDialog modify profile -->
-                    <ContentDialog x:Name="moduleModifyInternalProfileDialog" PrimaryButtonText="Accepter"
+                    <!-- ContentDialog Update profile -->
+                    <ContentDialog x:Name="moduleUpdateInternalProfileDialog" PrimaryButtonText="Accepter"
                                    SecondaryButtonText="Annuler">
                         <StackPanel>
                             

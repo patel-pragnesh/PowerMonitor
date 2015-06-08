@@ -53,6 +53,8 @@ namespace Powermonitor.Common
             sendFuncs.Add("deleteTimeSlot", new Action<Action<JObject, JObject>, UInt64>(DeleteTimeSlot));
             sendFuncs.Add("updateTimeSlot", new Action<Action<JObject, JObject>, UInt64, Time, Time>(UpdateTimeSlot));
             sendFuncs.Add("addAlert", new Action<Action<JObject, JObject>, UInt64, double, UInt64>(AddAlert));
+            sendFuncs.Add("deleteAlert", new Action<Action<JObject, JObject>, UInt64>(DeleteAlert));
+            sendFuncs.Add("updateAlert", new Action<Action<JObject, JObject>, UInt64, double, UInt64>(UpdateAlert));
         }
 
         async public Task<bool> Connect()
@@ -208,6 +210,18 @@ namespace Powermonitor.Common
         private void AddAlert(Action<JObject, JObject> callback, UInt64 profileId, double value, UInt64 unitId)
         {
             JObject json = new JObject() { { "cmd", "addAlert" }, { "profileId", profileId }, { "value", value }, { "unitId", unitId } };
+            AddMsg(callback, json);
+        }
+
+        private void DeleteAlert(Action<JObject, JObject> callback, UInt64 id)
+        {
+            JObject json = new JObject() { { "cmd", "deleteAlert" }, { "id", id } };
+            AddMsg(callback, json);
+        }
+
+        private void UpdateAlert(Action<JObject, JObject> callback, UInt64 alertId, double value, UInt64 unitId)
+        {
+            JObject json = new JObject() { { "cmd", "updateAlert" }, { "id", alertId }, { "value", value }, { "unitId", unitId } };
             AddMsg(callback, json);
         }
         #endregion

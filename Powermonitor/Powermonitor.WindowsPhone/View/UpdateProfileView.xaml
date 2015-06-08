@@ -6,22 +6,38 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Controls="using:WinRTXamlToolkit.Controls"
     xmlns:common="using:Powermonitor.Common"
-    x:Class="Powermonitor.View.ModifyProfileView"
+    x:Class="Powermonitor.View.UpdateProfileView"
     mc:Ignorable="d"
-    DataContext="{Binding ModifyProfileVM, Source={StaticResource Locator}}"
+    DataContext="{Binding UpdateProfileVM, Source={StaticResource Locator}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
         <common:Units x:Key="Units"/>
         <DataTemplate x:Key="AlertTemplate">
-            <ListViewItem>
+            <ListViewItem Holding="Alert_Holding" Tapped="Alert_Tapped">
+                <!-- Menu -->
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem x:Name="bUpdateAlert" Click="bUpdateAlert_Click" Text="Modifier"/>
+                        <MenuFlyoutItem x:Name="bDeleteAlert" Click="bDeleteAlert_Click" Text="Supprimer"/>
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+                
                 <Border BorderBrush="Black" BorderThickness="0,1,0,0">
-                    <StackPanel>
-                        <TextBlock>Valeur :</TextBlock>
-                        <TextBlock Text="{Binding Value}"/>
-                        <TextBlock>Unité :</TextBlock>
-                        <TextBlock Text="{Binding UnitName}"/>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0">Valeur :</TextBlock>
+                        <TextBlock Text="{Binding Value}" Grid.Column="1" Grid.Row="0"/>
+                        <TextBlock Grid.Column="0" Grid.Row="1">Unité :</TextBlock>
+                        <TextBlock Text="{Binding UnitName}" Grid.Column="1" Grid.Row="1"/>
+                    </Grid>
                 </Border>
             </ListViewItem>
         </DataTemplate>
@@ -53,7 +69,8 @@
                 <TextBox Text="{Binding Profile.Name}"/>
                 <TextBlock Text="Polling"/>
                 <TextBox InputScope="Number" Text="{Binding Profile.Polling}"/>
-                <ListView ItemsSource="{Binding Profile.Alerts, Mode=OneWay}" ItemTemplate="{StaticResource AlertTemplate}">
+                <ListView Name="AlertListView" ItemsSource="{Binding Profile.Alerts, Mode=OneWay}" SelectedValue="{Binding SelectedAlert, Mode=TwoWay}" ItemTemplate="{StaticResource AlertTemplate}"
+                          SelectedItem="{Binding SelectedAlert, Mode=TwoWay}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -64,6 +81,12 @@
             </StackPanel>
 
             <!-- ContentDialog confirmDelete -->
+            <ContentDialog Name="confirmDelete" PrimaryButtonText="Accepter" PrimaryButtonCommand="{Binding bDeleteAlert_Command}"
+                                   SecondaryButtonText="Annuler" Title="Confirmer la suppression">
+                <TextBlock TextWrapping="Wrap">Voulez vous vraiment supprimer cette alerte façon définitive ?</TextBlock>
+            </ContentDialog>
+
+            <!-- ContentDialog addAlert -->
             <ContentDialog Name="addAlertDialog" PrimaryButtonText="Accepter"
                            PrimaryButtonClick="addAlertDialog_PrimaryButtonClick"
                            SecondaryButtonText="Annuler" Title="Ajouter une alerte">

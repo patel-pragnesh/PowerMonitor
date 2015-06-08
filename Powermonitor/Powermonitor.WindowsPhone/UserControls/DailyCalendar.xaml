@@ -10,7 +10,7 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="TimeTemplate">
-            <Border Tapped="TimeBorder_Tapped" Name="TimeBorder" Background="Transparent" BorderBrush="Black" BorderThickness="0,0,1,1" Grid.Column="0" HorizontalAlignment="Stretch" Height="50">
+            <Border Name="TimeBorder" Background="Transparent" BorderBrush="Black" BorderThickness="0,0,1,1" Grid.Column="0" HorizontalAlignment="Stretch" Height="50">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding}"></TextBlock>
             </Border>
         </DataTemplate>
@@ -23,8 +23,8 @@
     <Grid>
         <FlyoutBase.AttachedFlyout>
             <MenuFlyout>
-                <MenuFlyoutItem x:Name="bRename" Text="Modifier"/>
-                <MenuFlyoutItem x:Name="bChangeDefaultProfile" Text="Supprimer"/>
+                <MenuFlyoutItem x:Name="bUpdate" Click="bUpdate_Click" Text="Modifier"/>
+                <MenuFlyoutItem x:Name="bDelete" Click="bDelete_Click" Text="Supprimer"/>
             </MenuFlyout>
         </FlyoutBase.AttachedFlyout>
         <Grid.ColumnDefinitions>
@@ -48,7 +48,7 @@
         <!-- ContentDialog confirmDelete -->
         <ContentDialog Name="confirmDelete" PrimaryButtonText="Accepter" PrimaryButtonClick="confirmDelete_PrimaryButtonClick"
                                    SecondaryButtonText="Annuler" Title="Confirmer la suppression">
-            <TextBlock TextWrapping="Wrap">Voulez vous vraiment supprimer ce profil de façon définitive ?</TextBlock>
+            <TextBlock TextWrapping="Wrap">Voulez vous vraiment supprimer cette plage horaire de façon définitive ?</TextBlock>
         </ContentDialog>
     </Grid>
 </UserControl>

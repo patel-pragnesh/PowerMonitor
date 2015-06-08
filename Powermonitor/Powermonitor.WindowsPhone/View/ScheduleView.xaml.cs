@@ -104,12 +104,12 @@ namespace Powermonitor.View
         /// handlers that cannot cancel the navigation request.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            (this.DefaultViewModel as ScheduleViewModel).Refresh();
             this.navigationHelper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            (this.DefaultViewModel as ScheduleViewModel).SetTimeSlots();
             this.navigationHelper.OnNavigatedFrom(e);
         }
 

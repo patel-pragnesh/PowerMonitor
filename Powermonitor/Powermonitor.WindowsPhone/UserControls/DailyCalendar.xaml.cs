@@ -97,8 +97,11 @@ namespace Powermonitor.UserControls
         private void Child_Holding(object sender, HoldingRoutedEventArgs e)
         {
             current = UInt64.Parse((sender as Rectangle).Name);
-            Communication.getInstance.sendFuncs["deleteTimeSlot"].DynamicInvoke((Action<JObject, JObject>)DeleteTimeSlotCallback, current);
-            //FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout((((sender as FrameworkElement).Parent as FrameworkElement).Parent as FrameworkElement).Parent as FrameworkElement);
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout((((sender as FrameworkElement).Parent as FrameworkElement).Parent as FrameworkElement).Parent as FrameworkElement);
+//            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(sender as FrameworkElement);
+
+            flyoutBase.ShowAt(sender as FrameworkElement); 
+            
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs rea)
@@ -107,12 +110,6 @@ namespace Powermonitor.UserControls
             {
                 SetPlanning();
             }
-        }
-
-        async private void TimeBorder_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            current = 0;
-            await ChooseTimeDialog.ShowAsync();
         }
 
         async private void EventBorder_Tapped(object sender, TappedRoutedEventArgs e)
@@ -180,6 +177,7 @@ namespace Powermonitor.UserControls
                 TimeSlotsContainer container = (DataContext as TimeSlotsContainer);
                 EmptyPlanning();
                 container.TimeSlots.RemoveAll(ts => ts.Id == request["id"].ToObject<UInt64>());
+                SetPlanning();
             }
             //else
             //    HandleError(response);
@@ -187,7 +185,21 @@ namespace Powermonitor.UserControls
 
         private void confirmDelete_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            Communication.getInstance.sendFuncs["deleteTimeSlot"].DynamicInvoke((Action<JObject, JObject>)DeleteTimeSlotCallback, current);
+        }
 
+        private async void bDelete_Click(object sender, RoutedEventArgs e)
+        {
+            await confirmDelete.ShowAsync();
+        }
+
+        private async void bUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            TimeSlotsContainer container = (DataContext as TimeSlotsContainer);
+            TimeSlot ts = container.TimeSlots.First(t => t.Id == current) as TimeSlot;
+            BeginTimePicker.Time = new TimeSpan(ts.Beg.AsHours(), 0, 0);
+            EndTimePicker.Time = new TimeSpan(ts.End.AsHours(), 0, 0);
+            await ChooseTimeDialog.ShowAsync();
         }
     }
 }

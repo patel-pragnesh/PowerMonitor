@@ -114,7 +114,7 @@
     <Compile Include="ViewModel\HomeViewModel.cs" />
     <Compile Include="ViewModel\InitViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
-    <Compile Include="ViewModel\ModifyProfileViewModel.cs" />
+    <Compile Include="ViewModel\UpdateProfileViewModel.cs" />
     <Compile Include="ViewModel\ScheduleViewModel.cs" />
     <Compile Include="View\InitView.xaml.cs">
       <DependentUpon>InitView.xaml</DependentUpon>
@@ -134,8 +134,8 @@
     <Compile Include="View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ModifyProfileView.xaml.cs">
-      <DependentUpon>ModifyProfileView.xaml</DependentUpon>
+    <Compile Include="View\UpdateProfileView.xaml.cs">
+      <DependentUpon>UpdateProfileView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ScheduleView.xaml.cs">
       <DependentUpon>ScheduleView.xaml</DependentUpon>
@@ -191,7 +191,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ModifyProfileView.xaml">
+    <Page Include="View\UpdateProfileView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

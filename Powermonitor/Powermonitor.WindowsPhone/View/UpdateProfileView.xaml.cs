@@ -27,12 +27,12 @@ namespace Powermonitor.View
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
-    public sealed partial class ModifyProfileView : Page
+    public sealed partial class UpdateProfileView : Page
     {
         private NavigationHelper navigationHelper;
         private ViewModelBase defaultViewModel;
 
-        public ModifyProfileView()
+        public UpdateProfileView()
         {
             this.InitializeComponent();
 
@@ -104,6 +104,7 @@ namespace Powermonitor.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+            (this.DefaultViewModel as UpdateProfileViewModel).Refresh();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -120,12 +121,44 @@ namespace Powermonitor.View
 
         async private void bAddAlert_Click(object sender, RoutedEventArgs e)
         {
+            valueInput.Text = "";
+            unitInput.SelectedIndex = 0;
+            (this.DefaultViewModel as UpdateProfileViewModel).SelectedAlert = null;
             await addAlertDialog.ShowAsync();
         }
 
         private void addAlertDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            (this.DataContext as ModifyProfileViewModel).addAlert(double.Parse(this.valueInput.Text), this.unitInput.SelectedIndex + 1);
+            (this.DataContext as UpdateProfileViewModel).AddAlert(double.Parse(this.valueInput.Text), this.unitInput.SelectedIndex + 1);
+        }
+
+        private void Alert_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            if (e.HoldingState == Windows.UI.Input.HoldingState.Started)
+            {
+                var tmp = (sender as ListViewItem).DataContext;
+                AlertListView.SelectedItem = tmp;
+                FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(sender as FrameworkElement);
+
+                flyoutBase.ShowAt(sender as FrameworkElement);
+            } 
+        }
+
+        private async void bDeleteAlert_Click(object sender, RoutedEventArgs e)
+        {
+            await confirmDelete.ShowAsync();
+        }
+
+        private async void bUpdateAlert_Click(object sender, RoutedEventArgs e)
+        {
+            valueInput.Text = (AlertListView.SelectedItem as Alert).Value.ToString();
+            unitInput.SelectedIndex = (int)(AlertListView.SelectedItem as Alert).UnitId - 1;
+            await addAlertDialog.ShowAsync();
+        }
+
+        private void Alert_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+
         }
     }
 }
