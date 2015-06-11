@@ -20,6 +20,25 @@ namespace Powermonitor.ViewModel
     {
         INavigationService _nav;
 
+        #region Modules
+        private ObservableCollection<Module> _modules;
+        public ObservableCollection<Module> Modules
+        {
+            get
+            {
+                return _modules;
+            }
+            set
+            {
+                if (value == _modules)
+                    return;
+                _modules = value;
+                RaisePropertyChanged("Modules");
+            }
+
+        }
+        #endregion
+        
         #region Test
         private ObservableCollection<Tuple<int, int>> _test;
         public ObservableCollection<Tuple<int, int>> Test
@@ -79,10 +98,10 @@ namespace Powermonitor.ViewModel
         private Chart _power;
         private Chart _voltage;
         private Chart _amperage;
-        public ObservableCollection<Module> Modules { get; private set; }
         public ConsultationViewModel(INavigationService navigationService)
         {
             _nav = navigationService;
+            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
         }
 
         private void HandleError(JObject response)
@@ -133,7 +152,10 @@ namespace Powermonitor.ViewModel
 
         private void GetModulesCallback(JObject request, JObject response)
         {
-            Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["modules"].ToString()));
+            if ((response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0) && response["modules"] != null)
+                Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["modules"].ToString()));
+            else
+                HandleError(response);
         }
     }
 }
