@@ -112,5 +112,21 @@ namespace Powermonitor.ViewModel
                 this.Profile.Alerts.Remove(this.Profile.Alerts.First(a => a.Id == SelectedAlert.Id));
             }
         }
+
+        private void UpdateNameCallback(JObject request, JObject response)
+        {
+            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
+            {
+                this.Profile.Name = request["name"].ToObject<string>();
+            }
+        }
+    
+        private void UpdatePollingCallback(JObject request, JObject response)
+        {
+            if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
+            {
+                this.Profile.Polling = request["polling"].ToObject<uint>();
+            }
+        }
     }
 }

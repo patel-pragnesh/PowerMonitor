@@ -55,6 +55,8 @@ namespace Powermonitor.Common
             sendFuncs.Add("addAlert", new Action<Action<JObject, JObject>, UInt64, double, UInt64>(AddAlert));
             sendFuncs.Add("deleteAlert", new Action<Action<JObject, JObject>, UInt64>(DeleteAlert));
             sendFuncs.Add("updateAlert", new Action<Action<JObject, JObject>, UInt64, double, UInt64>(UpdateAlert));
+            sendFuncs.Add("updateProfileName", new Action<Action<JObject, JObject>, UInt64, string>(UpdateProfileName));
+            sendFuncs.Add("updateProfilePolling", new Action<Action<JObject, JObject>, UInt64, uint>(UpdateProfilePolling));
         }
 
         async public Task<bool> Connect()
@@ -222,6 +224,18 @@ namespace Powermonitor.Common
         private void UpdateAlert(Action<JObject, JObject> callback, UInt64 alertId, double value, UInt64 unitId)
         {
             JObject json = new JObject() { { "cmd", "updateAlert" }, { "id", alertId }, { "value", value }, { "unitId", unitId } };
+            AddMsg(callback, json);
+        }
+
+        private void UpdateProfileName(Action<JObject, JObject> callback, UInt64 id, string name)
+        {
+            JObject json = new JObject() { { "cmd", "updateAlert" }, { "id", id }, { "name", name } };
+            AddMsg(callback, json);
+        }
+
+        private void UpdateProfilePolling(Action<JObject, JObject> callback, UInt64 id, uint polling)
+        {
+            JObject json = new JObject() { { "cmd", "updateAlert" }, { "id", id }, { "polling", polling } };
             AddMsg(callback, json);
         }
         #endregion
