@@ -1,0 +1,9 @@
+{
+    "cmd": "updateModuleDefaultProfile",
+    "id": 1,
+    "defaultProfileId": 4,
+    "session": {
+	"token": "dca40bfb0d602f7a1d6c859dc65c3637",
+	"userId": 1
+    }
+}

@@ -1,0 +1,8 @@
+- addAlert
+- updateAlert
+- deleteAlert
+- addAlertUser
+- deleteAlertUser
+- addTimeSlot
+- updateTimeSlot
+- deleteTimeSlot

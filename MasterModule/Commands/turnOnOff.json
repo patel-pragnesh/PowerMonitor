@@ -1,0 +1,9 @@
+{
+    "cmd": "turnOnOff",
+    "id": 1,
+    "status": false,
+    "session": {
+	"token": "3f921bd2b1510b7c2af6f16e4b89b6ee",
+	"userId": 1
+    }
+}
