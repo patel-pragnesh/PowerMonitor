@@ -5,18 +5,17 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Wed Jan 28 02:17:58 2015 alexis mestag
-// Last update Tue Jun  2 09:51:27 2015 laurent ansel
+// Last update Mon Jul  6 21:34:55 2015 alexis mestag
 //
 
 #include		<iostream>
 #include		<vector>
 #include		<json/reader.h>
 #include		"Network/Connection.hh"
-#include		"Network/ConnectionManager.hh"
 #include		"Utils/Bytes.hpp"
 
 Connection::Connection(boost::asio::ip::tcp::socket socket,
-		       ConnectionManager &connectionManager,
+		       ConnectionManagerType &connectionManager,
 		       Database &db) :
   _socket(std::move(socket)),
   _connectionManager(connectionManager),

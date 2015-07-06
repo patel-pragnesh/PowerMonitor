@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Wed Jan 28 00:08:12 2015 alexis mestag
-// Last update Sun May 31 00:05:11 2015 alexis mestag
+// Last update Mon Jul  6 21:10:20 2015 alexis mestag
 //
 
 #ifndef			__CONNECTION_HH__
@@ -19,19 +19,19 @@
 # include		<json/value.h>
 # include		<json/writer.h>
 
+# include		"Network/ConnectionManager.hpp"
 # include		"Network/MasterModuleRequestHandler.hh"
-
-class			ConnectionManager;
 
 class			Connection : public std::enable_shared_from_this<Connection>
 {
 public:
-  using	sendHandler = std::function<void(boost::system::error_code const &error, std::size_t bytes_transferred)>;
-  using	recvHandler = std::function<void(Json::Value const &response)>;
+  using	sendHandler		= std::function<void(boost::system::error_code const &error, std::size_t bytes_transferred)>;
+  using	recvHandler		= std::function<void(Json::Value const &response)>;
+  using ConnectionManagerType	= ConnectionManager<Connection>;
 
 private:
   boost::asio::ip::tcp::socket		_socket;
-  ConnectionManager			&_connectionManager;
+  ConnectionManagerType			&_connectionManager;
   MasterModuleRequestHandler		_requestHandler;
   std::shared_ptr<Json::StreamWriter>	_jsonWriter;
   int					_sizeToRead;
@@ -44,7 +44,7 @@ public:
   Connection		&operator=(Connection const &rhs) = delete;
 
   explicit Connection(boost::asio::ip::tcp::socket socket,
-		      ConnectionManager &connectionManager,
+		      ConnectionManagerType &connectionManager,
 		      Database &db);
   ~Connection() = default;
 
