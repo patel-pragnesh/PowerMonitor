@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Tue Apr 14 17:57:21 2015 alexis mestag
-// Last update Wed Apr 29 22:18:13 2015 alexis mestag
+// Last update Tue Jul  7 22:33:55 2015 alexis mestag
 //
 
 #include		<list>
@@ -17,6 +17,7 @@
 
 #include		"Tests/AlertTest.hh"
 #include		"Tests/LoginTest.hh"
+#include		"Tests/ModuleTest.hh"
 #include		"Tests/TimeSlotTest.hh"
 #include		"UnitTestsClient.hh"
 #include		"UnitTest.hh"
@@ -36,6 +37,7 @@ void			UnitTestsClient::run() {
     std::shared_ptr<UnitTest>(new LoginTest(*this)),
     std::shared_ptr<UnitTest>(new AlertTest(*this)),
     std::shared_ptr<UnitTest>(new TimeSlotTest(*this)),
+    std::shared_ptr<UnitTest>(new ModuleTest(*this)),
   };
   bool			ret;
 

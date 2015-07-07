@@ -5,7 +5,7 @@
 ## Login   <mestag_a@epitech.net>
 ## 
 ## Started on  Sat Nov 29 00:07:36 2014 alexis mestag
-## Last update Wed Apr 29 22:17:29 2015 alexis mestag
+## Last update Tue Jul  7 22:30:32 2015 alexis mestag
 ##
 
 NAME=		unit_tests
@@ -15,6 +15,7 @@ SRC=		main.cpp			\
 		Logger.cpp			\
 		Tests/AlertTest.cpp		\
 		Tests/LoginTest.cpp		\
+		Tests/ModuleTest.cpp		\
 		Tests/TimeSlotTest.cpp		\
 		UnitTest.cpp			\
 		UnitTestsClient.cpp
