@@ -81,6 +81,16 @@ namespace Powermonitor.ViewModel
                 Communication.getInstance.sendFuncs["updateAlert"].DynamicInvoke((Action<JObject, JObject>)UpdateAlertCallback, SelectedAlert.Id, value, (UInt64)unit);
         }
 
+        public void Rename(string name)
+        {
+            Communication.getInstance.sendFuncs["updateProfileName"].DynamicInvoke((Action<JObject, JObject>)RenameCallback, Profile.Id, name);
+        }
+
+        public void UpdatePolling(string polling)
+        {
+            Communication.getInstance.sendFuncs["updateProfilePolling"].DynamicInvoke((Action<JObject, JObject>)UpdatePollingCallback, Profile.Id, uint.Parse(polling));
+        }
+
         private void DeleteAlertCommand()
         {
             if (SelectedAlert != null)
@@ -113,7 +123,7 @@ namespace Powermonitor.ViewModel
             }
         }
 
-        private void UpdateNameCallback(JObject request, JObject response)
+        private void RenameCallback(JObject request, JObject response)
         {
             if (response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0)
             {

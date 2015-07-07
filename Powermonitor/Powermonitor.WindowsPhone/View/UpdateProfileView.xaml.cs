@@ -160,5 +160,25 @@ namespace Powermonitor.View
         {
 
         }
+
+        private async void bRename_Click(object sender, RoutedEventArgs e)
+        {
+            await renameDialog.ShowAsync();
+        }
+
+        private async void bUpdatePolling_Click(object sender, RoutedEventArgs e)
+        {
+            await updatePollingDialog.ShowAsync();
+        }
+
+        private void updatePollingDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            (this.DataContext as UpdateProfileViewModel).UpdatePolling(newPollingTextBox.Text);
+        }
+
+        private void renameDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            (this.DataContext as UpdateProfileViewModel).Rename(newNameTextBox.Text);
+        }
     }
 }

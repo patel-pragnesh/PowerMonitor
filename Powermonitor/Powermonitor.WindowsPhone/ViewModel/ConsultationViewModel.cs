@@ -98,6 +98,9 @@ namespace Powermonitor.ViewModel
         private Chart _power;
         private Chart _voltage;
         private Chart _amperage;
+
+        public ICommand bTurnOnOff_Command { get { return new RelayCommand(TurnOnOffCommand); } }
+
         public ConsultationViewModel(INavigationService navigationService)
         {
             _nav = navigationService;
@@ -121,33 +124,33 @@ namespace Powermonitor.ViewModel
             //Modules.Add(new Module("module 1", true, new Profile("test")));
             //Modules.Add(new Module("module 2", false, new Profile("test")));
 
-            ObservableCollection<Tuple<int, int>> Test2 = new ObservableCollection<Tuple<int, int>>();
-            Test2.Add(new Tuple<int, int>(0, 30));
-            Test2.Add(new Tuple<int, int>(1, 20));
-            Test2.Add(new Tuple<int, int>(2, 50));
-            _power.Series.Add(new LineSeries());
-            (_power.Series[0] as LineSeries).ItemsSource = Test2;
-            (_power.Series[0] as LineSeries).IndependentValuePath = "Item1";
-            (_power.Series[0] as LineSeries).DependentValuePath = "Item2";
+            //ObservableCollection<Tuple<int, int>> Test2 = new ObservableCollection<Tuple<int, int>>();
+            //Test2.Add(new Tuple<int, int>(0, 30));
+            //Test2.Add(new Tuple<int, int>(1, 20));
+            //Test2.Add(new Tuple<int, int>(2, 50));
+            //_power.Series.Add(new LineSeries());
+            //(_power.Series[0] as LineSeries).ItemsSource = Test2;
+            //(_power.Series[0] as LineSeries).IndependentValuePath = "Item1";
+            //(_power.Series[0] as LineSeries).DependentValuePath = "Item2";
 
-            ObservableCollection<Tuple<int, int>> Test3 = new ObservableCollection<Tuple<int, int>>();
-            Test3.Add(new Tuple<int, int>(0, 20));
-            Test3.Add(new Tuple<int, int>(1, 10));
-            Test3.Add(new Tuple<int, int>(2, 60));
-            _power.Series.Add(new LineSeries());
-            (_power.Series[1] as LineSeries).ItemsSource = Test3;
-            (_power.Series[1] as LineSeries).IndependentValuePath = "Item1";
-            (_power.Series[1] as LineSeries).DependentValuePath = "Item2";
+            //ObservableCollection<Tuple<int, int>> Test3 = new ObservableCollection<Tuple<int, int>>();
+            //Test3.Add(new Tuple<int, int>(0, 20));
+            //Test3.Add(new Tuple<int, int>(1, 10));
+            //Test3.Add(new Tuple<int, int>(2, 60));
+            //_power.Series.Add(new LineSeries());
+            //(_power.Series[1] as LineSeries).ItemsSource = Test3;
+            //(_power.Series[1] as LineSeries).IndependentValuePath = "Item1";
+            //(_power.Series[1] as LineSeries).DependentValuePath = "Item2";
 
-            _voltage.Series.Add(new LineSeries());
-            (_voltage.Series[0] as LineSeries).ItemsSource = Test3;
-            (_voltage.Series[0] as LineSeries).IndependentValuePath = "Item1";
-            (_voltage.Series[0] as LineSeries).DependentValuePath = "Item2";
+            //_voltage.Series.Add(new LineSeries());
+            //(_voltage.Series[0] as LineSeries).ItemsSource = Test3;
+            //(_voltage.Series[0] as LineSeries).IndependentValuePath = "Item1";
+            //(_voltage.Series[0] as LineSeries).DependentValuePath = "Item2";
 
-            _amperage.Series.Add(new LineSeries());
-            (_amperage.Series[0] as LineSeries).ItemsSource = Test3;
-            (_amperage.Series[0] as LineSeries).IndependentValuePath = "Item1";
-            (_amperage.Series[0] as LineSeries).DependentValuePath = "Item2";
+            //_amperage.Series.Add(new LineSeries());
+            //(_amperage.Series[0] as LineSeries).ItemsSource = Test3;
+            //(_amperage.Series[0] as LineSeries).IndependentValuePath = "Item1";
+            //(_amperage.Series[0] as LineSeries).DependentValuePath = "Item2";
         }
 
         private void GetModulesCallback(JObject request, JObject response)

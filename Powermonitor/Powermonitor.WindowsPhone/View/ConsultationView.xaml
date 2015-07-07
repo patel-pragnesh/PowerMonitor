@@ -63,7 +63,7 @@
                 <!--<Charting:Chart Name="MyChart" Width="300" Height="300" Title="My Chart" Margin="0">
                 <Charting:PieSeries ItemsSource="{Binding Test}"  Margin="0" IndependentValuePath="Item1" DependentValuePath="Item2" IsSelectionEnabled="False" />
             </Charting:Chart>-->
-                <ListView x:Name="ModuleList" ItemsSource="{Binding Modules, Mode=OneWay}" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}" Margin="0,0,-0.333,0">
+                <ListView x:Name="ModuleList" ItemsSource="{Binding Modules, Mode=OneWay}" Height="150" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}" Margin="0,0,-0.333,0">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -90,5 +90,11 @@
             </StackPanel>
         </ScrollViewer>
     </Grid>
+    
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Name="bAccept" Icon="Accept" Label="Accepter" Command="{Binding bAccept_Command}"/>
+        </CommandBar>
+    </Page.BottomAppBar>
     
 </Page>

@@ -229,13 +229,13 @@ namespace Powermonitor.Common
 
         private void UpdateProfileName(Action<JObject, JObject> callback, UInt64 id, string name)
         {
-            JObject json = new JObject() { { "cmd", "updateAlert" }, { "id", id }, { "name", name } };
+            JObject json = new JObject() { { "cmd", "updateProfileName" }, { "id", id }, { "name", name } };
             AddMsg(callback, json);
         }
 
         private void UpdateProfilePolling(Action<JObject, JObject> callback, UInt64 id, uint polling)
         {
-            JObject json = new JObject() { { "cmd", "updateAlert" }, { "id", id }, { "polling", polling } };
+            JObject json = new JObject() { { "cmd", "updateProfilePolling" }, { "id", id }, { "polling", polling } };
             AddMsg(callback, json);
         }
         #endregion

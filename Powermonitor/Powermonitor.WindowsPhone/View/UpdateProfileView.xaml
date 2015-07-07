@@ -66,9 +66,9 @@
 		<Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
 			<StackPanel>
                 <TextBlock Text="Nom du profil"/>
-                <TextBox Text="{Binding Profile.Name}"/>
+                <TextBlock Text="{Binding Profile.Name}"/>
                 <TextBlock Text="Polling"/>
-                <TextBox InputScope="Number" Text="{Binding Profile.Polling}"/>
+                <TextBlock Text="{Binding Profile.Polling}"/>
                 <ListView Name="AlertListView" ItemsSource="{Binding Profile.Alerts, Mode=OneWay}" SelectedValue="{Binding SelectedAlert, Mode=TwoWay}" ItemTemplate="{StaticResource AlertTemplate}"
                           SelectedItem="{Binding SelectedAlert, Mode=TwoWay}">
                     <ListView.ItemContainerStyle>
@@ -96,6 +96,24 @@
                     <ComboBox Name="unitInput" Header="Unité" ItemsSource="{Binding Path=units,Source={StaticResource Units}}" SelectedIndex="0"/>
                 </StackPanel>
             </ContentDialog>
+
+            <!-- ContentDialog rename -->
+            <ContentDialog Name="renameDialog" PrimaryButtonText="Accepter"
+                           PrimaryButtonClick="renameDialog_PrimaryButtonClick"
+                           SecondaryButtonText="Annuler" Title="Renommer">
+                <StackPanel>
+                    <TextBox Header="Nom" Name="newNameTextBox" Text="{Binding Profile.Name}"/>
+                </StackPanel>
+            </ContentDialog>
+
+            <!-- ContentDialog updatePolling -->
+            <ContentDialog Name="updatePollingDialog" PrimaryButtonText="Accepter"
+                           PrimaryButtonClick="updatePollingDialog_PrimaryButtonClick"
+                           SecondaryButtonText="Annuler" Title="Renommer">
+                <StackPanel>
+                    <TextBox Header="Polling" Name="newPollingTextBox" Text="{Binding Profile.Polling}" InputScope="Number"/>
+                </StackPanel>
+            </ContentDialog>
         </Grid>
 	</Grid>
     
@@ -103,6 +121,8 @@
         <CommandBar>
             <AppBarButton Label="Gérer les timeslots" Icon="Calendar" Command="{Binding bSchedule_Command}"/>
             <AppBarButton Name="bAddAlert" Label="Ajouter une alerte" Icon="Add" Click="bAddAlert_Click"/>
+            <AppBarButton Name="bRename" Label="Renommer" Icon="Rename" Click="bRename_Click"/>
+            <AppBarButton Name="bUpdatePolling" Label="Modifier le polling" Icon="Edit" Click="bUpdatePolling_Click"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>
