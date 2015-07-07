@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Tue Jul  7 22:13:13 2015 alexis mestag
-// Last update Tue Jul  7 22:42:45 2015 alexis mestag
+// Last update Tue Jul  7 23:12:17 2015 alexis mestag
 //
 
 #include	<chrono>
@@ -44,9 +44,9 @@ bool		ModuleTest::getModuleConso() {
   request["unitId"] = static_cast<Json::Value::UInt64>(2);
 
   using day_type	= std::chrono::duration<int, std::ratio<24 * 60 * 60>>;
-  auto	now		= std::chrono::system_clock::now();
-  auto	end		= now + day_type(30);
-  request["beg"] = static_cast<Json::Value::UInt64>(now.time_since_epoch().count() * std::chrono::system_clock::period::num / std::chrono::system_clock::period::den);
+  auto	end		= std::chrono::system_clock::now();
+  auto	beg		= end - day_type(7);
+  request["beg"] = static_cast<Json::Value::UInt64>(beg.time_since_epoch().count() * std::chrono::system_clock::period::num / std::chrono::system_clock::period::den);
   request["end"] = static_cast<Json::Value::UInt64>(end.time_since_epoch().count() * std::chrono::system_clock::period::num / std::chrono::system_clock::period::den);
 
   this->send(request);
