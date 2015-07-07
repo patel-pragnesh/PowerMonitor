@@ -26,3 +26,10 @@
 *.exe
 *.out
 *.app
+
+# ODB generated files
+*-odb.hxx
+*-odb.ixx
+*-odb.cpp
+*.sql
+!SQL/*.sql

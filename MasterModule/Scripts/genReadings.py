@@ -5,7 +5,7 @@
 ## Login   <mestag_a@epitech.net>
 ## 
 ## Started on  Tue Jul  7 19:12:22 2015 alexis mestag
-## Last update Tue Jul  7 22:03:45 2015 alexis mestag
+## Last update Tue Jul  7 23:01:09 2015 alexis mestag
 ##
 
 import  copy
@@ -21,7 +21,7 @@ class   SlaveModule:
 def     main():
     ret = 0
     now = datetime.datetime.now()
-    end = now + datetime.timedelta(days=1)
+    end = now + datetime.timedelta(days=60)
     modules = {SlaveModule(1, 'TV', 1800)                  : lambda x: 1,
                SlaveModule(2, 'Frigo', 900)                : lambda x: 5,
                SlaveModule(3, 'Lave-vaisselle', 3600)      : lambda x: 3,
