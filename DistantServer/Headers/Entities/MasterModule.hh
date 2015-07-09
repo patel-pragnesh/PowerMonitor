@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat May 30 21:38:59 2015 alexis mestag
-// Last update Fri Jun  5 07:20:03 2015 laurent ansel
+// Last update Thu Jul  9 22:33:15 2015 alexis mestag
 //
 
 #ifndef		__MASTERMODULE_HH__
@@ -28,7 +28,7 @@ private:
   MasterModule() = default;
 
 public:
-  MasterModule(std::string const &uuid, Connection *network = NULL);
+  MasterModule(std::string const &uuid);
   ~MasterModule() = default;
 
 public:
@@ -39,7 +39,6 @@ public:
 # ifdef	ODB_COMPILER
 #  pragma db object(MasterModule)
 #  pragma db member(MasterModule::_uuid)
-#  pragma db member(MasterModule::_network) transient
 # endif
 
 #endif

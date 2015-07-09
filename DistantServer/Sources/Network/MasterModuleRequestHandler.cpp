@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat May 30 22:33:34 2015 alexis mestag
-// Last update Wed Jun 10 08:29:34 2015 laurent ansel
+// Last update Thu Jul  9 22:36:05 2015 alexis mestag
 //
 
 #include	<iostream>
@@ -17,10 +17,10 @@
 #include	"Network/MasterModuleRequestHandler.hh"
 #include	"Utils/JsonValidator.hh"
 
-MasterModuleRequestHandler::MasterModuleRequestHandler(Database &db, Connection &network)
-  : _database(db),
+MasterModuleRequestHandler::MasterModuleRequestHandler(Database &db/*, Connection &network*/)
+  : _database(db)/*,
     _network(network),
-    _owner(NULL)
+    _owner(NULL)*/
 {
 }
 
@@ -96,26 +96,26 @@ bool		MasterModuleRequestHandler::connect(Json::Value const &request, Json::Valu
 
   if (module)
     {
-      if (module->isConnect())
-	{
-	  //_logger.err() << "MasterModule already connected" << std::endl;
-	  this->returnCode(response, Generic_MasterModuleAlreadyConnected);
-	}
-      else
-	{
-	  module->setNetwork(&_network);
-	  //send response
-	}
+      // if (module->isConnect())
+      // 	{
+      // 	  //_logger.err() << "MasterModule already connected" << std::endl;
+      // 	  this->returnCode(response, Generic_MasterModuleAlreadyConnected);
+      // 	}
+      // else
+      // 	{
+      // 	  // module->setNetwork(&_network);
+      // 	  //send response
+      // 	}
     }
   else
     {
       // Add this module to the database
 
       std::string				uuid = request["id"].asString();
-      MasterModule				*master = new MasterModule(uuid, &_network);
+      MasterModule				*master = new MasterModule(uuid/*, &_network*/);
 
       mmr.persist(*master);
-      _owner = master;
+      //_owner = master;
       //send response
     }
   return (ret);
@@ -134,10 +134,10 @@ bool		MasterModuleRequestHandler::addUser(Json::Value const &request, Json::Valu
   else
     {
       std::string			email = request["email"].asString();
-      User				*u = new User(email, &_network);
+      User				*u = new User(email/*, &_network*/);
 
-      if (_owner)
-	u->setModule(std::shared_ptr<MasterModule>(dynamic_cast<MasterModule *>(_owner)));
+      // if (_owner)
+      // 	u->setModule(std::shared_ptr<MasterModule>(dynamic_cast<MasterModule *>(_owner)));
       r.persist(*u);
     }
   return (ret);
@@ -151,8 +151,8 @@ bool		MasterModuleRequestHandler::login(Json::Value const &request, Json::Value 
 
   if (user)
     {
-      user->setNetwork(&_network);
-      _owner = reinterpret_cast<User *>(&user);
+      // user->setNetwork(&_network);
+      // _owner = reinterpret_cast<User *>(&user);
     }
   else
     {

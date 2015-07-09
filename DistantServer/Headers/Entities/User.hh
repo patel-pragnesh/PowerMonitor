@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sun May  3 22:53:09 2015 alexis mestag
-// Last update Fri Jun  5 07:20:55 2015 laurent ansel
+// Last update Thu Jul  9 22:43:43 2015 alexis mestag
 //
 
 #ifndef			__USER_HH__
@@ -32,8 +32,8 @@ private:
   User() = default;
   
 public:
-  User(std::string const &email, Connection *network = NULL);
-  User(std::string &&email, Connection *network = NULL);
+  User(std::string const &email);
+  User(std::string &&email);
   User(User const &rhs) = delete;
   User			&operator=(User const &rhs) = delete;
 
@@ -54,7 +54,6 @@ public:
 #  pragma db object(User)
 #  pragma db member(User::_email)
 #  pragma db member(User::_module) not_null
-#  pragma db member(User::_network) transient
 # endif
 
 #endif

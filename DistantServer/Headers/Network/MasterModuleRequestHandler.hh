@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat May 30 22:28:29 2015 alexis mestag
-// Last update Wed Jun 10 08:18:46 2015 laurent ansel
+// Last update Thu Jul  9 22:20:40 2015 alexis mestag
 //
 
 #ifndef		__MASTERMODULEREQUESTHANDLER_HH__
@@ -14,9 +14,6 @@
 # include	"Database/Database.hh"
 
 # include	<json/value.h>
-
-class		Entity;
-class		Connection;
 
 class		MasterModuleRequestHandler
 {
@@ -37,11 +34,11 @@ private:
 
 private:
   Database	&_database;
-  Connection	&_network;
-  Entity	*_owner;
+  // Connection	&_network;
+  // Entity	*_owner;
 
 public:
-  MasterModuleRequestHandler(Database &db, Connection &network);
+  MasterModuleRequestHandler(Database &db/*, Connection &network*/);
   ~MasterModuleRequestHandler() = default;
 
 public:
@@ -56,8 +53,5 @@ private:
 private:
   void		returnCode(Json::Value &response, eReturnCode const &code);
 };
-
-# include	"Network/Connection.hh"
-# include	"Entities/Entity.hh"
 
 #endif

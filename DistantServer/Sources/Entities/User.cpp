@@ -5,25 +5,20 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sun May  3 23:25:55 2015 alexis mestag
-// Last update Fri Jun  5 07:21:14 2015 laurent ansel
+// Last update Thu Jul  9 22:43:35 2015 alexis mestag
 //
 
 #include		<utility>
-
 #include		"Entities/User.hh"
 
-User::User(std::string const &email, Connection *network) :
+User::User(std::string const &email) :
   Entity(),
-  _email(email)
-{
-  setNetwork(network);
+  _email(email) {
 }
 
-User::User(std::string &&email, Connection *network) :
+User::User(std::string &&email) :
   Entity(),
-  _email(std::move(email))
-{
-  setNetwork(network);
+  _email(std::move(email)) {
 }
 
 std::string const	&User::getEmail() const {

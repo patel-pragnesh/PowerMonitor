@@ -1,25 +1,23 @@
 //
-// Connection.cpp for PowerMonitor in /home/mestag_a/Documents/Projets/EIP/MasterModule
+// MasterModuleConnection.cpp for PowerMonitor in /home/mestag_a/Documents/Projets/EIP/DistantServer
 // 
 // Made by alexis mestag
 // Login   <mestag_a@epitech.net>
 // 
-// Started on  Wed Jan 28 02:17:58 2015 alexis mestag
-// Last update Mon Jul  6 21:34:55 2015 alexis mestag
+// Started on  Thu Jul  9 21:25:46 2015 alexis mestag
+// Last update Thu Jul  9 22:21:55 2015 alexis mestag
 //
 
-#include		<iostream>
-#include		<vector>
-#include		<json/reader.h>
-#include		"Network/Connection.hh"
-#include		"Utils/Bytes.hpp"
+#include	<iostream>
+#include	<json/reader.h>
+#include	"Network/MasterModuleConnection.hh"
+#include	"Utils/Bytes.hpp"
 
-Connection::Connection(boost::asio::ip::tcp::socket socket,
-		       ConnectionManagerType &connectionManager,
-		       Database &db) :
-  _socket(std::move(socket)),
-  _connectionManager(connectionManager),
-  _requestHandler(db, *this) {
+MasterModuleConnection::MasterModuleConnection(boost::asio::ip::tcp::socket socket,
+					       ConnectionManager &connectionManager,
+					       Database &database) :
+  AbstractConnection(std::move(socket), connectionManager),
+  _requestHandler(database) {
   Json::StreamWriterBuilder	builder;
 
   builder.settings_["commentStyle"] = "None";
@@ -27,17 +25,13 @@ Connection::Connection(boost::asio::ip::tcp::socket socket,
   _jsonWriter.reset(builder.newStreamWriter());
 }
 
-void			Connection::start() {
+void		MasterModuleConnection::start() {
   this->recv([this](Json::Value const &json) {
       this->handle(json);
     });
 }
 
-void			Connection::stop() {
-  _socket.close();
-}
-
-void			Connection::handle(Json::Value const &json) {
+void			MasterModuleConnection::handle(Json::Value const &json) {
   Json::Value		response;
 
   std::cout << "Received: " << json.toStyledString();
@@ -49,7 +43,7 @@ void			Connection::handle(Json::Value const &json) {
     });
 }
 
-void			Connection::send(Json::Value const &toSend, sendHandler const &handler) {
+void			MasterModuleConnection::send(Json::Value const &toSend, sendHandler const &handler) {
   std::ostringstream            oss;
 
   _jsonWriter->write(toSend, &oss);
@@ -61,10 +55,10 @@ void			Connection::send(Json::Value const &toSend, sendHandler const &handler) {
     boost::asio::buffer(str)
   };
 
-  boost::asio::async_write(_socket, buffers, handler);
+  boost::asio::async_write(this->socket(), buffers, handler);
 }
 
-void			Connection::recv(recvHandler const &handler) {
+void			MasterModuleConnection::recv(recvHandler const &handler) {
   auto          onBufferRead = [this, handler](boost::system::error_code const &ec, std::size_t bytes_transferred) {
     if (!ec) {
       Json::Value       received;
@@ -78,9 +72,9 @@ void			Connection::recv(recvHandler const &handler) {
   auto          onHeaderRead = [this, onBufferRead](boost::system::error_code const &ec, std::size_t) {
     if (!ec) {
       _sizeToRead = Bytes::swap(_sizeToRead);
-      boost::asio::async_read(_socket, boost::asio::buffer(_buffer, _sizeToRead),
+      boost::asio::async_read(this->socket(), boost::asio::buffer(_buffer, _sizeToRead),
 			      onBufferRead);
     }
   };
-  boost::asio::async_read(_socket, boost::asio::buffer(&_sizeToRead, sizeof(_sizeToRead)), onHeaderRead);
+  boost::asio::async_read(this->socket(), boost::asio::buffer(&_sizeToRead, sizeof(_sizeToRead)), onHeaderRead);
 }

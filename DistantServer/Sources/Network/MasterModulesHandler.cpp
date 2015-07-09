@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat May 30 18:44:16 2015 alexis mestag
-// Last update Mon Jul  6 21:07:36 2015 alexis mestag
+// Last update Thu Jul  9 22:28:50 2015 alexis mestag
 //
 
 #include	<iostream>
@@ -19,6 +19,6 @@ MasterModulesHandler::MasterModulesHandler(boost::asio::io_service &ios,
 }
 
 
-Server<Connection>::ConnectionPtr	MasterModulesHandler::getNewConnection() {
+std::shared_ptr<AbstractConnection>	MasterModulesHandler::getNewConnection() {
   return (this->_getNewConnection<Database &>(_database));
 }

@@ -5,16 +5,14 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat May 30 21:50:03 2015 alexis mestag
-// Last update Fri Jun  5 07:18:57 2015 laurent ansel
+// Last update Thu Jul  9 22:31:49 2015 alexis mestag
 //
 
 #include	"Entities/MasterModule.hh"
 
-MasterModule::MasterModule(std::string const &uuid, Connection *network) :
+MasterModule::MasterModule(std::string const &uuid) :
   Entity(),
-  _uuid(uuid)
-{
-  setNetwork(network);
+  _uuid(uuid) {
 }
 
 std::string const	&MasterModule::getUUID() const {

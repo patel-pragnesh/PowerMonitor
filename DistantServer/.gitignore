@@ -31,3 +31,4 @@
 *-odb.hxx
 *-odb.ixx
 *-odb.cpp
+*.sql

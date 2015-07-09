@@ -5,7 +5,7 @@
 ## Login   <mestag_a@epitech.net>
 ## 
 ## Started on  Sat Nov 29 00:07:36 2014 alexis mestag
-## Last update Mon Jul  6 21:35:16 2015 alexis mestag
+## Last update Thu Jul  9 23:09:07 2015 alexis mestag
 ##
 
 NAME=		server
@@ -20,9 +20,13 @@ SRC=		main.cpp				\
 		Entities/Entity.cpp			\
 		Entities/MasterModule.cpp		\
 		Entities/User.cpp			\
-		Network/Connection.cpp			\
+		Network/AbstractConnection.cpp		\
+		Network/ConnectionManager.cpp		\
 		Network/MasterModuleRequestHandler.cpp	\
+		Network/MasterModuleConnection.cpp	\
 		Network/MasterModulesHandler.cpp	\
+		Network/UIConnection.cpp		\
+		Network/UIHandler.cpp			\
 		Utils/JsonValidator.cpp			\
 		Utils/Logger.cpp
 SRC:=		$(addprefix $(SRC_DIR)/, $(SRC))

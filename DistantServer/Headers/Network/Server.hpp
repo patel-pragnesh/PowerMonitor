@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Mon Jul  6 19:35:55 2015 alexis mestag
-// Last update Mon Jul  6 21:04:07 2015 alexis mestag
+// Last update Thu Jul  9 22:49:56 2015 alexis mestag
 //
 
 #ifndef		__SERVER_HPP__
@@ -14,27 +14,27 @@
 # include	<iostream>
 # include	<memory>
 # include	<string>
+# include	<type_traits>
 # include	<utility>
 # include	<boost/asio.hpp>
 
-# include	"Network/ConnectionManager.hpp"
+# include	"Network/AbstractConnection.hh"
+# include	"Network/ConnectionManager.hh"
 
 using	boost::asio::ip::tcp;
 
 template<typename C>
 class		Server
 {
-public:
-  using ConnectionManagerType	= ConnectionManager<C>;
-  using ConnectionType		= typename ConnectionManagerType::ConnectionType;
-  using ConnectionPtr		= typename ConnectionManagerType::ConnectionPtr;
+  static_assert(std::is_base_of<AbstractConnection, C>::value,
+		"Template C must be a derived class of AbstractConnection");
 
 private:
   std::string			_name;
   boost::asio::io_service	&_ios;
   tcp::acceptor			_acceptor;
   tcp::socket			_socket;
-  ConnectionManagerType		_connectionManager;
+  ConnectionManager		_connectionManager;
   
 public:
   Server(std::string &&name, boost::asio::io_service &ios,
@@ -60,12 +60,12 @@ public:
 
 protected:
   template<typename... Args>
-  ConnectionPtr	_getNewConnection(Args... params) {
+  std::shared_ptr<C>	_getNewConnection(Args... params) {
     return (std::make_shared<C>(std::move(_socket), _connectionManager, params...));
   }
 
 public:
-  virtual ConnectionPtr	getNewConnection() = 0;
+  virtual std::shared_ptr<AbstractConnection>	getNewConnection() = 0;
   
 private:
   void		accept() {

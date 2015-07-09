@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat Nov 29 00:26:03 2014 alexis mestag
-// Last update Fri Jun  5 07:21:58 2015 laurent ansel
+// Last update Thu Jul  9 22:31:34 2015 alexis mestag
 //
 
 #include		"Entities/Entity.hh"
@@ -20,21 +20,6 @@ void			Entity::setId(unsigned long const id) {
 
 unsigned long		Entity::getId() const {
   return (_id);
-}
-
-Connection		&Entity::getNetwork() const {
-  return (*_network);
-}
-
-void			Entity::setNetwork(Connection *network) {
-  _network = network;
-}
-
-bool			Entity::isConnect() const
-{
-  if (_network)
-    return (true);
-  return (false);
 }
 
 void			Entity::serialize(Json::Value &json) const {
