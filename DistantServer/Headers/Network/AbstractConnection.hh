@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Thu Jul  9 17:16:33 2015 alexis mestag
-// Last update Thu Jul  9 22:49:26 2015 alexis mestag
+// Last update Sat Jul 11 16:48:28 2015 alexis mestag
 //
 
 #ifndef		__ABSTRACTCONNECTION_HH__
@@ -31,6 +31,8 @@ protected:
 
   AbstractConnection(boost::asio::ip::tcp::socket socket,
 		     ConnectionManager &connectionManager);
+
+public:
   virtual ~AbstractConnection() = default;
 
 protected:

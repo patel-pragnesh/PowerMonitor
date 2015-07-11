@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sun Feb 22 18:26:11 2015 alexis mestag
-// Last update Sun Mar 29 18:22:33 2015 alexis mestag
+// Last update Sat Jul 11 22:09:17 2015 alexis mestag
 //
 
 #ifndef			__JSONVALIDATOR_HH__
@@ -32,7 +32,7 @@ public:
   JsonValidator() = default;
   JsonValidator(JsonValidator const &rhs) = default;
 
-  template<typename Fn> JsonValidator(Fn fn) : _predicate(fn) {}
+  template<typename Fn> JsonValidator(Fn &&fn) : _predicate(std::forward<Fn>(fn)) {}
   JsonValidator(std::initializer_list<pair_type> const &il);
 
   JsonValidator		&operator=(JsonValidator const &rhs) = default;

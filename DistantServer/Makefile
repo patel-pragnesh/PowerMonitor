@@ -5,7 +5,7 @@
 ## Login   <mestag_a@epitech.net>
 ## 
 ## Started on  Sat Nov 29 00:07:36 2014 alexis mestag
-## Last update Thu Jul  9 23:09:07 2015 alexis mestag
+## Last update Sat Jul 11 19:53:35 2015 alexis mestag
 ##
 
 NAME=		server
@@ -22,6 +22,7 @@ SRC=		main.cpp				\
 		Entities/User.cpp			\
 		Network/AbstractConnection.cpp		\
 		Network/ConnectionManager.cpp		\
+		Network/JsonConnection.cpp		\
 		Network/MasterModuleRequestHandler.cpp	\
 		Network/MasterModuleConnection.cpp	\
 		Network/MasterModulesHandler.cpp	\
