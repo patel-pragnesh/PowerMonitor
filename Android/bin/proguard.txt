@@ -1,0 +1,38 @@
+# view res/layout/configview.xml #generated:9
+# view res/layout/editprofileslots.xml #generated:8
+# view res/layout/viewmodules.xml #generated:62
+-keep class android.support.v4.view.ViewPager { <init>(...); }
+
+# view res/layout/linechart.xml #generated:9
+-keep class com.github.mikephil.charting.charts.LineChart { <init>(...); }
+
+# view AndroidManifest.xml #generated:34
+-keep class com.powermonitor.epitech.ConfigView { <init>(...); }
+
+# view res/layout/calendarday.xml #generated:22
+-keep class com.powermonitor.epitech.CustomCalendar { <init>(...); }
+
+# view AndroidManifest.xml #generated:38
+-keep class com.powermonitor.epitech.EditProfile { <init>(...); }
+
+# view AndroidManifest.xml #generated:42
+-keep class com.powermonitor.epitech.EditProfileSlots { <init>(...); }
+
+# view AndroidManifest.xml #generated:26
+-keep class com.powermonitor.epitech.Home { <init>(...); }
+
+# view AndroidManifest.xml #generated:23
+-keep class com.powermonitor.epitech.Login { <init>(...); }
+
+# view AndroidManifest.xml #generated:16
+-keep class com.powermonitor.epitech.SplashScreen { <init>(...); }
+
+# view AndroidManifest.xml #generated:30
+-keep class com.powermonitor.epitech.ViewModules { <init>(...); }
+
+# onClick res/layout/editprofile.xml #generated:52
+-keepclassmembers class * { *** onAddAlertClick(...); }
+
+# onClick res/layout/editprofile.xml #generated:33
+-keepclassmembers class * { *** onSaveClick(...); }
+
