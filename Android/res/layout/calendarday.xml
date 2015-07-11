@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+>
+    <TextView
+        android:id="@+CalendarDay/title"
+        android:text="Lundi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textColor="#0080FF"
+        android:textSize="18sp"
+        android:textStyle="bold">
+    </TextView>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="1dp"
+    >
+        <com.powermonitor.epitech.CustomCalendar
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+EditProfileSlots/calendar"
+        />
+    </ScrollView>
+</LinearLayout>
