@@ -24,7 +24,7 @@
                     </Grid.RowDefinitions>
 
                     <!-- Grid Content -->
-                    <CheckBox Grid.Column="0" IsChecked="{Binding Path=IsSelected}"/>
+                    <CheckBox Grid.Column="0" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}"/>
                     <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch">
                         <TextBlock x:Name="ModuleName" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
                         <TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="{Binding DefaultProfile.Name}"/>
@@ -71,20 +71,57 @@
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>
-                <DatePicker Header="Début"/>
-                <DatePicker Header="Fin"/>
+                <DatePicker x:Name="begDatePicker" Header="Début"/>
+                <DatePicker x:Name="endDatePicker" Header="Fin"/>
                 <Pivot>
                     <PivotItem>
-                        <Charting:Chart Name="Power" Height="300" Title="Puissance" Margin="0">
-                        </Charting:Chart>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <Charting:Chart Grid.Column="0" Grid.Row="0" Name="Power" Height="300" Title="Puissance" Margin="0">
+                            </Charting:Chart>
+                            <TextBlock Visibility="{Binding PowerNoDataVisibility}" Grid.Column="0" Grid.Row="0" TextWrapping="Wrap" 
+                                       Name="powerNoDataTextBox" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                Pas de données pour la période selectionnée
+                            </TextBlock>
+                        </Grid>
                     </PivotItem>
                     <PivotItem>
-                        <Charting:Chart Name="Voltage" Height="300" Title="Tension" Margin="0">
-                        </Charting:Chart>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Charting:Chart Grid.Column="0" Grid.Row="0" Name="Voltage" Height="300" Title="Tension" Margin="0">
+                            </Charting:Chart>
+                            <TextBlock Visibility="{Binding VoltageNoDataVisibility}" Grid.Column="0" Grid.Row="0" TextWrapping="Wrap" 
+                                       Name="voltageNoDataTextBox" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                Pas de données pour la période selectionnée
+                            </TextBlock>
+                        </Grid>
                     </PivotItem>
                     <PivotItem>
-                        <Charting:Chart Name="Amperage" Height="300" Title="Intensité" Margin="0">
-                        </Charting:Chart>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Charting:Chart Grid.Column="0" Grid.Row="0" Name="Amperage" Height="300" Title="Intensité" Margin="0">
+                            </Charting:Chart>
+                            <TextBlock Visibility="{Binding AmperageNoDataVisibility}" Grid.Column="0" Grid.Row="0" TextWrapping="Wrap" 
+                                       Name="amperageNoDataTextBox" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                Pas de données pour la période selectionnée
+                            </TextBlock>
+                        </Grid>
                     </PivotItem>
                 </Pivot>
             </StackPanel>
@@ -93,7 +130,7 @@
     
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Name="bAccept" Icon="Accept" Label="Accepter" Command="{Binding bAccept_Command}"/>
+            <AppBarButton x:Name="bGetMeta" Icon="Accept" Label="Voir la consommation" Click="bGetMeta_Click"/>
         </CommandBar>
     </Page.BottomAppBar>
     

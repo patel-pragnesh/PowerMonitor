@@ -40,6 +40,8 @@ namespace Powermonitor.View
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             defaultViewModel = this.DataContext as ViewModelBase;
             (defaultViewModel as ConsultationViewModel).SetGraphs(Power, Voltage, Amperage);
+            begDatePicker.Date = new DateTime(2015, 06, 01, 00, 00, 00);
+            endDatePicker.Date = new DateTime(2015, 06, 30, 23, 59, 59);
         }
     
         /// <summary>
@@ -112,5 +114,16 @@ namespace Powermonitor.View
         }
 
         #endregion
+
+        static public uint ConvertToTimestamp(DateTime value)
+        {
+            TimeSpan span = (value - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime());
+            return (uint)span.TotalSeconds;
+        }
+
+        private void bGetMeta_Click(object sender, RoutedEventArgs e)
+        {
+           (this.DefaultViewModel as ConsultationViewModel).GetConso(ConvertToTimestamp(this.begDatePicker.Date.DateTime), ConvertToTimestamp(this.endDatePicker.Date.DateTime));
+        }
     }
 }

@@ -57,6 +57,8 @@ namespace Powermonitor.Common
             sendFuncs.Add("updateAlert", new Action<Action<JObject, JObject>, UInt64, double, UInt64>(UpdateAlert));
             sendFuncs.Add("updateProfileName", new Action<Action<JObject, JObject>, UInt64, string>(UpdateProfileName));
             sendFuncs.Add("updateProfilePolling", new Action<Action<JObject, JObject>, UInt64, uint>(UpdateProfilePolling));
+            sendFuncs.Add("getConsoMeta", new Action<Action<JObject, JObject>, UInt64, uint, uint>(GetConsoMeta));
+            sendFuncs.Add("getModuleConso", new Action<Action<JObject, JObject>, UInt64, uint, uint, UInt64>(GetModuleConso));
         }
 
         async public Task<bool> Connect()
@@ -236,6 +238,18 @@ namespace Powermonitor.Common
         private void UpdateProfilePolling(Action<JObject, JObject> callback, UInt64 id, uint polling)
         {
             JObject json = new JObject() { { "cmd", "updateProfilePolling" }, { "id", id }, { "polling", polling } };
+            AddMsg(callback, json);
+        }
+
+        private void GetConsoMeta(Action<JObject, JObject> callback, UInt64 id, uint beg, uint end)
+        {
+            JObject json = new JObject() { { "cmd", "getConsoMeta" }, { "id", id }, { "beg", beg }, { "end", end } };
+            AddMsg(callback, json);
+        }
+
+        private void GetModuleConso(Action<JObject, JObject> callback, UInt64 moduleId, uint beg, uint end, UInt64 unitId)
+        {
+            JObject json = new JObject() { { "cmd", "getModuleConso" }, { "moduleId", moduleId }, { "beg", beg }, { "end", end }, { "unitId", unitId } };
             AddMsg(callback, json);
         }
         #endregion

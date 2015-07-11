@@ -94,6 +94,7 @@
     <Compile Include="Common\Communication.cs" />
     <Compile Include="Common\Socket.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Model\Info.cs" />
     <Compile Include="Model\Time.cs" />
     <Compile Include="Model\TimeSlot.cs" />
     <Compile Include="Common\Trame.cs" />

@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -11,7 +12,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI;
+using Windows.UI.Xaml;
 using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 
 namespace Powermonitor.ViewModel
@@ -38,60 +41,74 @@ namespace Powermonitor.ViewModel
 
         }
         #endregion
-        
-        #region Test
-        private ObservableCollection<Tuple<int, int>> _test;
-        public ObservableCollection<Tuple<int, int>> Test
+
+        #region SelectedModule
+        private Module _selectedModule;
+        public Module SelectedModule
         {
             get
             {
-                return _test;
+                return _selectedModule;
             }
             set
             {
-                if (value == _test)
+                if (value == _selectedModule)
                     return;
-                _test = value;
-                RaisePropertyChanged("Test");
+                _selectedModule = value;
+                RaisePropertyChanged("SelectedModule");
             }
-
-        }
-        #endregion
-        #region Test2
-        private ObservableCollection<Tuple<int, int>> _test2;
-        public ObservableCollection<Tuple<int, int>> Test2
-        {
-            get
-            {
-                return _test2;
-            }
-            set
-            {
-                if (value == _test2)
-                    return;
-                _test2 = value;
-                RaisePropertyChanged("Test2");
-            }
-
         }
         #endregion
 
-        #region Series
-        Collection<ISeries> _series;
-        public Collection<ISeries> Series
+        #region PowerNoDataVisibility
+        private Visibility _powerNoDataVisibility;
+        public Visibility PowerNoDataVisibility
         {
             get
             {
-                return _series;
+                return _powerNoDataVisibility;
             }
             set
             {
-                if (value == _series)
+                if (value == _powerNoDataVisibility)
                     return;
-                _series = value;
-                RaisePropertyChanged("Series");
+                _powerNoDataVisibility = value;
+                RaisePropertyChanged("PowerNoDataVisibility");
             }
-
+        }
+        #endregion
+        #region VoltageNoDataVisibility
+        private Visibility _voltageNoDataVisibility;
+        public Visibility VoltageNoDataVisibility
+        {
+            get
+            {
+                return _voltageNoDataVisibility;
+            }
+            set
+            {
+                if (value == _voltageNoDataVisibility)
+                    return;
+                _voltageNoDataVisibility = value;
+                RaisePropertyChanged("VoltageNoDataVisibility");
+            }
+        }
+        #endregion
+        #region AmperageNoDataVisibility
+        private Visibility _amperageNoDataVisibility;
+        public Visibility AmperageNoDataVisibility
+        {
+            get
+            {
+                return _amperageNoDataVisibility;
+            }
+            set
+            {
+                if (value == _amperageNoDataVisibility)
+                    return;
+                _amperageNoDataVisibility = value;
+                RaisePropertyChanged("AmperageNoDataVisibility");
+            }
         }
         #endregion
 
@@ -99,12 +116,14 @@ namespace Powermonitor.ViewModel
         private Chart _voltage;
         private Chart _amperage;
 
-        public ICommand bTurnOnOff_Command { get { return new RelayCommand(TurnOnOffCommand); } }
 
         public ConsultationViewModel(INavigationService navigationService)
         {
             _nav = navigationService;
             Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
+            PowerNoDataVisibility = Visibility.Collapsed;
+            VoltageNoDataVisibility = Visibility.Collapsed;
+            AmperageNoDataVisibility = Visibility.Collapsed;
         }
 
         private void HandleError(JObject response)
@@ -120,37 +139,78 @@ namespace Powermonitor.ViewModel
             _voltage = voltage;
             _amperage = amperage;
             Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
-            //Modules = new ObservableCollection<Module>();
-            //Modules.Add(new Module("module 1", true, new Profile("test")));
-            //Modules.Add(new Module("module 2", false, new Profile("test")));
+        }
 
-            //ObservableCollection<Tuple<int, int>> Test2 = new ObservableCollection<Tuple<int, int>>();
-            //Test2.Add(new Tuple<int, int>(0, 30));
-            //Test2.Add(new Tuple<int, int>(1, 20));
-            //Test2.Add(new Tuple<int, int>(2, 50));
-            //_power.Series.Add(new LineSeries());
-            //(_power.Series[0] as LineSeries).ItemsSource = Test2;
-            //(_power.Series[0] as LineSeries).IndependentValuePath = "Item1";
-            //(_power.Series[0] as LineSeries).DependentValuePath = "Item2";
+        public void GetConso(uint beg, uint end)
+        {
+            List<Module> selectedModules = Modules.Where(m => m.IsSelected == true).ToList();
+            _power.Series.Clear();
+            _voltage.Series.Clear();
+            _amperage.Series.Clear();
+            PowerNoDataVisibility = Visibility.Collapsed;
+            VoltageNoDataVisibility = Visibility.Collapsed;
+            AmperageNoDataVisibility = Visibility.Collapsed;
+            foreach (Module m in selectedModules)
+            {
+                Communication.getInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)1);
+                if (m.Id != 2)
+                    Communication.getInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)2);
+                Communication.getInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)3);
+            }
+        }
 
-            //ObservableCollection<Tuple<int, int>> Test3 = new ObservableCollection<Tuple<int, int>>();
-            //Test3.Add(new Tuple<int, int>(0, 20));
-            //Test3.Add(new Tuple<int, int>(1, 10));
-            //Test3.Add(new Tuple<int, int>(2, 60));
-            //_power.Series.Add(new LineSeries());
-            //(_power.Series[1] as LineSeries).ItemsSource = Test3;
-            //(_power.Series[1] as LineSeries).IndependentValuePath = "Item1";
-            //(_power.Series[1] as LineSeries).DependentValuePath = "Item2";
+        public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        {
+            // Unix timestamp is seconds past epoch
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dtDateTime;
+        }
 
-            //_voltage.Series.Add(new LineSeries());
-            //(_voltage.Series[0] as LineSeries).ItemsSource = Test3;
-            //(_voltage.Series[0] as LineSeries).IndependentValuePath = "Item1";
-            //(_voltage.Series[0] as LineSeries).DependentValuePath = "Item2";
-
-            //_amperage.Series.Add(new LineSeries());
-            //(_amperage.Series[0] as LineSeries).ItemsSource = Test3;
-            //(_amperage.Series[0] as LineSeries).IndependentValuePath = "Item1";
-            //(_amperage.Series[0] as LineSeries).DependentValuePath = "Item2";
+        private void GetConsoCallback(JObject request, JObject response)
+        {
+            //if ((response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0) && response["modules"] != null)
+            //{
+            ObservableCollection<Tuple<DateTime, int>> values = new ObservableCollection<Tuple<DateTime, int>>();
+            List<Info> tmp = JsonConvert.DeserializeObject<List<Info>>(response["infos"].ToString());
+            foreach (Info i in tmp) {
+                values.Add(new Tuple<DateTime, int>(UnixTimeStampToDateTime(i.Time), i.Value));
+            }
+            string moduleName = Modules.First(m => m.Id == request["moduleId"].ToObject<UInt64>()).Name;
+            if (request["unitId"].ToObject<UInt64>() == 1)
+            {
+                if (values.Count == 0)
+                    PowerNoDataVisibility = Visibility.Visible;
+                _power.Series.Add(new LineSeries());
+                int i = _power.Series.Count - 1;
+                (_power.Series[i] as LineSeries).Title = moduleName;
+                (_power.Series[i] as LineSeries).ItemsSource = values;
+                (_power.Series[i] as LineSeries).IndependentValuePath = "Item1";
+                (_power.Series[i] as LineSeries).DependentValuePath = "Item2";
+            }
+            else if (request["unitId"].ToObject<UInt64>() == 2)
+            {
+                if (values.Count == 0)
+                    VoltageNoDataVisibility = Visibility.Visible;
+                _voltage.Series.Add(new LineSeries());
+                int i = _voltage.Series.Count - 1;
+                (_voltage.Series[i] as LineSeries).Title = moduleName;
+                (_voltage.Series[i] as LineSeries).ItemsSource = values;
+                (_voltage.Series[i] as LineSeries).IndependentValuePath = "Item1";
+                (_voltage.Series[i] as LineSeries).DependentValuePath = "Item2";
+            }
+            else if (request["unitId"].ToObject<UInt64>() == 3)
+            {
+                if (values.Count == 0)
+                    AmperageNoDataVisibility = Visibility.Visible;
+                _amperage.Series.Add(new LineSeries());
+                int i = _amperage.Series.Count - 1;
+                (_amperage.Series[i] as LineSeries).Title = moduleName;
+                (_amperage.Series[i] as LineSeries).ItemsSource = values;
+                (_amperage.Series[i] as LineSeries).IndependentValuePath = "Item1";
+                (_amperage.Series[i] as LineSeries).DependentValuePath = "Item2";
+            }
+            //}
         }
 
         private void GetModulesCallback(JObject request, JObject response)
