@@ -5,13 +5,14 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat May 30 22:28:29 2015 alexis mestag
-// Last update Thu Jul  9 22:20:40 2015 alexis mestag
+// Last update Tue Jul 21 22:57:56 2015 alexis mestag
 //
 
 #ifndef		__MASTERMODULEREQUESTHANDLER_HH__
 # define	__MASTERMODULEREQUESTHANDLER_HH__
 
 # include	"Database/Database.hh"
+# include	"Entities/MasterModule.hh"
 
 # include	<json/value.h>
 
@@ -33,7 +34,8 @@ private:
   static std::string const	returnCodeStringKey;
 
 private:
-  Database	&_database;
+  Database			&_database;
+  std::shared_ptr<MasterModule>	_module;
   // Connection	&_network;
   // Entity	*_owner;
 
@@ -42,7 +44,8 @@ public:
   ~MasterModuleRequestHandler() = default;
 
 public:
-  bool		operator()(Json::Value const &request, Json::Value &response);
+  bool				operator()(Json::Value const &request, Json::Value &response);
+  std::shared_ptr<MasterModule>	getModule() const { return (_module); }
 
 private:
   bool		commandHandler(Json::Value const &request, Json::Value &response);

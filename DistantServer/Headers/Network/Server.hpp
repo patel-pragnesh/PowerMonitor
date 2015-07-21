@@ -5,12 +5,13 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Mon Jul  6 19:35:55 2015 alexis mestag
-// Last update Tue Jul 21 19:34:48 2015 alexis mestag
+// Last update Tue Jul 21 22:49:00 2015 alexis mestag
 //
 
 #ifndef		__SERVER_HPP__
 # define	__SERVER_HPP__
 
+# include	<algorithm>
 # include	<iostream>
 # include	<memory>
 # include	<string>
@@ -67,6 +68,16 @@ protected:
 public:
   virtual std::shared_ptr<AbstractConnection>	getNewConnection() = 0;
 
+  std::shared_ptr<C>	find(std::function<bool(C const &)> &&f) {
+    auto	c = std::find_if(_connectionManager.begin(), _connectionManager.end(),
+				 [f](std::shared_ptr<AbstractConnection> const &elt) {
+				   std::shared_ptr<C> const c = std::dynamic_pointer_cast<C>(elt);
+
+				   return (f(*c));
+				 });
+    return (c != _connectionManager.end() ? std::dynamic_pointer_cast<C>(*c) : nullptr);
+  }
+  
 private:
   void		accept() {
     _acceptor.async_accept(_socket, [this](boost::system::error_code const &ec) {

@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat May 30 22:33:34 2015 alexis mestag
-// Last update Thu Jul  9 22:36:05 2015 alexis mestag
+// Last update Tue Jul 21 22:56:42 2015 alexis mestag
 //
 
 #include	<iostream>
@@ -14,6 +14,7 @@
 
 #include	"Database/MasterModuleRepository.hh"
 #include	"Database/UserRepository.hh"
+#include	"Entities/MasterModule-odb.hxx"
 #include	"Network/MasterModuleRequestHandler.hh"
 #include	"Utils/JsonValidator.hh"
 
@@ -91,33 +92,16 @@ bool		MasterModuleRequestHandler::commandHandler(Json::Value const &request, Jso
 
 bool		MasterModuleRequestHandler::connect(Json::Value const &request, Json::Value &response) {
   MasterModuleRepository			mmr(_database);
-  Repository<MasterModule>::pointer_type	module = mmr.getByUUID(request["id"].asString());
+  std::string					uuid = request["id"].asString();
+  Repository<MasterModule>::pointer_type	module = mmr.getByUUID(uuid);
   bool						ret = true;
 
-  if (module)
-    {
-      // if (module->isConnect())
-      // 	{
-      // 	  //_logger.err() << "MasterModule already connected" << std::endl;
-      // 	  this->returnCode(response, Generic_MasterModuleAlreadyConnected);
-      // 	}
-      // else
-      // 	{
-      // 	  // module->setNetwork(&_network);
-      // 	  //send response
-      // 	}
-    }
-  else
-    {
-      // Add this module to the database
-
-      std::string				uuid = request["id"].asString();
-      MasterModule				*master = new MasterModule(uuid/*, &_network*/);
-
-      mmr.persist(*master);
-      //_owner = master;
-      //send response
-    }
+  if (!module) {
+    // Add this module to the database
+    module = std::make_shared<MasterModule>(uuid);
+    mmr.persist(*module);
+  }
+  _module = module;
   return (ret);
 }
 
@@ -134,7 +118,7 @@ bool		MasterModuleRequestHandler::addUser(Json::Value const &request, Json::Valu
   else
     {
       std::string			email = request["email"].asString();
-      User				*u = new User(email/*, &_network*/);
+      std::shared_ptr<User>		u = std::make_shared<User>(email/*, &_network*/);
 
       // if (_owner)
       // 	u->setModule(std::shared_ptr<MasterModule>(dynamic_cast<MasterModule *>(_owner)));

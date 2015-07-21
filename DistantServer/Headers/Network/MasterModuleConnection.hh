@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Thu Jul  9 21:10:58 2015 alexis mestag
-// Last update Sat Jul 11 19:42:45 2015 alexis mestag
+// Last update Tue Jul 21 22:57:47 2015 alexis mestag
 //
 
 #ifndef		__MASTERMODULECONNECTION_H__
@@ -30,6 +30,8 @@ public:
 
 public:
   virtual void	start() override;
+
+  std::shared_ptr<MasterModule>	getModule() const { return (_requestHandler.getModule()); }
 
 private:
   void			handle(Json::Value const &json);

@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Thu Jul  9 23:02:21 2015 alexis mestag
-// Last update Tue Jul 21 19:12:12 2015 alexis mestag
+// Last update Tue Jul 21 22:59:00 2015 alexis mestag
 //
 
 #include	<iostream>
@@ -15,9 +15,9 @@
 
 UIConnection::UIConnection(boost::asio::ip::tcp::socket socket,
 			   ConnectionManager &connectionManager,
-			   Database &database) :
+			   Database &database, MasterModulesHandler &mmHandler) :
   JsonConnection(std::move(socket), connectionManager),
-  _database(database) {
+  _database(database), _mmHandler(mmHandler) {
 }
 
 /*
@@ -89,7 +89,9 @@ bool	UIConnection::getUser(std::string const &email) {
 **
 */
 void	UIConnection::getMasterModuleConnection() {
-  
+  _mmConnection = _mmHandler.find([this](MasterModuleConnection const &c) -> bool {
+      return (c.getModule()->getUUID() == _user->getModule()->getUUID());
+    });
 }
 
 void	UIConnection::forward(Json::Value const &json) {

@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat Nov 29 00:37:51 2014 alexis mestag
-// Last update Mon Jul 13 21:19:29 2015 alexis mestag
+// Last update Tue Jul 21 22:42:12 2015 alexis mestag
 //
 
 #include	<iostream>
@@ -21,7 +21,7 @@ int	main() {
     boost::asio::signal_set	signals(ios);
     Database			db("powermonitor", "powermonitor", "powermonitor_DistantServer");
     MasterModulesHandler	mmHandler(ios, "0.0.0.0", "4243", db);
-    UIHandler			uiHandler(ios, "0.0.0.0", "4242", db);
+    UIHandler			uiHandler(ios, "0.0.0.0", "4242", db, mmHandler);
 
     signals.add(SIGINT);
     signals.add(SIGTERM);
