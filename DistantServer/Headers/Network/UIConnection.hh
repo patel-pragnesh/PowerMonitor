@@ -5,31 +5,38 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Thu Jul  9 22:53:52 2015 alexis mestag
-// Last update Sun Jul 12 00:53:16 2015 alexis mestag
+// Last update Tue Jul 21 19:13:56 2015 alexis mestag
 //
 
 #ifndef		__UICONNECTION_HH__
 # define	__UICONNECTION_HH__
 
 # include	<memory>
+# include	"Database/Database.hh"
 # include	"Entities/User.hh"
 # include	"Network/JsonConnection.hh"
 
 class	UIConnection : public JsonConnection
 {
 private:
+  Database			&_database;
   std::shared_ptr<User>		_user;
 
 public:
   explicit UIConnection(boost::asio::ip::tcp::socket socket,
-			ConnectionManager &connectionManager);
+			ConnectionManager &connectionManager,
+			Database &database);
 
 public:
   virtual void	start() override;
 
 private:
-  void		getUser();
-  void		forward();
+  void		forward(Json::Value const &json);
+
+  std::string	getEmail(Json::Value const &json);
+  bool		getUser(std::string const &email);
+
+  void		getMasterModuleConnection();
 };
 
 #endif

@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Mon Jul  6 19:35:55 2015 alexis mestag
-// Last update Thu Jul  9 22:49:56 2015 alexis mestag
+// Last update Tue Jul 21 19:34:48 2015 alexis mestag
 //
 
 #ifndef		__SERVER_HPP__
@@ -66,7 +66,7 @@ protected:
 
 public:
   virtual std::shared_ptr<AbstractConnection>	getNewConnection() = 0;
-  
+
 private:
   void		accept() {
     _acceptor.async_accept(_socket, [this](boost::system::error_code const &ec) {

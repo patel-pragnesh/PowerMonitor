@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat May 30 18:39:03 2015 alexis mestag
-// Last update Thu Jul  9 22:46:43 2015 alexis mestag
+// Last update Mon Jul 13 21:19:53 2015 alexis mestag
 //
 
 #ifndef		__MASTERMODULESHANDLER_HH__
@@ -20,11 +20,12 @@ using	boost::asio::ip::tcp;
 class		MasterModulesHandler : public Server<MasterModuleConnection>
 {
 private:
-  Database			_database;
+  Database			&_database;
 
 public:
   MasterModulesHandler(boost::asio::io_service &ios,
-		       std::string &&address, std::string &&port);
+		       std::string &&address, std::string &&port,
+		       Database &db);
 
   virtual std::shared_ptr<AbstractConnection>	getNewConnection() override;
 };
