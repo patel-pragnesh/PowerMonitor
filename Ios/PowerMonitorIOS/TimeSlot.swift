@@ -9,7 +9,7 @@
 import SwiftyJSON
 
 let D_DEFAULT_TIMESLOT_ID = 0 //Temporary id pour l'ajout de nouveau timeslots
-let D_DEFAULT_TIMESLOT_STARTINGDAY = 0
+let D_DEFAULT_TIMESLOT_OFFSETTIME = 10
 let D_DEFAULT_TIMESLOT_STARTINGTIME = 0
 
 struct TimeSlotTime {
@@ -22,8 +22,8 @@ struct TimeSlotTime {
 		var ret = String()
 
 		ret += String(format: "%02d:%02d", hours, minutes)
-		if (forDay != self.day) {
-			ret += String(format: " (%s)", self.day)
+		if (forDay != day) {
+			ret += String(format: " (%@)", getDay(day))
 		}
 		return ret
 	}
@@ -84,12 +84,12 @@ func generateTimeSlotFromJSON(data: JSON) -> TimeSlot
 
 // when adding a new timeslot, generate the temporary newly created timeslots
 //  before we add it by request
-func generateNewTimeSlot() -> TimeSlot
+func generateNewTimeSlot(day: Int) -> TimeSlot
 {
 	var timeSlot: TimeSlot
 
 	timeSlot = TimeSlot(id: D_DEFAULT_TIMESLOT_ID,
-		beg: TimeSlotTime(day: D_DEFAULT_TIMESLOT_STARTINGDAY, min: D_DEFAULT_TIMESLOT_STARTINGTIME),
-		end: TimeSlotTime(day: D_DEFAULT_TIMESLOT_STARTINGDAY, min: D_DEFAULT_TIMESLOT_STARTINGTIME))
+		beg: TimeSlotTime(day: day, min: D_DEFAULT_TIMESLOT_STARTINGTIME),
+		end: TimeSlotTime(day: day, min: D_DEFAULT_TIMESLOT_STARTINGTIME + D_DEFAULT_TIMESLOT_OFFSETTIME))
 	return timeSlot
 }

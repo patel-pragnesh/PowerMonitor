@@ -216,8 +216,10 @@ class Network {
 		var returnCode: Int = -1
 
 		if _currentSession != nil {
+			println("SEND " + _jReq.getDeleteTimeSlot(_currentSession!, id: timeslotId).description) //DEV
 			_proto.writePaquet(_jReq.getDeleteTimeSlot(_currentSession!, id: timeslotId))
 			let resJSON = JSON(data: _proto.readPacket())
+			println("RES " + resJSON.description) //DEV
 			_currentSession = generateSessionFromJSON(resJSON["session"])
 			returnCode = generateReturnCodeFromJSON(resJSON["returnCode"])
 		}

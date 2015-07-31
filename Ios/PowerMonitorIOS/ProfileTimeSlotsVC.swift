@@ -17,6 +17,9 @@ class ProfileTimeSlotsVC: UIViewController {
 
 	override func viewDidLoad() {
 		timeSlotsTableView.setProfile(profile)
+	}
+
+	override func viewWillAppear(animated: Bool) {
 		updateDisplay()
 	}
 
@@ -40,6 +43,7 @@ class ProfileTimeSlotsVC: UIViewController {
 	}
 
 	func updateDisplay() {
+		timeSlotsTableView.refreshTimeSlotsArray()
 		timeSlotsTableView.render()
 		self.navigationItem.title = getDay(timeSlotsTableView.day)
 	}

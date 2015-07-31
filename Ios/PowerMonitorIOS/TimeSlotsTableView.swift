@@ -51,7 +51,7 @@ class TimeSlotsTableView: UITableView, UITableViewDelegate, UITableViewDataSourc
 
 	// add an empty new Profile to Profiles
 	func addNewTimeSlot() {
-		var defaultTimeSlot = generateNewTimeSlot()
+		var defaultTimeSlot = generateNewTimeSlot(day)
 		let ret = pd.addNewTimeSlot(profile.id, timeslot: defaultTimeSlot)
 
 		if (ret != nil) {
@@ -68,7 +68,7 @@ class TimeSlotsTableView: UITableView, UITableViewDelegate, UITableViewDataSourc
 		reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Fade)
 	}
 
-	private func refreshTimeSlotsArray() {
+	func refreshTimeSlotsArray() {
 		loadProfileTimeSlots()
 		for var iDay = 0; iDay < 7; iDay++ {
 			timeSlots[iDay].removeAll(keepCapacity: false)

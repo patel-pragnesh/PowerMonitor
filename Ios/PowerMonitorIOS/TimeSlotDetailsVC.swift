@@ -10,6 +10,7 @@ import UIKit
 
 class TimeSlotDetailsVC: UIViewController {
 	var timeslot: TimeSlot!
+	var pd = ProfileDetails()
 	@IBOutlet weak var startingPicker: TimeSlotPickerView!
 	@IBOutlet weak var endingPicker: TimeSlotPickerView!
 	@IBOutlet weak var onTimeLabel: UILabel!
@@ -34,19 +35,17 @@ class TimeSlotDetailsVC: UIViewController {
 	// TODO add la fonction pour delete un profile
 //peut etre integrer profiledetails ici
 
-
-	/* remove a timeslot from profile
-	func removeTimeSlot() {
-
-		let ret = pd.removeTimeSlot(timeSlotId)
+	@IBAction func TouchRemoveTimeSlot(sender: UIButton) {
+		let ret = pd.deleteTimeSlot(timeslot.id)
 
 		if (ret != nil) {
 			// display error
 			popAlertView(self, ret!)
 		}
 		else {
-			// refresh table display
-			self.refreshTimeSlotsArray()
+			navigationController!.popViewControllerAnimated(true)
 		}
-	}*/
+	}
+
+	//TODO modif du timeslot
 }
