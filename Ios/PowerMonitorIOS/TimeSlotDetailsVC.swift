@@ -35,7 +35,7 @@ class TimeSlotDetailsVC: UIViewController {
 //peut etre integrer profiledetails ici
 
 
-	/*// remove a timeslot from profile
+	/* remove a timeslot from profile
 	func removeTimeSlot() {
 
 		let ret = pd.removeTimeSlot(timeSlotId)
@@ -48,5 +48,5 @@ class TimeSlotDetailsVC: UIViewController {
 			// refresh table display
 			self.refreshTimeSlotsArray()
 		}
-	}/*
+	}*/
 }
