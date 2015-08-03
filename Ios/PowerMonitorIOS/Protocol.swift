@@ -17,12 +17,16 @@ class Protocol {
 
 	// Connect sockets streams to host:port
 	func connect(host: String, port: Int) {
+		networkActivity(true)
 		_socket.connect(host, port: port)
+		networkActivity(false)
 	}
 
 	// Close the current socket streams
 	func disconnect() {
+		networkActivity(true)
 		_socket.disconnect()
+		networkActivity(false)
 	}
 
 	func isConnected() -> Bool {
@@ -42,6 +46,7 @@ class Protocol {
 		var packetData :NSData!
 		var errorFlag :Bool = false
 
+		networkActivity(true)
 		packetSize = readPacketSize()
 		//verify if packet header has been read properly
 		if (packetSize != D_ReadPacketSizeError) {
@@ -57,6 +62,7 @@ class Protocol {
 		if (!errorFlag) {
 			packetData = NSData(bytes: &tmpDataBuffer, length: packetSize)
 		}
+		networkActivity(false)
 		return packetData
 	}
 
@@ -65,17 +71,20 @@ class Protocol {
 	** return the result of the operation (OK/NOK)
 	*/
 	func writePaquet(paquetJSON :JSON) -> Bool {
+		var ret = false
 		var data = NSMutableData()
 		var paquetSize: UInt32
 		var paquetBytes: Int = 4
 
+		networkActivity(true)
 		paquetSize = CFSwapInt32HostToBig(UInt32(paquetJSON.rawData()!.length))
 		data.appendBytes(&paquetSize, length: 4)
 		data.appendData(paquetJSON.rawData()!)
 		if (_socket.writeData(data)) {
-			return true
+			ret = true
 		}
-		return false
+		networkActivity(false)
+		return ret
 	}
 
 	/*

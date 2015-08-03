@@ -32,9 +32,7 @@ class TimeSlotDetailsVC: UIViewController {
 		offTimeLabel.text = timeslot.end.getHourString(timeslot.end.day)
 	}
 
-	// TODO add la fonction pour delete un profile
-//peut etre integrer profiledetails ici
-
+	// delete profile
 	@IBAction func TouchRemoveTimeSlot(sender: UIButton) {
 		let ret = pd.deleteTimeSlot(timeslot.id)
 
@@ -48,4 +46,10 @@ class TimeSlotDetailsVC: UIViewController {
 	}
 
 	//TODO modif du timeslot
+	@IBAction func touchUpdateTimeSlot() {
+		
+	}
+
+
+
 }

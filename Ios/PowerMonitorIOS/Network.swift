@@ -200,7 +200,7 @@ class Network {
 		return (returnCode)
 	}
 
-	func modifyTimeSlot(timeslot: TimeSlot) -> Int {
+	func updateTimeSlot(timeslot: TimeSlot) -> Int {
 		var returnCode: Int = -1
 
 		if _currentSession != nil {

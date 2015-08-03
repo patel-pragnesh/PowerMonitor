@@ -22,7 +22,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PowerMonitorIOS/Network.swift"
@@ -31,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "210"
             endingLineNumber = "210"
-            landmarkName = "modifyTimeSlot(_:)"
+            landmarkName = "updateTimeSlot(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -48,6 +48,22 @@
             startingLineNumber = "198"
             endingLineNumber = "198"
             landmarkName = "addTimeSlot(_:timeslot:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PowerMonitorIOS/Network.swift"
+            timestampString = "460278450.502992"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
+            landmarkName = "updateTimeSlot(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

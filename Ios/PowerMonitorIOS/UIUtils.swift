@@ -37,3 +37,10 @@ func popAlertView(sender: AnyObject, content: alertViewContent)
 	alertView.addButtonWithTitle(content.btn)
 	alertView.show()
 }
+
+/*
+** Display networking activity
+*/
+func networkActivity(state: Bool) {
+	UIApplication.sharedApplication().networkActivityIndicatorVisible = state
+}

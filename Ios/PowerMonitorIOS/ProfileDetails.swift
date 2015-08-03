@@ -64,9 +64,9 @@ class ProfileDetails
 		return (ret)
 	}
 
-	func modifyExistingTimeSlot(timeslot: TimeSlot) -> alertViewContent? {
+	func updateTimeSlot(timeslot: TimeSlot) -> alertViewContent? {
 		var ret: alertViewContent!
-		let res = _network.modifyTimeSlot(timeslot)
+		let res = _network.updateTimeSlot(timeslot)
 
 		if (res != D_REQUEST_SUCCESS) {
 			ret = ("Couldn't modify the timeslot", errDesc(res), "Ok")
