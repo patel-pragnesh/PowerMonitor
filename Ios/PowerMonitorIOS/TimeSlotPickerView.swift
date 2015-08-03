@@ -63,4 +63,12 @@ class TimeSlotPickerView: UIPickerView, UIPickerViewDelegate, UIPickerViewDataSo
 		}
 	}
 
+	func getValues() -> (d: Int, h: Int, m: Int) {
+		var ret: (Int, Int, Int)
+
+		ret.0 = self.selectedRowInComponent(components.days.rawValue)
+		ret.1 = self.selectedRowInComponent(components.hours.rawValue)
+		ret.2 = self.selectedRowInComponent(components.minutes.rawValue)
+		return ret
+	}
 }

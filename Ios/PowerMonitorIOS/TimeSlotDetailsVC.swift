@@ -45,11 +45,37 @@ class TimeSlotDetailsVC: UIViewController {
 		}
 	}
 
-	//TODO modif du timeslot
+	// update timeslot
 	@IBAction func touchUpdateTimeSlot() {
-		
+		var updatedTS: TimeSlot
+		var spvalue = startingPicker.getValues()
+		var epvalue = endingPicker.getValues()
+
+		updatedTS = generateTimeSlotFromPicker(spvalue, epvalue)
+		updatedTS.id = timeslot.id
+		let valid = checkValidity(updatedTS)
+		if (valid) {
+			let ret = pd.updateTimeSlot(updatedTS)
+			if (ret != nil) {
+				popAlertView(self, ret!)
+			}
+			else {
+				navigationController!.popViewControllerAnimated(true)
+			}
+		}
+		else {
+			popAlertView(self, ("Invalid time frames", "You probably made a mistake", "Ok"))
+		}
 	}
 
-
-
+	private func checkValidity(ts: TimeSlot) -> Bool {
+		if (ts.beg.day > ts.end.day) {
+			return false
+		}
+		if (ts.beg.min >= ts.end.min) {
+			return false
+		}
+		return true
+	}
 }
+

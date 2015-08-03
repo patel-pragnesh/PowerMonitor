@@ -70,8 +70,7 @@ struct TimeSlot {
 }
 
 // convert JSON timeslot data into timeslot struct
-func generateTimeSlotFromJSON(data: JSON) -> TimeSlot
-{
+func generateTimeSlotFromJSON(data: JSON) -> TimeSlot {
 	var timeSlot: TimeSlot
 	let begData: JSON = data["beg"]
 	let endData: JSON = data["end"]
@@ -84,12 +83,20 @@ func generateTimeSlotFromJSON(data: JSON) -> TimeSlot
 
 // when adding a new timeslot, generate the temporary newly created timeslots
 //  before we add it by request
-func generateNewTimeSlot(day: Int) -> TimeSlot
-{
+func generateNewTimeSlot(day: Int) -> TimeSlot {
 	var timeSlot: TimeSlot
 
 	timeSlot = TimeSlot(id: D_DEFAULT_TIMESLOT_ID,
 		beg: TimeSlotTime(day: day, min: D_DEFAULT_TIMESLOT_STARTINGTIME),
 		end: TimeSlotTime(day: day, min: D_DEFAULT_TIMESLOT_STARTINGTIME + D_DEFAULT_TIMESLOT_OFFSETTIME))
+	return timeSlot
+}
+
+func generateTimeSlotFromPicker(sp: (Int,Int,Int), ep: (Int, Int,Int)) -> TimeSlot {
+	var timeSlot: TimeSlot
+
+	timeSlot = TimeSlot(id: D_DEFAULT_TIMESLOT_ID,
+		beg: TimeSlotTime(day: sp.0, min: (sp.1 * 60) + sp.2),
+		end: TimeSlotTime(day: ep.0, min: (ep.1 * 60) + ep.2))
 	return timeSlot
 }
