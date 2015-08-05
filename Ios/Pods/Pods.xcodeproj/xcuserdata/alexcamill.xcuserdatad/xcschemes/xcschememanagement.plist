@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Pods-PowerMonitorIOS-Charts.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-PowerMonitorIOS-SwiftyJSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -17,12 +22,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>4204D5010FDEC6505F6698BB</key>
+		<key>181BD3035DD6AA06BCB70269</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4C67D00FF6148878213062FC</key>
+		<key>904029E939B3519D05474A32</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DCDD156867819F453FEC2E71</key>
 		<dict>
 			<key>primary</key>
 			<true/>

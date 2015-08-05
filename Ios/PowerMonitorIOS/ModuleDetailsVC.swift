@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import Charts
 
-class ModuleDetailsVC: UIViewController, UITextFieldDelegate {
+class ModuleDetailsVC: UIViewController, UITextFieldDelegate  {
 	@IBOutlet weak var _nameTextField: UITextField!
 	@IBOutlet weak var _serialNumberLabel: UILabel!
 	@IBOutlet weak var _defaultProfileLabel: UILabel!
@@ -22,6 +23,7 @@ class ModuleDetailsVC: UIViewController, UITextFieldDelegate {
 		_nameTextField.delegate = self
 		_nameTextField.text = _module.name
 		_serialNumberLabel.text = _module.serial.description
+		_defaultProfileLabel.text = _module.defaultProfileName
 		self.navigationItem.title = _module.name
 	}
 

@@ -45,6 +45,7 @@
 		F3C57F6D1AB12D4F004285C2 /* ProfilCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C57F6C1AB12D4F004285C2 /* ProfilCell.swift */; };
 		F3C57F6F1AB13934004285C2 /* ProfileDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C57F6E1AB13934004285C2 /* ProfileDetailsVC.swift */; };
 		F3C57F711AB13E31004285C2 /* Alerte.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C57F701AB13E31004285C2 /* Alerte.swift */; };
+		F3DF1ACC1B72024D00D09DA4 /* MonthlyConsumptionBCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DF1ACB1B72024D00D09DA4 /* MonthlyConsumptionBCVC.swift */; };
 		F3E37FA91A85FBE4007AD300 /* ReadMe in Resources */ = {isa = PBXBuildFile; fileRef = F3E37FA81A85FBE4007AD300 /* ReadMe */; };
 		F3FA502C1AAD48B200372CF6 /* ModuleDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FA502B1AAD48B200372CF6 /* ModuleDetailsVC.swift */; };
 /* End PBXBuildFile section */
@@ -92,6 +93,7 @@
 		F3C57F6C1AB12D4F004285C2 /* ProfilCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilCell.swift; sourceTree = "<group>"; };
 		F3C57F6E1AB13934004285C2 /* ProfileDetailsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileDetailsVC.swift; sourceTree = "<group>"; };
 		F3C57F701AB13E31004285C2 /* Alerte.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alerte.swift; sourceTree = "<group>"; };
+		F3DF1ACB1B72024D00D09DA4 /* MonthlyConsumptionBCVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthlyConsumptionBCVC.swift; sourceTree = "<group>"; };
 		F3E37FA81A85FBE4007AD300 /* ReadMe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe; sourceTree = "<group>"; };
 		F3FA502B1AAD48B200372CF6 /* ModuleDetailsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleDetailsVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -241,6 +243,7 @@
 				F311D1F31ABD2FB500418FDE /* CustomTableView */,
 				F3C016371AAAD1C10009935F /* CustomTableViewCells */,
 				F3B282541B2BE1B800F1ADC5 /* CustomPickerView */,
+				F3DF1ACD1B72029F00D09DA4 /* Charts */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -269,6 +272,14 @@
 				F3700BA31B255627007BEC86 /* TimeSlotCell.swift */,
 			);
 			name = CustomTableViewCells;
+			sourceTree = "<group>";
+		};
+		F3DF1ACD1B72029F00D09DA4 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				F3DF1ACB1B72024D00D09DA4 /* MonthlyConsumptionBCVC.swift */,
+			);
+			name = Charts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -422,6 +433,7 @@
 				F3886CD81AA93CD000900B73 /* Modules.swift in Sources */,
 				F3886CDA1AA93E1800900B73 /* Profile.swift in Sources */,
 				F3C57F6F1AB13934004285C2 /* ProfileDetailsVC.swift in Sources */,
+				F3DF1ACC1B72024D00D09DA4 /* MonthlyConsumptionBCVC.swift in Sources */,
 				F34B92231ABFB33400AB8CA9 /* ProfilesTableView.swift in Sources */,
 				F32DC0D61A1F284600C7F062 /* LoginVC.swift in Sources */,
 				F33BE1B31B1D34F500F13458 /* TimeSlot.swift in Sources */,
