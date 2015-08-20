@@ -44,7 +44,6 @@
                 <TimePicker Header="Fin" Name="EndTimePicker"></TimePicker>
             </StackPanel>
         </ContentDialog>
-
         
         <!-- ContentDialog confirmDelete -->
         <ContentDialog Name="confirmDelete" PrimaryButtonText="Accepter" PrimaryButtonClick="confirmDelete_PrimaryButtonClick"
