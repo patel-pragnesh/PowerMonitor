@@ -45,6 +45,7 @@
             </StackPanel>
         </ContentDialog>
 
+        
         <!-- ContentDialog confirmDelete -->
         <ContentDialog Name="confirmDelete" PrimaryButtonText="Accepter" PrimaryButtonClick="confirmDelete_PrimaryButtonClick"
                                    SecondaryButtonText="Annuler" Title="Confirmer la suppression">
