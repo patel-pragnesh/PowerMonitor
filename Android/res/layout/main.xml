@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
+
+    <include layout="@layout/titlebar" />
+        
+    <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="0dp"
+                  android:orientation="horizontal"
+                  android:layout_weight="0.9"
+                  android:baselineAligned="false"
+    >
+    
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.15">
+        </Space>
+    
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.7">
+
+            <!-- This is the part that's 70% of the total width. I'm inserting a LinearLayout and buttons.-->   
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:padding="10px">
+
+                <EditText 
+                    android:hint="Username"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#FFFFFF"
+                    android:singleLine="true"
+                    android:text="cyril.jourdain@epitech.eu"
+                    android:id="@+Main/email">
+                </EditText>
+
+                <EditText
+                    android:hint="Password"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#FFFFFF"
+                    android:singleLine="true"
+                    android:inputType="textPassword"
+                    android:text="cyril"
+                    android:id="@+Main/pass">
+                </EditText>
+                <Button
+                    android:id="@+id/signin"
+                    android:text="Sign in"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#268CEE"
+                >
+                </Button>
+            </LinearLayout>
+            <!-- 70% Width End-->
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.15">
+        </RelativeLayout>    
+    </LinearLayout>
+
+</LinearLayout>

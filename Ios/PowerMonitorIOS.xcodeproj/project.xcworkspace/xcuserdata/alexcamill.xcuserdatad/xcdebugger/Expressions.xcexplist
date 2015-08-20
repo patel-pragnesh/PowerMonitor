@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "PowerMonitorIOS.ModulesVC.tableView (PowerMonitorIOS.ModulesVC)(ObjectiveC.UITableView, cellForRowAtIndexPath : ObjectiveC.NSIndexPath) -&gt; ObjectiveC.UITableViewCell:ModulesVC.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "_modules.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PowerMonitorIOS.ModulesVC.tableView (PowerMonitorIOS.ModulesVC)(ObjectiveC.UITableView, numberOfRowsInSection : Swift.Int) -&gt; Swift.Int:ModulesVC.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "_modules.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

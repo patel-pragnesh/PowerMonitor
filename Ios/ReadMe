@@ -1,0 +1,34 @@
+Tags a clean:
+
+//TODO : self explaining
+
+//USELESS? : verifier si c'est utile
+
+//TOCHECK : verifier un problem particulier
+
+//WARNING : attention
+
+//TOMOVE : a mettre ailleur
+
+// --------------------------------  TODO  ---------------------------------- //
+
+[UI]
+
+. Changer les bouttons de swipe:
+		mettre des icones a la place des mots: un graph, un data un param et un delete
+
+
+[CODE]
+
+. Socket : implementer une gestion d'erreur post connection pour voir si on est bien connécté
+(pour l'instant se connecte meme quand l'hote n'est pas joint)
+
+-- DONE --
+
+. Socket : faire un singleton pour y avoir acces de partout?
+
+. Confirmer taille du header + endianness et encodage JSON
+
+. Implementer Writepaquet dans paquetcom, puis regarder comment envoyer recevoir les requetes
+
+. PacketUtils -> voir si ca peut pas etre remplacé par NSJSon teube en direct du stream

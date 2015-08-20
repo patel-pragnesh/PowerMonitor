@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
+    <item android:id="@+id/action_add_profile"
+          android:icon="@drawable/android_plus"
+          android:title="Ajouter"
+          android:showAsAction="ifRoom"  />
+</menu>
