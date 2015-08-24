@@ -5,7 +5,7 @@
 ## Login   <mestag_a@epitech.net>
 ## 
 ## Started on  Sat Nov 29 00:07:36 2014 alexis mestag
-## Last update Sat Jun 20 23:02:53 2015 alexis mestag
+## Last update Mon Aug 24 23:35:22 2015 alexis mestag
 ##
 
 NAME=		master
@@ -79,6 +79,7 @@ ODB_HDR=	Entities/Alert.hh			\
 		Entities/User.hh			\
 		Entities/Week.hh			\
 		Entities/Views/SlaveModuleCount.hh	\
+		Entities/Views/GlobalReading.hh		\
 		Utils/Time.hh
 ODB_HDR:=	$(addprefix $(HDR_DIR)/, $(ODB_HDR))
 ODB_CXX=	$(ODB_HDR:.hh=$(ODB_CXX_FILE_PATTERN))
