@@ -119,12 +119,12 @@ namespace Powermonitor.View
             this.Frame.Navigate(typeof(ScheduleView));
         }
 
-        async private void bAddAlert_Click(object sender, RoutedEventArgs e)
+        private void bAddAlert_Click(object sender, RoutedEventArgs e)
         {
             valueInput.Text = "";
             unitInput.SelectedIndex = 0;
             (this.DefaultViewModel as UpdateProfileViewModel).SelectedAlert = null;
-            await addAlertDialog.ShowAsync();
+            CancelPreviousAndShowDialog(addAlertDialog);
         }
 
         private void addAlertDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -144,16 +144,16 @@ namespace Powermonitor.View
             } 
         }
 
-        private async void bDeleteAlert_Click(object sender, RoutedEventArgs e)
+        private void bDeleteAlert_Click(object sender, RoutedEventArgs e)
         {
-            await confirmDelete.ShowAsync();
+            CancelPreviousAndShowDialog(confirmDelete);
         }
 
-        private async void bUpdateAlert_Click(object sender, RoutedEventArgs e)
+        private void bUpdateAlert_Click(object sender, RoutedEventArgs e)
         {
             valueInput.Text = (AlertListView.SelectedItem as Alert).Value.ToString();
             unitInput.SelectedIndex = (int)(AlertListView.SelectedItem as Alert).UnitId - 1;
-            await addAlertDialog.ShowAsync();
+            CancelPreviousAndShowDialog(addAlertDialog);
         }
 
         private void Alert_Tapped(object sender, TappedRoutedEventArgs e)
@@ -161,14 +161,14 @@ namespace Powermonitor.View
 
         }
 
-        private async void bRename_Click(object sender, RoutedEventArgs e)
+        private void bRename_Click(object sender, RoutedEventArgs e)
         {
-            await renameDialog.ShowAsync();
+            CancelPreviousAndShowDialog(renameDialog);
         }
 
-        private async void bUpdatePolling_Click(object sender, RoutedEventArgs e)
+        private void bUpdatePolling_Click(object sender, RoutedEventArgs e)
         {
-            await updatePollingDialog.ShowAsync();
+            CancelPreviousAndShowDialog(updatePollingDialog);
         }
 
         private void updatePollingDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

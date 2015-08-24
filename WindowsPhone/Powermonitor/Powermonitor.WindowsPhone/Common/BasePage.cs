@@ -4,12 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace Powermonitor.Common
 {
     public class BasePage : Page
     {
+        IAsyncInfo LastDialogControl = null;
+
         public BasePage()
         {
             Loaded += BasePage_Loaded;
@@ -44,6 +48,13 @@ namespace Powermonitor.Common
         private void configurationButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(ConfigurationView));
+        }
+
+        protected void CancelPreviousAndShowDialog(ContentDialog dialog)
+        {
+            if (LastDialogControl != null)
+                LastDialogControl.Cancel();
+            LastDialogControl = dialog.ShowAsync();
         }
     }
 }
