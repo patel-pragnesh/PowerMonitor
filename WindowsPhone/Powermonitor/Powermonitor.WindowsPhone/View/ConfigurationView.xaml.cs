@@ -194,15 +194,15 @@ namespace Powermonitor.View
                 NewProfileButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
-        private async void bRename_Click(object sender, RoutedEventArgs e)
+        private void bRename_Click(object sender, RoutedEventArgs e)
         {
-            await moduleRenameDialog.ShowAsync();
+            CancelPreviousAndShowDialog(moduleRenameDialog);
         }
 
-        private async void bChangeDefaultProfile_Click(object sender, RoutedEventArgs e)
+        private void bChangeDefaultProfile_Click(object sender, RoutedEventArgs e)
         {
             DefaultProfile_List.SelectedItem = null;
-            await moduleDefaultProfileDialog.ShowAsync();
+            CancelPreviousAndShowDialog(moduleDefaultProfileDialog);
         }
 
         private void bDissociatDefaultProfile_Click(object sender, RoutedEventArgs e)
