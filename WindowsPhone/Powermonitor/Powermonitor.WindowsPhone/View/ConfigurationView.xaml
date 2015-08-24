@@ -1,4 +1,4 @@
-﻿<Page
+﻿<common:BasePage
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Powermonitor.View"
@@ -282,8 +282,8 @@
     
     <!-- AppBar -->
     <Page.BottomAppBar>
-        <CommandBar x:Name="commandBar" Visibility="Collapsed">
-            <AppBarButton  Label="Nouveau" Icon="Add" Click="bCreate_Click"/>
+        <CommandBar x:Name="commandBar">
+            <AppBarButton Name="NewProfileButton" Label="Nouveau" Icon="Add" Click="bCreate_Click"/>
         </CommandBar>
     </Page.BottomAppBar>
-</Page>
+</common:BasePage>
