@@ -5,15 +5,24 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Mon Feb 23 22:00:09 2015 alexis mestag
-// Last update Wed May  6 20:03:05 2015 alexis mestag
+// Last update Tue Aug 25 00:02:56 2015 alexis mestag
 //
 
 #include		<iostream>
-#include		"Entities/Week.hh"
+#include		<memory>
+#include		"Database/Database.hh"
+#include		"Database/Repository.hpp"
+#include		"Entities/Views/GlobalReading-odb.hxx"
+
 
 int			main() {
-  Week::Point		p(Week::Day::Monday, 3600);
+  Database		db("powermonitor", "powermonitor", "powermonitor");
+  Database::transaction_type	*t = db.getTransaction();
+  Repository<GlobalReading>::query_type	q(Repository<GlobalReading>::query_type::tp.point == 1436299435);
+  GlobalReading			result = db.query_value(q);
 
-  p = Week::Point(Week::Day::Tuesday, 7200);
+  std::cout << result.tp.getTimeSinceEpoch() << ": " << result.value << std::endl;
+  
+  delete t;
   return (0);
 }
