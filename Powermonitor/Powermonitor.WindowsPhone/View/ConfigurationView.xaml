@@ -1,0 +1,289 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Powermonitor.View"
+    xmlns:common="using:Powermonitor.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:Controls="using:WinRTXamlToolkit.Controls"
+    x:Class="Powermonitor.View.ConfigurationView"
+    mc:Ignorable="d"
+    DataContext="{Binding ConfigurationVM, Source={StaticResource Locator}}"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <!-- Begin Resources -->
+    <Page.Resources>
+        <!-- Begin Template Modules -->
+        <DataTemplate x:Key="ModuleTemplate">
+        	<ListViewItem Holding="ModuleListViewItem_Holding" Tapped="ModuleListViewItem_Tapped" HorizontalContentAlignment="Stretch">
+                <!-- Menu -->
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem x:Name="bRename" Text="Renommer" Click="bRename_Click" />
+                        <MenuFlyoutItem x:Name="bUpdateInternalProfile" Command="{Binding ElementName=LayoutRoot, Path=DataContext.bUpdateInternalProfile_Command}" CommandParameter="{Binding}" Text="Modifier le profil interne"/>
+                        <MenuFlyoutItem x:Name="bChangeDefaultProfile" Click="bChangeDefaultProfile_Click" Text="Changer le profil associé"/>
+                        <MenuFlyoutItem x:Name="bDissociatDefaultProfile" Click="bDissociatDefaultProfile_Click" Text="Dissocier le profil associé"/>
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+
+                <!-- Main grid -->
+                <Grid Name="gModuleItem">
+                    <Grid.ColumnDefinitions>
+        				<ColumnDefinition Width="4*"/>
+        				<ColumnDefinition Width="3*"/>
+        			</Grid.ColumnDefinitions>
+        			<Grid.RowDefinitions>
+        				<RowDefinition Height="Auto"/>
+        			</Grid.RowDefinitions>
+
+                    <!-- Grid Content -->
+                    <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
+                        <TextBlock x:Name="ModuleName" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
+                        <TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="{Binding DefaultProfile.Name}"/>
+                    </StackPanel>
+                    <ToggleButton Grid.Row="0" Grid.Column="1" IsChecked="{Binding Status}" Click="ToggleButton_Click" Command="{Binding ElementName=LayoutRoot, Path=DataContext.bTurnOnOff_Command}" CommandParameter="{Binding}">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton">
+                                <Setter Property="Background" Value="#FFFF0000"/>
+                                <Setter Property="BorderBrush" Value="{ThemeResource PhoneForegroundBrush}"/>
+                                <Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
+                                <Setter Property="BorderThickness" Value="{ThemeResource PhoneBorderThickness}"/>
+                                <Setter Property="FontFamily" Value="{ThemeResource PhoneFontFamilyNormal}"/>
+                                <Setter Property="FontWeight" Value="{ThemeResource PhoneButtonFontWeight}"/>
+                                <Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
+                                <Setter Property="MinHeight" Value="{ThemeResource PhoneButtonMinHeight}"/>
+                                <Setter Property="MinWidth" Value="{ThemeResource PhoneButtonMinWidth}"/>
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Content" Value="Off"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Grid Background="Transparent">
+                                                <VisualStateManager.VisualStateGroups>
+                                                    <VisualStateGroup x:Name="CommonStates">
+                                                        <VisualState x:Name="Normal"/>
+                                                        <VisualState x:Name="PointerOver"/>
+                                                        <VisualState x:Name="Pressed"/>
+                                                        <VisualState x:Name="Disabled">
+                                                            <Storyboard>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="EnabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="DisabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </VisualState>
+                                                        <VisualState x:Name="Checked">
+                                                            <Storyboard>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="EnabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="#FF00FF00"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="EnabledContent">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneButtonBasePressedForegroundBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Content" Storyboard.TargetName="EnabledContent">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="On"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="DisabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneDisabledBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="DisabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneDisabledBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="DisabledContent">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneBackgroundBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </VisualState>
+                                                        <VisualState x:Name="CheckedPointerOver">
+                                                            <Storyboard>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="EnabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneAccentBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="EnabledContent">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneButtonBasePressedForegroundBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="DisabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneDisabledBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="DisabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneDisabledBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="DisabledContent">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneBackgroundBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </VisualState>
+                                                        <VisualState x:Name="CheckedPressed"/>
+                                                        <VisualState x:Name="CheckedDisabled">
+                                                            <Storyboard>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="EnabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="#FF00FF00"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="EnabledContent">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneButtonBasePressedForegroundBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="DisabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneDisabledBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="DisabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneDisabledBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="DisabledContent">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PhoneBackgroundBrush}"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </VisualState>
+                                                        <VisualState x:Name="Indeterminate"/>
+                                                        <VisualState x:Name="IndeterminatePointerOver"/>
+                                                        <VisualState x:Name="IndeterminatePressed"/>
+                                                        <VisualState x:Name="IndeterminateDisabled">
+                                                            <Storyboard>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="EnabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="DisabledBackground">
+                                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                                                                </ObjectAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </VisualState>
+                                                    </VisualStateGroup>
+                                                </VisualStateManager.VisualStateGroups>
+                                                <Border x:Name="EnabledBackground" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Margin="{ThemeResource PhoneTouchTargetOverhang}">
+                                                    <ContentPresenter x:Name="EnabledContent" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                </Border>
+                                                <Border x:Name="DisabledBackground" BorderBrush="{ThemeResource ButtonDisabledBorderThemeBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" IsHitTestVisible="False" Margin="{ThemeResource PhoneTouchTargetOverhang}" Visibility="Collapsed">
+                                                    <ContentPresenter x:Name="DisabledContent" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{ThemeResource ButtonDisabledForegroundThemeBrush}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                </Border>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                </Grid>
+        	</ListViewItem>
+        </DataTemplate>
+        <!-- End Template Modules -->
+        
+        <!-- Begin Template Profiles-->
+        <DataTemplate x:Key="ProfileTemplate">
+            <ListViewItem Holding="ProfileListViewItem_Holding" HorizontalContentAlignment="Stretch">
+                <!-- Menu -->
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem x:Name="bUpdate" Command="{Binding ElementName=LayoutRoot, Path=DataContext.bUpdate_Command}" Text="Modifier"/>
+                        <MenuFlyoutItem x:Name="bDelete" Click="bDelete_Click" Text="Supprimer"/>
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+                
+                <!-- Main grid -->
+                <Grid Name="gProfileItem" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Grid Content -->
+                    <TextBlock Grid.Column="0" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
+                </Grid>
+            </ListViewItem>
+        </DataTemplate>
+        <!-- End Template Profiles-->
+
+        <!-- Begin Template Profiles-->
+        <DataTemplate x:Key="DefaultProfileTemplate">
+            <ListBoxItem HorizontalContentAlignment="Stretch" Tapped="DefaultProfileListBox_Tapped">
+                <!-- Main grid -->
+                <Grid Name="gProfileItem" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Grid Content -->
+                    <TextBlock Grid.Column="0" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
+                </Grid>
+            </ListBoxItem>
+        </DataTemplate>
+        <!-- End Template Profiles-->
+    </Page.Resources>
+    <!-- End Resources -->
+
+    <Grid x:Name="LayoutRoot">
+        <!--Contrôle Pivot-->
+        <Pivot Title="{StaticResource ApplicationTitle}" SelectionChanged="Pivot_SelectionChanged">
+            <!-- Begin Modules -->
+            <PivotItem Header="Modules">
+                <StackPanel>
+                    <ListView Height="440" x:Name="ModuleList" ItemsSource="{Binding Modules, Mode=OneWay}" SelectedValue="{Binding SelectedModule, Mode=TwoWay}" ItemTemplate="{StaticResource ModuleTemplate}" Margin="0,0,-0.333,0">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+
+                    <!-- ContentDialog rename -->
+                    <ContentDialog x:Name="moduleRenameDialog" PrimaryButtonText="Renommer" PrimaryButtonClick="RenameDialog_PrimaryButtonClick"
+                                   SecondaryButtonText="Annuler"
+                                   Opened="RenameDialog_Opened">
+                        <StackPanel>
+                            <TextBox KeyDown="TextBox_KeyDown" Name="renameTextBox"></TextBox>
+                        </StackPanel>
+                    </ContentDialog>
+
+                    <!-- ContentDialog Update profile -->
+                    <ContentDialog x:Name="moduleUpdateInternalProfileDialog" PrimaryButtonText="Accepter"
+                                   SecondaryButtonText="Annuler">
+                        <StackPanel>
+                            
+                        </StackPanel>
+                    </ContentDialog>
+
+                    <!-- ContentDialog change associated profile -->
+                    <ContentDialog Style="{StaticResource FullScreenContentDialogStyle}" x:Name="moduleDefaultProfileDialog" PrimaryButtonText="Accepter"
+                                   PrimaryButtonCommand="{Binding bSelectDefaultProfile_Command}"
+                                   SecondaryButtonText="Annuler">
+                        <ListBox Name="DefaultProfile_List" ItemsSource="{Binding Profiles, Mode=OneWay}" SelectedValue="{Binding SelectedDefaultProfile, Mode=TwoWay}" ItemTemplate="{StaticResource DefaultProfileTemplate}" Background="Transparent"/>
+                    </ContentDialog>
+                </StackPanel>
+            </PivotItem>
+            <!-- End Modules -->
+
+            <!--Begin Profiles -->
+            <PivotItem Header="Profils">
+                <StackPanel>
+                    <ListView Name="ProfileList" ItemsSource="{Binding Profiles, Mode=OneWay}" SelectedValue="{Binding SelectedProfile, Mode=TwoWay}" ItemTemplate="{StaticResource ProfileTemplate}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                    
+                    <!-- ContentDialog confirmDelete -->
+                    <ContentDialog Name="confirmDelete" PrimaryButtonText="Accepter" PrimaryButtonCommand="{Binding bDeleteProfile_Command}"
+                                   SecondaryButtonText="Annuler" Title="Confirmer la suppression">
+                        <TextBlock TextWrapping="Wrap">Voulez vous vraiment supprimer ce profil de façon définitive ?</TextBlock>
+                    </ContentDialog>
+                    
+                    <ContentDialog Name="error" PrimaryButtonText="Accepter" Title="Erreur">
+                        <TextBlock TextWrapping="Wrap" Name="errorMsg"></TextBlock>
+                    </ContentDialog>
+                </StackPanel>
+            </PivotItem>
+            <!-- End Profiles -->
+        </Pivot>
+    </Grid>
+    
+    <!-- AppBar -->
+    <Page.BottomAppBar>
+        <CommandBar x:Name="commandBar" Visibility="Collapsed">
+            <AppBarButton  Label="Nouveau" Icon="Add" Click="bCreate_Click"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>

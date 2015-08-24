@@ -27,7 +27,7 @@ namespace Powermonitor.View
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
-    public sealed partial class ConfigurationView : Page
+    public sealed partial class ConfigurationView : BasePage
     {
         private NavigationHelper navigationHelper;
         private ViewModelBase defaultViewModel;
@@ -189,9 +189,9 @@ namespace Powermonitor.View
         {
             Pivot p = sender as Pivot;
             if (p.SelectedIndex == 0)
-                commandBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                NewProfileButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             else if (p.SelectedIndex == 1)
-                commandBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                NewProfileButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         private async void bRename_Click(object sender, RoutedEventArgs e)

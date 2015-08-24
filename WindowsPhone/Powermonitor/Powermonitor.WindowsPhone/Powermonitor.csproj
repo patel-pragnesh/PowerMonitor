@@ -83,6 +83,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\BasePage.cs" />
     <Compile Include="Common\BoolToObjectConverter.cs" />
     <Compile Include="Common\Errors.cs" />
     <Compile Include="Common\Helper.cs" />
