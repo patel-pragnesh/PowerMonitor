@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat Nov 29 00:37:51 2014 alexis mestag
-// Last update Tue Aug 25 02:06:13 2015 alexis mestag
+// Last update Tue Aug 25 02:44:28 2015 alexis mestag
 //
 
 #include	<iostream>
@@ -13,6 +13,7 @@
 
 #include	"Database/Database.hh"
 // #include	"Network/DistantServerConnector.hh"
+#include	"Network/SlaveModuleServer.hh"
 #include	"Network/UIHandler.hh"
 
 int	main() {
@@ -22,6 +23,8 @@ int	main() {
 
     // DistantServerConnector	dsConnector(ios, "127.0.0.1", "4243");
 
+    SlaveModuleServer		smServer(ios, "0.0.0.0", "4244");
+    
     Database			db("powermonitor", "powermonitor", "powermonitor");
     UIHandler			uiHandler(ios, "0.0.0.0", "4242", db);
 
@@ -29,7 +32,8 @@ int	main() {
     signals.add(SIGTERM);
     signals.add(SIGQUIT);
     signals.async_wait([&](boost::system::error_code const &, int) {
-	uiHandler.stop();
+	smServer.stop();
+	uiHandler.stop();	
       });
 
     ios.run();

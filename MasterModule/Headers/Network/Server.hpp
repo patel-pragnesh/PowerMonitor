@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Mon Jul  6 19:35:55 2015 alexis mestag
-// Last update Tue Jul 21 22:49:00 2015 alexis mestag
+// Last update Tue Aug 25 02:39:48 2015 alexis mestag
 //
 
 #ifndef		__SERVER_HPP__
@@ -50,6 +50,7 @@ public:
     _acceptor.bind(endpoint);
     _acceptor.listen();
 
+    std::cout << _name << ": starting" << std::endl;
     this->accept();
   }
 
