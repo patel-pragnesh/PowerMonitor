@@ -128,7 +128,7 @@ namespace Powermonitor.View
 
         private void bGetMeta_Click(object sender, RoutedEventArgs e)
         {
-           (this.DefaultViewModel as ConsultationViewModel).GetConso(ModuleList.SelectedItems, ConvertToTimestamp(this.begDatePicker.Date.DateTime), ConvertToTimestamp(this.endDatePicker.Date.DateTime));
+          // (this.DefaultViewModel as ConsultationViewModel).GetConso(ModuleList.SelectedItems, ConvertToTimestamp(this.begDatePicker.Date.DateTime), ConvertToTimestamp(this.endDatePicker.Date.DateTime));
         }
 
         private void ModuleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -144,6 +144,11 @@ namespace Powermonitor.View
             {
                 items.Remove(items.SingleOrDefault(m => (m as Module).Id == 0));
             }
+        }
+
+        private void bSelectModules_Click(object sender, RoutedEventArgs e)
+        {
+            CancelPreviousAndShowDialog(SelectModulesDialog);
         }
     }
 }

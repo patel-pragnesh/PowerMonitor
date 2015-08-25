@@ -33,13 +33,19 @@
                 </Grid>
             </ListViewItem>
         </DataTemplate>
-         --><!--End Template Modules--> 
-        
+         --><!--End Template Modules-->
+
         <DataTemplate x:Key="ModuleTemplate">
+            <ListBoxItem HorizontalContentAlignment="Stretch">
+                <TextBlock Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
+            </ListBoxItem>
+        </DataTemplate>
+
+        <!--<DataTemplate x:Key="ModuleTemplate">
             <ListBoxItem HorizontalContentAlignment="Stretch">
                 <TextBlock x:Name="ModuleName" Text="{Binding Name}"/>
             </ListBoxItem>
-        </DataTemplate>
+        </DataTemplate>-->
         <!-- End Template Modules -->
     </Page.Resources>
     
@@ -80,16 +86,12 @@
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>-->
-                <ListBox Name="ModuleList" Height="150" Margin="0,0,-0.333,0" SelectionMode="Multiple"
+
+                <!--<ListBox Name="ModuleList" Height="150" Margin="0,0,-0.333,0" SelectionMode="Multiple"
                          ItemsSource="{Binding Modules}" ItemTemplate="{StaticResource ModuleTemplate}"
                          SelectionChanged="ModuleList_SelectionChanged">
-                    <!--<ListBox.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListBox.ItemContainerStyle>-->
-                </ListBox>
+                </ListBox>-->
+
                 <DatePicker x:Name="begDatePicker" Header="Début"/>
                 <DatePicker x:Name="endDatePicker" Header="Fin"/>
                 <Pivot>
@@ -143,12 +145,35 @@
                         </Grid>
                     </PivotItem>
                 </Pivot>
+
+                <ContentDialog Style="{StaticResource FullScreenContentDialogStyle}"
+                               x:Name="SelectModulesDialog" PrimaryButtonText="Accepter">
+                    <ListBox Name="ModuleList" SelectionMode="Multiple"
+                             ItemsSource="{Binding Modules}" SelectionChanged="ModuleList_SelectionChanged"
+                             ItemTemplate="{StaticResource ModuleTemplate}" Background="Transparent"/>
+                </ContentDialog>
+                
+                <!--<ContentDialog x:Name="SelectModulesDialog"
+                               Style="{StaticResource FullScreenContentDialogStyle}"
+                               PrimaryButtonText="Accepter">
+                    --><!--<ListBox Name="ModuleList" Height="150" Margin="0,0,-0.333,0" SelectionMode="Multiple"
+                         ItemsSource="{Binding Modules}" ItemTemplate="{StaticResource ModuleTemplate}"
+                         SelectionChanged="ModuleList_SelectionChanged">
+                    </ListBox>--><!--
+                    <ListView Background="Transparent">
+                        <ListViewItem>
+                            <TextBlock>TEST</TextBlock>
+                        </ListViewItem>
+                    </ListView>
+                </ContentDialog>-->
             </StackPanel>
         </ScrollViewer>
     </Grid>
     
     <Page.BottomAppBar>
         <CommandBar>
+            <AppBarButton Name="bSelectModules" Icon="Bullets" Label="Selectionner les modules"
+                          Click="bSelectModules_Click"/>
             <AppBarButton x:Name="bGetMeta" Icon="Accept" Label="Voir la consommation" Click="bGetMeta_Click"/>
         </CommandBar>
     </Page.BottomAppBar>
