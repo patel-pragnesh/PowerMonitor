@@ -41,13 +41,6 @@ namespace Powermonitor.View
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             defaultViewModel = this.DataContext as ViewModelBase;
             LayoutRoot.DataContext = DefaultViewModel;
-            Messenger.Default.Register<string>(this, HandleError);
-        }
-
-        async private void HandleError(string msg)
-        {
-            errorMsg.Text = msg;
-            await error.ShowAsync();
         }
 
         /// <summary>
@@ -111,12 +104,15 @@ namespace Powermonitor.View
         /// les gestionnaires d'événements qui ne peuvent pas annuler la requête de navigation.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            Messenger.Default.Register<Error>(this, HandleError);
             (this.DefaultViewModel as ConfigurationViewModel).Refresh();
             this.navigationHelper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            Messenger.Default.Unregister<Error>(this);
+            CancelPreviousDialog();
             this.navigationHelper.OnNavigatedFrom(e);
         }
 

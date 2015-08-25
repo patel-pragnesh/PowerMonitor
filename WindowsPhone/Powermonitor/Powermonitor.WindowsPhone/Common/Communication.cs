@@ -29,7 +29,7 @@ namespace Powermonitor.Common
             if (roamingSettings.Values.ContainsKey("session"))
                 Session = JsonConvert.DeserializeObject<Session>(roamingSettings.Values["session"].ToString());
             else
-                Session = new Session();
+                ResetSession();
             _socket = new Socket();
             _socket.Received.CollectionChanged += ReceivedMsgs;
             sendFuncs = new Dictionary<string, Delegate>();
@@ -59,6 +59,11 @@ namespace Powermonitor.Common
             sendFuncs.Add("updateProfilePolling", new Action<Action<JObject, JObject>, UInt64, uint>(UpdateProfilePolling));
             sendFuncs.Add("getConsoMeta", new Action<Action<JObject, JObject>, UInt64, uint, uint>(GetConsoMeta));
             sendFuncs.Add("getModuleConso", new Action<Action<JObject, JObject>, UInt64, uint, uint, UInt64>(GetModuleConso));
+        }
+
+        public void ResetSession()
+        {
+            Session = new Session();
         }
 
         async public Task<bool> Connect()

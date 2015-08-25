@@ -14,23 +14,21 @@ using GalaSoft.MvvmLight.Views;
 
 namespace Powermonitor.ViewModel
 {
-    public class LoginViewModel : ViewModelBase
+    public class LoginViewModel : MyViewModelBase
     {
-        INavigationService _nav;
-        public LoginViewModel(INavigationService navigationService)
+        public LoginViewModel(INavigationService navigationService) : base(navigationService)
         {
-            _nav = navigationService;
         }
 
         public void GoToHomeIfConnected()
         {
-            if (!Communication.getInstance.Session.IsEmpty())
+            if (!Communication.GetInstance.Session.IsEmpty())
                 _nav.NavigateTo("Home");
         }
 
         public void Login(string email, string password)
         {
-            Communication.getInstance.sendFuncs["login"].DynamicInvoke((Action<JObject, JObject>)LoginCallback, email, password);
+            Communication.GetInstance.sendFuncs["login"].DynamicInvoke((Action<JObject, JObject>)LoginCallback, email, password);
         }
 
         private void LoginCallback(JObject request, JObject response)

@@ -31,7 +31,7 @@ namespace Powermonitor.View
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
-    public sealed partial class LoginView : Page
+    public sealed partial class LoginView : BasePage
     {
         private NavigationHelper navigationHelper;
         private ViewModelBase defaultViewModel;
@@ -43,14 +43,19 @@ namespace Powermonitor.View
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             defaultViewModel = this.DataContext as ViewModelBase;
-            Messenger.Default.Register<string>(this, FailedLogin);
+            Messenger.Default.Register<Error>(this, FailedLogin);
+            this.Loaded += LoginView_Loaded;
             // com.sendFuncs["getModules"].DynamicInvoke();
         }
 
-        private async void FailedLogin(string s)
+        void LoginView_Loaded(object sender, RoutedEventArgs e)
         {
-            loginError.Hide();
-            await loginError.ShowAsync();
+            this.BottomAppBar.IsEnabled = false;
+        }
+
+        private void FailedLogin(Error error)
+        {
+          //  CancelPreviousAndShowDialog(loginError);
         }
 
         /// <summary>
@@ -114,11 +119,14 @@ namespace Powermonitor.View
         /// les gestionnaires d'événements qui ne peuvent pas annuler la requête de navigation.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            Messenger.Default.Register<Error>(this, HandleError);
             this.navigationHelper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            Messenger.Default.Unregister<Error>(this);
+            CancelPreviousDialog();
             this.navigationHelper.OnNavigatedFrom(e);
         }
 

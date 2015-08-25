@@ -129,10 +129,10 @@ namespace Powermonitor.UserControls
         {
             TimeSlotsContainer container = (DataContext as TimeSlotsContainer);
             if (current == 0)
-                Communication.getInstance.sendFuncs["addTimeSlot"].DynamicInvoke((Action<JObject, JObject>)AddTimeSlotCallback,
+                Communication.GetInstance.sendFuncs["addTimeSlot"].DynamicInvoke((Action<JObject, JObject>)AddTimeSlotCallback,
                     container.ProfileId, new Time(container.DayOfWeek, (int)BeginTimePicker.Time.TotalMinutes), new Time(container.DayOfWeek, (int)EndTimePicker.Time.TotalMinutes));
             else
-                Communication.getInstance.sendFuncs["updateTimeSlot"].DynamicInvoke((Action<JObject, JObject>)UpdateTimeSlotCallback,
+                Communication.GetInstance.sendFuncs["updateTimeSlot"].DynamicInvoke((Action<JObject, JObject>)UpdateTimeSlotCallback,
                     current, new Time(container.DayOfWeek, (int)BeginTimePicker.Time.TotalMinutes), new Time(container.DayOfWeek, (int)EndTimePicker.Time.TotalMinutes));
             //DateTime tmp = GetNextWeekday(DateTime.Now, DayOfWeek.Tuesday);
             //DateTime b = new DateTime(tmp.Year, tmp.Month, tmp.Day, BeginTimePicker.Time.Hours, BeginTimePicker.Time.Minutes, 0);
@@ -185,7 +185,7 @@ namespace Powermonitor.UserControls
 
         private void confirmDelete_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            Communication.getInstance.sendFuncs["deleteTimeSlot"].DynamicInvoke((Action<JObject, JObject>)DeleteTimeSlotCallback, current);
+            Communication.GetInstance.sendFuncs["deleteTimeSlot"].DynamicInvoke((Action<JObject, JObject>)DeleteTimeSlotCallback, current);
         }
 
         private async void bDelete_Click(object sender, RoutedEventArgs e)

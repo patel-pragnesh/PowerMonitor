@@ -1,4 +1,5 @@
-﻿using Powermonitor.View;
+﻿using GalaSoft.MvvmLight.Messaging;
+using Powermonitor.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,22 @@ namespace Powermonitor.Common
 {
     public class BasePage : Page
     {
-        IAsyncInfo LastDialogControl = null;
+        static IAsyncInfo LastDialogControl = null;
 
         public BasePage()
         {
             Loaded += BasePage_Loaded;
+            previous = null;
+        }
+
+        protected void HandleError(Error error)
+        {
+            ContentDialog errorDialog = new ContentDialog();
+            TextBlock errorMsg = new TextBlock();
+            errorMsg.Text = error.Text;
+            errorDialog.Content = errorMsg;
+            errorDialog.PrimaryButtonText = "Ok";
+            CancelPreviousAndShowDialog(errorDialog);
         }
 
         void BasePage_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -50,11 +62,23 @@ namespace Powermonitor.Common
             this.Frame.Navigate(typeof(ConfigurationView));
         }
 
+        ContentDialog previous;
+
         protected void CancelPreviousAndShowDialog(ContentDialog dialog)
         {
-            if (LastDialogControl != null)
-                LastDialogControl.Cancel();
+            if (previous == null)
+                previous = dialog;
+            CancelPreviousDialog();
             LastDialogControl = dialog.ShowAsync();
+        }
+
+        protected void CancelPreviousDialog()
+        {
+            if (LastDialogControl != null)
+            {
+                LastDialogControl.Cancel();
+                LastDialogControl = null;
+            }
         }
     }
 }

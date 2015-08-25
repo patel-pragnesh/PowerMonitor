@@ -87,6 +87,7 @@
     <Compile Include="Common\BoolToObjectConverter.cs" />
     <Compile Include="Common\Errors.cs" />
     <Compile Include="Common\Helper.cs" />
+    <Compile Include="ViewModel\MyViewModelBase.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\Request.cs" />

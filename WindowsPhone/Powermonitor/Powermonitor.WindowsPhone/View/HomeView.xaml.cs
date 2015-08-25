@@ -106,6 +106,7 @@ namespace Powermonitor.View
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            CancelPreviousDialog();
             this.navigationHelper.OnNavigatedFrom(e);
         }
 

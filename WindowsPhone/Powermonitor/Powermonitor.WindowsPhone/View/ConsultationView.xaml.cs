@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight;
 using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 using System.Collections.ObjectModel;
+using GalaSoft.MvvmLight.Messaging;
 
 // Pour en savoir plus sur le modèle d'élément Page de base, consultez la page http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -105,11 +106,14 @@ namespace Powermonitor.View
         /// les gestionnaires d'événements qui ne peuvent pas annuler la requête de navigation.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            Messenger.Default.Register<Error>(this, HandleError);
             this.navigationHelper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            Messenger.Default.Unregister<Error>(this);
+            CancelPreviousDialog();
             this.navigationHelper.OnNavigatedFrom(e);
         }
 

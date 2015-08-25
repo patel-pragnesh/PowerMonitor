@@ -19,10 +19,8 @@ using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 
 namespace Powermonitor.ViewModel
 {
-    public class ConsultationViewModel : ViewModelBase
+    public class ConsultationViewModel : MyViewModelBase
     {
-        INavigationService _nav;
-
         #region Modules
         private ObservableCollection<Module> _modules;
         public ObservableCollection<Module> Modules
@@ -117,28 +115,19 @@ namespace Powermonitor.ViewModel
         private Chart _amperage;
 
 
-        public ConsultationViewModel(INavigationService navigationService)
+        public ConsultationViewModel(INavigationService navigationService) : base(navigationService)
         {
-            _nav = navigationService;
-            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
+            Communication.GetInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
             PowerNoDataVisibility = Visibility.Collapsed;
             VoltageNoDataVisibility = Visibility.Collapsed;
             AmperageNoDataVisibility = Visibility.Collapsed;
-        }
-
-        private void HandleError(JObject response)
-        {
-            var code = response["returnCode"].ToObject<UInt64>();
-            if (code == 0x103 || code == 0x104)
-                this._nav.NavigateTo("Login");
-            MessengerInstance.Send(Errors.GetErrorMessage(code));
         }
 
         public void SetGraphs(Chart power, Chart voltage, Chart amperage) {
             _power = power;
             _voltage = voltage;
             _amperage = amperage;
-            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
+            Communication.GetInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
         }
 
         public void GetConso(uint beg, uint end)
@@ -152,10 +141,10 @@ namespace Powermonitor.ViewModel
             AmperageNoDataVisibility = Visibility.Collapsed;
             foreach (Module m in selectedModules)
             {
-                Communication.getInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)1);
+                Communication.GetInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)1);
                 if (m.Id != 2)
-                    Communication.getInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)2);
-                Communication.getInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)3);
+                    Communication.GetInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)2);
+                Communication.GetInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)3);
             }
         }
 

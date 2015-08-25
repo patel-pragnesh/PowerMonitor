@@ -17,10 +17,8 @@ using GalaSoft.MvvmLight.Views;
 
 namespace Powermonitor.ViewModel
 {
-    public class ConfigurationViewModel : ViewModelBase
+    public class ConfigurationViewModel : MyViewModelBase
     {
-        INavigationService _nav;
-
         #region Profiles
         private ObservableCollection<Profile> _profiles;
         public ObservableCollection<Profile> Profiles
@@ -133,27 +131,18 @@ namespace Powermonitor.ViewModel
         public ICommand bUpdate_Command { get { return new RelayCommand(UpdateCommand); } }
         public ICommand bUpdateInternalProfile_Command { get { return new RelayCommand(UpdateInternalProfileCommand); } }
 
-        public ConfigurationViewModel(INavigationService navigationService)
+        public ConfigurationViewModel(INavigationService navigationService) : base(navigationService)
         {
             Profiles = null;
             Modules = null;
             SelectedModule = null;
             SelectedDefaultProfile = null;
-            _nav = navigationService;
         }
 
         public void Refresh()
         {
-            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
-            Communication.getInstance.sendFuncs["getProfiles"].DynamicInvoke((Action<JObject, JObject>)GetProfilesCallback);
-        }
-
-        private void HandleError(JObject response)
-        {
-            var code = response["returnCode"].ToObject<UInt64>();
-            if (code == 0x103 || code == 0x104)
-                this._nav.NavigateTo("Login");
-            MessengerInstance.Send(Errors.GetErrorMessage(code));
+            Communication.GetInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
+            Communication.GetInstance.sendFuncs["getProfiles"].DynamicInvoke((Action<JObject, JObject>)GetProfilesCallback);
         }
 
         private void InternalProfileHandler_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -169,7 +158,7 @@ namespace Powermonitor.ViewModel
                 if (newName.Count() == 0)
                     MessengerInstance.Send("Nom incorrect");
                 else
-                    Communication.getInstance.sendFuncs["renameModule"].DynamicInvoke((Action<JObject, JObject>)RenameModuleCallback, newName, SelectedModule.Id);
+                    Communication.GetInstance.sendFuncs["renameModule"].DynamicInvoke((Action<JObject, JObject>)RenameModuleCallback, newName, SelectedModule.Id);
             }
         }
 
@@ -179,7 +168,7 @@ namespace Powermonitor.ViewModel
         {
             if (SelectedModule != null)
             {
-                Communication.getInstance.sendFuncs["turnOnOff"].DynamicInvoke((Action<JObject, JObject>)TurnOnOffCallback, !SelectedModule.Status, SelectedModule.Id);
+                Communication.GetInstance.sendFuncs["turnOnOff"].DynamicInvoke((Action<JObject, JObject>)TurnOnOffCallback, !SelectedModule.Status, SelectedModule.Id);
                 //SelectedModule.Status = !SelectedModule.Status;
             }
         }
@@ -188,7 +177,7 @@ namespace Powermonitor.ViewModel
         {
             if (SelectedDefaultProfile != null)
             {
-                Communication.getInstance.sendFuncs["updateModuleDefaultProfile"].DynamicInvoke((Action<JObject, JObject>)UpdateModuleDefaultProfileCallback, SelectedModule.Id, SelectedDefaultProfile.Id);
+                Communication.GetInstance.sendFuncs["updateModuleDefaultProfile"].DynamicInvoke((Action<JObject, JObject>)UpdateModuleDefaultProfileCallback, SelectedModule.Id, SelectedDefaultProfile.Id);
             }
         }
 
@@ -196,23 +185,23 @@ namespace Powermonitor.ViewModel
         {
             if (SelectedProfile != null)
             {
-                Communication.getInstance.sendFuncs["deleteProfile"].DynamicInvoke((Action<JObject, JObject>)DeleteProfileCallback, SelectedProfile.Id);
+                Communication.GetInstance.sendFuncs["deleteProfile"].DynamicInvoke((Action<JObject, JObject>)DeleteProfileCallback, SelectedProfile.Id);
             }
         }
 
         public void DissociateProfile()
         {
-            Communication.getInstance.sendFuncs["updateModuleDefaultProfile"].DynamicInvoke((Action<JObject, JObject>)UpdateModuleDefaultProfileCallback, SelectedModule.Id, null);
+            Communication.GetInstance.sendFuncs["updateModuleDefaultProfile"].DynamicInvoke((Action<JObject, JObject>)UpdateModuleDefaultProfileCallback, SelectedModule.Id, null);
         }
 
         public void UpdateCommand()
         {
-            Communication.getInstance.sendFuncs["getProfile"].DynamicInvoke((Action<JObject, JObject>)GetProfileCallback, SelectedProfile.Id);
+            Communication.GetInstance.sendFuncs["getProfile"].DynamicInvoke((Action<JObject, JObject>)GetProfileCallback, SelectedProfile.Id);
         }
 
         public void UpdateInternalProfileCommand()
         {
-            Communication.getInstance.sendFuncs["getProfile"].DynamicInvoke((Action<JObject, JObject>)GetProfileCallback, SelectedModule.InternalProfileId);
+            Communication.GetInstance.sendFuncs["getProfile"].DynamicInvoke((Action<JObject, JObject>)GetProfileCallback, SelectedModule.InternalProfileId);
         }
         #endregion
 

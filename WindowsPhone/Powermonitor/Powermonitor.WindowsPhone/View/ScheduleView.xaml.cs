@@ -109,6 +109,7 @@ namespace Powermonitor.View
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            CancelPreviousDialog();
             (this.DefaultViewModel as ScheduleViewModel).SetTimeSlots();
             this.navigationHelper.OnNavigatedFrom(e);
         }

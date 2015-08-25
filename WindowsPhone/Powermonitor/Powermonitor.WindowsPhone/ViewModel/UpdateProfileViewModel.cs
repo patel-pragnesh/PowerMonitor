@@ -13,9 +13,8 @@ using System.Windows.Input;
 
 namespace Powermonitor.ViewModel
 {
-    public class UpdateProfileViewModel : ViewModelBase
+    public class UpdateProfileViewModel : MyViewModelBase
     {
-        INavigationService _nav;
         public static Profile ToUpdate;
         #region Profile
         private Profile _profile;
@@ -56,9 +55,8 @@ namespace Powermonitor.ViewModel
         public ICommand bSchedule_Command { get { return new RelayCommand(ScheduleCommand); } }
         public ICommand bDeleteAlert_Command { get { return new RelayCommand(DeleteAlertCommand); } }
 
-        public UpdateProfileViewModel(INavigationService navigationService)
+        public UpdateProfileViewModel(INavigationService navigationService) : base(navigationService)
         {
-            _nav = navigationService;
         }
 
         public void Refresh()
@@ -76,26 +74,26 @@ namespace Powermonitor.ViewModel
         public void AddAlert(double value, int unit)
         {
             if (SelectedAlert == null)
-                Communication.getInstance.sendFuncs["addAlert"].DynamicInvoke((Action<JObject, JObject>)AddAlertCallback, this.Profile.Id, value, (UInt64)unit);
+                Communication.GetInstance.sendFuncs["addAlert"].DynamicInvoke((Action<JObject, JObject>)AddAlertCallback, this.Profile.Id, value, (UInt64)unit);
             else
-                Communication.getInstance.sendFuncs["updateAlert"].DynamicInvoke((Action<JObject, JObject>)UpdateAlertCallback, SelectedAlert.Id, value, (UInt64)unit);
+                Communication.GetInstance.sendFuncs["updateAlert"].DynamicInvoke((Action<JObject, JObject>)UpdateAlertCallback, SelectedAlert.Id, value, (UInt64)unit);
         }
 
         public void Rename(string name)
         {
-            Communication.getInstance.sendFuncs["updateProfileName"].DynamicInvoke((Action<JObject, JObject>)RenameCallback, Profile.Id, name);
+            Communication.GetInstance.sendFuncs["updateProfileName"].DynamicInvoke((Action<JObject, JObject>)RenameCallback, Profile.Id, name);
         }
 
         public void UpdatePolling(string polling)
         {
-            Communication.getInstance.sendFuncs["updateProfilePolling"].DynamicInvoke((Action<JObject, JObject>)UpdatePollingCallback, Profile.Id, uint.Parse(polling));
+            Communication.GetInstance.sendFuncs["updateProfilePolling"].DynamicInvoke((Action<JObject, JObject>)UpdatePollingCallback, Profile.Id, uint.Parse(polling));
         }
 
         private void DeleteAlertCommand()
         {
             if (SelectedAlert != null)
             {
-                Communication.getInstance.sendFuncs["deleteAlert"].DynamicInvoke((Action<JObject, JObject>)DeleteAlertCallback, SelectedAlert.Id);
+                Communication.GetInstance.sendFuncs["deleteAlert"].DynamicInvoke((Action<JObject, JObject>)DeleteAlertCallback, SelectedAlert.Id);
             }
         }
 

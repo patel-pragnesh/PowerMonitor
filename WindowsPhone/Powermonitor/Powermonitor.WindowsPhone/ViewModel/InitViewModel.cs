@@ -9,19 +9,16 @@ using System.Threading.Tasks;
 
 namespace Powermonitor.ViewModel
 {
-    public class InitViewModel : ViewModelBase
+    public class InitViewModel : MyViewModelBase
     {
-        INavigationService _nav;
-
-        public InitViewModel(INavigationService navigationService)
+        public InitViewModel(INavigationService navigationService) : base(navigationService)
         {
-            _nav = navigationService;
         }
 
         async public Task Init()
         {
-            Communication com = Communication.getInstance;
-            ResourceManager res = ResourceManager.getInstance;
+            Communication com = Communication.GetInstance;
+            ResourceManager res = ResourceManager.GetInstance;
             bool isConnected = await com.Connect();
             if (isConnected)
                 _nav.NavigateTo("Login");
