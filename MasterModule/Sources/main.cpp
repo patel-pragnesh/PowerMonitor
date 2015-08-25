@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat Nov 29 00:37:51 2014 alexis mestag
-// Last update Tue Aug 25 02:44:28 2015 alexis mestag
+// Last update Tue Aug 25 03:11:05 2015 alexis mestag
 //
 
 #include	<iostream>
@@ -23,9 +23,8 @@ int	main() {
 
     // DistantServerConnector	dsConnector(ios, "127.0.0.1", "4243");
 
-    SlaveModuleServer		smServer(ios, "0.0.0.0", "4244");
-    
     Database			db("powermonitor", "powermonitor", "powermonitor");
+    SlaveModuleServer		smServer(ios, "0.0.0.0", "4244", db);
     UIHandler			uiHandler(ios, "0.0.0.0", "4242", db);
 
     signals.add(SIGINT);
