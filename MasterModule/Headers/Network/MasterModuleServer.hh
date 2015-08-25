@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat Jan 24 18:45:59 2015 alexis mestag
-// Last update Mon Feb 23 00:52:33 2015 alexis mestag
+// Last update Tue Aug 25 01:28:59 2015 alexis mestag
 //
 
 #ifndef			__MASTERMODULESERVER_HH__
@@ -14,20 +14,13 @@
 # include		<string>
 # include		<boost/asio.hpp>
 # include		"Database/Database.hh"
-# include		"Network/ConnectionManager.hh"
-# include		"Network/RequestHandler.hh"
+# include		"Network/Server.hpp"
+# include		"Network/UIConnection.hh"
 
-using			boost::asio::ip::tcp;
-
-class			MasterModuleServer
+class			MasterModuleServer : public Server<UIConnection>
 {
 private:
-  boost::asio::io_service	_ios;
-  boost::asio::signal_set	_signals;
-  tcp::acceptor			_acceptor;
-  tcp::socket			_socket;
-  Database			_database;
-  ConnectionManager		_connectionManager;
+  Database			&_database;
 
 public:
   MasterModuleServer() = delete;
@@ -35,14 +28,14 @@ public:
 
   MasterModuleServer	&operator=(MasterModuleServer const &rhs) = delete;
 
-  MasterModuleServer(std::string const &address, std::string const &port);
+  MasterModuleServer(boost::asio::io_service &ios,
+		     std::string &&address, std::string &&port,
+		     Database &db);
   ~MasterModuleServer() = default;
 
-  void			run();
-
-private:
-  void			handleSignals();
-  void			handleAccept();
+  virtual std::shared_ptr<AbstractConnection>	getNewConnection() override {
+    return (this->_getNewConnection<Database &>(db));
+  }
 };
 
 #endif

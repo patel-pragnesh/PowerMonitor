@@ -5,7 +5,7 @@
 ## Login   <mestag_a@epitech.net>
 ## 
 ## Started on  Sat Nov 29 00:07:36 2014 alexis mestag
-## Last update Mon Aug 24 23:35:22 2015 alexis mestag
+## Last update Tue Aug 25 02:06:35 2015 alexis mestag
 ##
 
 NAME=		master
@@ -34,11 +34,10 @@ SRC=		main.cpp				\
 		Entities/User.cpp			\
 		Entities/Week.cpp			\
 		Network/AbstractConnection.cpp		\
-		Network/Connection.cpp			\
 		Network/ConnectionManager.cpp		\
-		Network/DistantServerConnector.cpp	\
-		Network/MasterModuleServer.cpp		\
+		Network/JsonConnection.cpp		\
 		Network/RequestHandler.cpp		\
+		Network/UIConnection.cpp		\
 		Network/UIHandler.cpp			\
 		Utils/JsonValidator.cpp			\
 		Utils/Logger.cpp			\

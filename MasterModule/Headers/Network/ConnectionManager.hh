@@ -1,26 +1,30 @@
 //
-// ConnectionManager.hh for PowerMonitor in /home/mestag_a/Documents/Projets/EIP/MasterModule
+// ConnectionManager.hpp for PowerMonitor in /home/mestag_a/Documents/Projets/EIP/DistantServer
 // 
 // Made by alexis mestag
 // Login   <mestag_a@epitech.net>
 // 
-// Started on  Wed Jan 28 00:01:43 2015 alexis mestag
-// Last update Sun Feb  8 23:31:59 2015 alexis mestag
+// Started on  Mon Jul  6 19:19:13 2015 alexis mestag
+// Last update Tue Jul 21 21:57:57 2015 alexis mestag
 //
 
-#ifndef			__CONNECTIONMANAGER_HH__
-# define		__CONNECTIONMANAGER_HH__
+#ifndef		__CONNECTIONMANAGER_HH__
+# define	__CONNECTIONMANAGER_HH__
 
-# include		<set>
-# include		"Network/Connection.hh"
+# include	<memory>
+# include	<set>
 
-class			ConnectionManager
+class		AbstractConnection;
+
+class		ConnectionManager
 {
-private:
-  typedef std::set<std::shared_ptr<Connection>>	Connections;
+  using ConnectionPtr		= std::shared_ptr<AbstractConnection>;
+  using ConnectionsContainer	= std::set<ConnectionPtr>;
+  using iterator		= typename ConnectionsContainer::iterator;
+  using const_iterator		= typename ConnectionsContainer::const_iterator;
 
 private:
-  Connections		_connections;
+  ConnectionsContainer	_connections;
 
 public:
   ConnectionManager(ConnectionManager const &rhs) = delete;
@@ -30,9 +34,16 @@ public:
   ~ConnectionManager() = default;
 
 public:
-  void			start(Connections::value_type c);
-  void			stop(Connections::value_type c);
-  void			stopAll();
+  void		start(typename ConnectionsContainer::value_type &&c);
+  void		stop(typename ConnectionsContainer::value_type c);
+  void		stop();
+
+  iterator		begin() noexcept { return (_connections.begin()); }
+  const_iterator	begin() const noexcept { return (_connections.begin()); }
+  iterator		end() noexcept { return (_connections.end()); }
+  const_iterator	end() const noexcept { return (_connections.end()); }
 };
+
+# include	"Network/AbstractConnection.hh"
 
 #endif
