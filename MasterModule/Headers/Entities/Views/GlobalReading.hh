@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Mon Aug 24 23:10:16 2015 alexis mestag
-// Last update Mon Aug 24 23:47:29 2015 alexis mestag
+// Last update Tue Aug 25 00:16:01 2015 alexis mestag
 //
 
 #ifndef		__GLOBALREADING_HH__
@@ -22,7 +22,7 @@ struct	GlobalReading
 # ifdef	ODB_COMPILER
 #  pragma db view (GlobalReading) object(Reading) //object(Information = info: Reading::_info)
 #  pragma db member(GlobalReading::tp) column(Reading::_tp)
-#  pragma db member(GlobalReading::value) column("SUM(info_value)")
+#  pragma db member(GlobalReading::value) column("SUM(" + Reading::_info._value + ")")
 # endif
 
 #endif

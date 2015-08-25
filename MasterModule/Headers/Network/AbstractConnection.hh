@@ -1,50 +1,46 @@
 //
-// AbstractConnection.hh for PowerMonitor in /home/mestag_a/Documents/Projets/EIP/MasterModule
+// AbstractConnection.hh for PowerMonitor in /home/mestag_a/Documents/Projets/EIP/DistantServer
 // 
 // Made by alexis mestag
 // Login   <mestag_a@epitech.net>
 // 
-// Started on  Fri Jun 12 01:50:49 2015 alexis mestag
-// Last update Fri Jun 12 02:15:23 2015 alexis mestag
+// Started on  Thu Jul  9 17:16:33 2015 alexis mestag
+// Last update Sat Jul 11 16:48:28 2015 alexis mestag
 //
 
 #ifndef		__ABSTRACTCONNECTION_HH__
 # define	__ABSTRACTCONNECTION_HH__
 
-# include	<array>
 # include	<memory>
 # include	<boost/asio.hpp>
-# include	<json/writer.h>
+
+# include	"Network/ConnectionManager.hh"
 
 using	boost::asio::ip::tcp;
 
-class	AbstractConnection
+class		AbstractConnection : public std::enable_shared_from_this<AbstractConnection>
 {
 private:
-  using	sendHandler	= std::function<void(boost::system::error_code const &error, std::size_t bytes_transferred)>;
-  using recvHandler	= std::function<void(Json::Value const &json)>;
-  using connectHandler	= std::function<void(boost::system::error_code const &error, tcp::resolver::iterator it)>;
+  tcp::socket		_socket;
+  ConnectionManager	&_connectionManager;
 
-private:
-  tcp::socket				_socket;
-  std::unique_ptr<Json::StreamWriter>	_jsonWriter;
-  unsigned int				_sizeToRead;
-  std::array<char, 8192>		_buffer;
-  
 protected:
-  AbstractConnection(boost::asio::io_service &ios);
-  AbstractConnection(tcp::socket &&socket);
+  AbstractConnection() = delete;
+  AbstractConnection(AbstractConnection const &rhs) = delete;
+  AbstractConnection	&operator=(AbstractConnection const &rhs) = delete;
 
-private:
-  void	init();
+  AbstractConnection(boost::asio::ip::tcp::socket socket,
+		     ConnectionManager &connectionManager);
 
 public:
   virtual ~AbstractConnection() = default;
 
 protected:
-  void	connect(tcp::resolver::iterator endpoint_it, connectHandler const &handler);
-  void	send(Json::Value const &json, sendHandler const &handler);
-  void	recv(recvHandler const &handler);
+  tcp::socket	&socket() { return (_socket); }
+
+public:
+  virtual void	start() = 0;
+  void		stop();
 };
 
 #endif

@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Thu May 28 15:01:52 2015 alexis mestag
-// Last update Fri Jun 12 02:21:20 2015 alexis mestag
+// Last update Tue Aug 25 02:05:49 2015 alexis mestag
 //
 
 #ifndef		__DISTANTSERVERCONNECTOR_HH__
