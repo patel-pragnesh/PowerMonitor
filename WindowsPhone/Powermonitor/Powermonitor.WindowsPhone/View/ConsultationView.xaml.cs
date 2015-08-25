@@ -20,6 +20,7 @@ using GalaSoft.MvvmLight;
 using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight.Messaging;
+using Powermonitor.Model;
 
 // Pour en savoir plus sur le modèle d'élément Page de base, consultez la page http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -127,7 +128,22 @@ namespace Powermonitor.View
 
         private void bGetMeta_Click(object sender, RoutedEventArgs e)
         {
-           (this.DefaultViewModel as ConsultationViewModel).GetConso(ConvertToTimestamp(this.begDatePicker.Date.DateTime), ConvertToTimestamp(this.endDatePicker.Date.DateTime));
+           (this.DefaultViewModel as ConsultationViewModel).GetConso(ModuleList.SelectedItems, ConvertToTimestamp(this.begDatePicker.Date.DateTime), ConvertToTimestamp(this.endDatePicker.Date.DateTime));
+        }
+
+        private void ModuleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IList<object> items = (sender as ListBox).SelectedItems;
+            if (e.AddedItems.Any(m => (m as Module).Id == 0))
+            {
+                var tmp = items.Where(m => (m as Module).Id != 0).ToList();
+                foreach (Module m in tmp)
+                    items.Remove(m);
+            }
+            else if (e.AddedItems.Count > 0 && items.Any(m => (m as Module).Id == 0))
+            {
+                items.Remove(items.SingleOrDefault(m => (m as Module).Id == 0));
+            }
         }
     }
 }

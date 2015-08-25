@@ -36,11 +36,9 @@
          --><!--End Template Modules--> 
         
         <DataTemplate x:Key="ModuleTemplate">
-            <ListViewItem HorizontalContentAlignment="Stretch">
-                    <StackPanel Grid.Column="1" HorizontalAlignment="Stretch">
-                        <TextBlock x:Name="ModuleName" Style="{ThemeResource ListViewItemTextBlockStyle}" Text="{Binding Name}"/>
-                    </StackPanel>
-            </ListViewItem>
+            <ListBoxItem HorizontalContentAlignment="Stretch">
+                <TextBlock x:Name="ModuleName" Text="{Binding Name}"/>
+            </ListBoxItem>
         </DataTemplate>
         <!-- End Template Modules -->
     </Page.Resources>
@@ -82,14 +80,16 @@
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>-->
-                <!--<ListBox Name="ModuleList" ItemsSource="{Binding Modules, Mode=OneWay}" Height="150" ItemTemplate="{StaticResource ModuleTemplate}" Margin="0,0,-0.333,0" SelectionMode="Multiple">
-                    <ListBox.ItemContainerStyle>
+                <ListBox Name="ModuleList" Height="150" Margin="0,0,-0.333,0" SelectionMode="Multiple"
+                         ItemsSource="{Binding Modules}" ItemTemplate="{StaticResource ModuleTemplate}"
+                         SelectionChanged="ModuleList_SelectionChanged">
+                    <!--<ListBox.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             <Setter Property="HorizontalAlignment" Value="Stretch"/>
                         </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>-->
+                    </ListBox.ItemContainerStyle>-->
+                </ListBox>
                 <DatePicker x:Name="begDatePicker" Header="Début"/>
                 <DatePicker x:Name="endDatePicker" Header="Fin"/>
                 <Pivot>
