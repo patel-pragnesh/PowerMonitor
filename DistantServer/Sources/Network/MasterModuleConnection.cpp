@@ -5,23 +5,29 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Thu Jul  9 21:25:46 2015 alexis mestag
-// Last update Sat Jul 11 19:55:25 2015 alexis mestag
+// Last update Wed Aug 26 03:03:13 2015 alexis mestag
 //
 
 #include	<iostream>
+#include	"Network/Bridge.hh"
 #include	"Network/MasterModuleConnection.hh"
 
 MasterModuleConnection::MasterModuleConnection(boost::asio::ip::tcp::socket socket,
 					       ConnectionManager &connectionManager,
-					       Database &database) :
+					       Bridge &bridge, Database &database) :
   JsonConnection(std::move(socket), connectionManager),
-  _requestHandler(database) {
+  _bridge(bridge), _requestHandler(database) {
 }
 
 void		MasterModuleConnection::start() {
-  this->recv([this](Json::Value const &json) {
-      this->handle(json);
-    });
+  // To FIX: should be registered to Bridge only if connect command has already been performed
+  _bridge.registerModule(std::dynamic_pointer_cast<MasterModuleConnection>(this->shared_from_this()));
+  /*
+  ** Pre-Bridge code
+  */
+  // this->recv([this](Json::Value const &json) {
+  //     this->handle(json);
+  //   });
 }
 
 void			MasterModuleConnection::handle(Json::Value const &json) {

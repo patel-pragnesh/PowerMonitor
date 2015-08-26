@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat Jul 11 16:42:56 2015 alexis mestag
-// Last update Sat Jul 11 19:42:22 2015 alexis mestag
+// Last update Wed Aug 26 02:04:45 2015 alexis mestag
 //
 
 #ifndef		__JSONCONNECTION_HH__
@@ -38,7 +38,7 @@ protected:
 public:
   virtual ~JsonConnection() = default;
 
-protected:
+// protected:
   void		send(Json::Value const &toSend, sendHandler const &handler);
   void		recv(recvHandler const &handler);
 };

@@ -5,13 +5,14 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat Nov 29 00:37:51 2014 alexis mestag
-// Last update Tue Jul 21 22:42:12 2015 alexis mestag
+// Last update Wed Aug 26 03:06:46 2015 alexis mestag
 //
 
 #include	<iostream>
 #include	<boost/asio.hpp>
 
 #include	"Database/Database.hh"
+#include	"Network/Bridge.hh"
 #include	"Network/MasterModulesHandler.hh"
 #include	"Network/UIHandler.hh"
 
@@ -19,9 +20,10 @@ int	main() {
   try {
     boost::asio::io_service	ios;
     boost::asio::signal_set	signals(ios);
+    Bridge			bridge;
     Database			db("powermonitor", "powermonitor", "powermonitor_DistantServer");
-    MasterModulesHandler	mmHandler(ios, "0.0.0.0", "4243", db);
-    UIHandler			uiHandler(ios, "0.0.0.0", "4242", db, mmHandler);
+    MasterModulesHandler	mmHandler(ios, "0.0.0.0", "4243", bridge, db);
+    UIHandler			uiHandler(ios, "0.0.0.0", "4242", bridge, db, mmHandler);
 
     signals.add(SIGINT);
     signals.add(SIGTERM);
