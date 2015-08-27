@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Thu May 28 15:01:52 2015 alexis mestag
-// Last update Thu Aug 27 02:34:56 2015 alexis mestag
+// Last update Fri Aug 28 01:30:26 2015 alexis mestag
 //
 
 #ifndef		__DISTANTSERVERCONNECTOR_HH__
@@ -25,6 +25,7 @@ class	DistantServerConnector
 private:
   using	sendHandler = std::function<void(boost::system::error_code const &error, std::size_t bytes_transferred)>;
   using recvHandler = std::function<void(Json::Value const &json)>;
+  using	tokenToRequestHandler = std::map<std::string, std::shared_ptr<RequestHandler>>;
 
 private:
   boost::asio::io_service		&_ios;
@@ -36,7 +37,7 @@ private:
   int					_sizeToRead;
   Database				&_database;
   Logger				_logger;
-  std::map<std::string, std::shared_ptr<RequestHandler>>	_handlers;
+  tokenToRequestHandler			_handlers;
 
 public:
   DistantServerConnector(boost::asio::io_service &ios,

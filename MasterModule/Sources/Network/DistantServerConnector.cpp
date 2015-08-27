@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Thu May 28 15:11:14 2015 alexis mestag
-// Last update Thu Aug 27 02:35:22 2015 alexis mestag
+// Last update Fri Aug 28 01:46:58 2015 alexis mestag
 //
 
 #include	<fstab.h>
@@ -93,29 +93,42 @@ void		DistantServerConnector::receiveRequests() {
 	}
       };
 
+      _logger.out() << "Request : " << received.toStyledString() << std::endl;
       if (ok(received)) {
+	// Should always be a session object (since distant server adds a dToken every time)
+	Json::Value const	&session = received["session"];
 	// Read distant session token
-	std::string	distantToken = received["session"]["dToken"].asString();
+	std::string		dToken = session["dToken"].asString();
 
-	// Find associated RequestHandler (if not any, create one)
-	auto				it = _handlers.find(distantToken);
 	std::shared_ptr<RequestHandler>	rh_ptr;
+	if (session.isMember("token")) {
+	  std::string const	token = session["token"].asString();
+	  auto			it = _handlers.find(token);
 
-	if (it != _handlers.end()) {
-	  rh_ptr = it->second;
-	} else {
+	  if (it != _handlers.end()) {
+	    rh_ptr = it->second;
+	    _handlers.erase(it);
+	  } else {
+	    _logger.err() << "Warning: handler not found for session " << token << std::endl;
+	  }
+	}
+	if (!rh_ptr) {
 	  rh_ptr = std::make_shared<RequestHandler>(_database, _logger);
-	  _handlers[distantToken] = rh_ptr;
 	}
 
-	// handle the request
-	Json::Value	response;
+	Json::Value		response;
+
 	rh_ptr->handle(received, response);
 
 	// Reinsert the distant token
-	response["session"]["dToken"] = distantToken;
-	
+	response["session"]["dToken"] = dToken;
+
+	if (response["session"].isMember("token")) {
+	  _handlers.insert(std::make_pair(response["session"]["token"].asString(), rh_ptr));
+	}
+
 	// send the response
+	_logger.out() << "-> Response: " << response.toStyledString() << std::endl;
 	this->send(response, [this](boost::system::error_code const &ec, std::size_t) {
 	    if (!ec) {
 	      this->receiveRequests();
