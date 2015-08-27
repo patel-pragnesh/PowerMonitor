@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Wed Aug 26 00:54:32 2015 alexis mestag
-// Last update Wed Aug 26 03:34:09 2015 alexis mestag
+// Last update Thu Aug 27 03:14:38 2015 alexis mestag
 //
 
 #include	<algorithm>
@@ -19,32 +19,52 @@
 
 void		Bridge::run(std::shared_ptr<UIConnection> c) {
   c->recv([this, c](Json::Value const &request) {
+      Json::UInt64	returnCode = 0;
       // Here, forward request to master module
       // Find it before ?
+      std::cout << "Request from UI: " << request.toStyledString() << std::endl;
       c->searchUser(request);
-      auto		mmConnectionIt = std::find_if(_modules.begin(), _modules.end(),
+      if (c->getUser()) {
+	// std::cerr << "UIConnection => " << c->getUser()->getEmail() << std::endl;
+	auto		mmConnectionIt = std::find_if(_modules.begin(), _modules.end(),
 						      [c](std::shared_ptr<MasterModuleConnection> &mmc) -> bool {
-							return (c->getUser()->getModule()->getUUID() == mmc->getModule()->getUUID());
+							return (c->getUser()->getModule()->getUUID() ==
+								mmc->getModule()->getUUID());
 						      });
-      if (mmConnectionIt != _modules.end()) {
-	token		dSession = this->generateToken();
-	Json::Value	modifiedRequest(request);
+	if (mmConnectionIt != _modules.end()) {
+	  std::cout << "Module found !" << std::endl;
+	  token		dToken = this->generateToken();
+	  Json::Value	modifiedRequest(request);
       
-	modifiedRequest["dSession"] = Bytes::hexEncode(dSession);
-	_tokenToUI.insert(std::make_pair(dSession, c));
-	(*mmConnectionIt)->send(request, [this, c](boost::system::error_code const &ec, std::size_t) {
-	    if (!ec) {
-	      this->run(c);
-	    }
+	  modifiedRequest["session"]["dToken"] = Bytes::hexEncode(dToken);
+	  _tokenToUI.insert(std::make_pair(dToken, c));
+	  (*mmConnectionIt)->send(modifiedRequest, [this, c](boost::system::error_code const &ec, std::size_t) {
+	      if (!ec) {
+		this->run(c);
+	      }
+	    });
+	} else {
+	  std::cerr << "Module not found" << std::endl;
+	  returnCode = 2;
+	}
+      } else {
+	std::cerr << "User not found" << std::endl;
+	returnCode = 1;
+      }
+
+      if (returnCode) {
+	Json::Value response; response["returnCode"] = returnCode;
+
+	c->send(response, [this, c](boost::system::error_code const &ec, std::size_t) {
+	    if (!ec) { this->run(c); }
 	  });
       }
-      
-      // this->run(c);
     });
 }
 
 void		Bridge::registerModule(std::shared_ptr<MasterModuleConnection> c) {
   _modules.push_back(c);
+  std::cout << "MasterModule connection registered for module " << c->getModule()->getUUID() << std::endl;
   this->run(c);
 }
 
@@ -55,13 +75,13 @@ void		Bridge::run(std::shared_ptr<MasterModuleConnection> c) {
       if (dCommand) {
 	std::cerr << "Warning: DistantServer commands handling is not implemented yet" << std::endl;
       } else {
-	std::string	dSessionString = json["dSession"].asString();
+	std::string	dTokenString = json["session"]["dToken"].asString();
 
-	if (dSessionString.empty()) {
-	  std::cerr << "Warning: dSession is empty" << std::endl;
+	if (dTokenString.empty()) {
+	  std::cerr << "Warning: dToken is empty" << std::endl;
 	} else {
-	  token		dSession; Bytes::hexDecode(dSessionString, dSession);
-	  auto		ui = _tokenToUI.find(dSession);
+	  token		dToken; Bytes::hexDecode(dTokenString, dToken);
+	  auto		ui = _tokenToUI.find(dToken);
 
 	  if (ui != _tokenToUI.end()) {
 	    ui->second->send(json, [this, c](boost::system::error_code const &ec, std::size_t) {
@@ -70,7 +90,7 @@ void		Bridge::run(std::shared_ptr<MasterModuleConnection> c) {
 		}
 	      });
 	  } else {
-	    std::cerr << "Warning: UI not found for token " << dSessionString << std::endl;
+	    std::cerr << "Warning: no UI found for token " << dTokenString << std::endl;
 	  }
 	}
       }

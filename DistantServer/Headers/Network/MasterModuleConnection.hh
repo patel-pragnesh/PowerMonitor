@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Thu Jul  9 21:10:58 2015 alexis mestag
-// Last update Wed Aug 26 02:51:05 2015 alexis mestag
+// Last update Thu Aug 27 01:23:58 2015 alexis mestag
 //
 
 #ifndef		__MASTERMODULECONNECTION_H__
@@ -20,6 +20,8 @@ class		MasterModuleConnection : public JsonConnection
 {
 private:
   Bridge			&_bridge;
+  Database			&_database;
+  std::shared_ptr<MasterModule>	_module;
   MasterModuleRequestHandler	_requestHandler;
 
 public:
@@ -34,12 +36,13 @@ public:
 public:
   virtual void	start() override;
 
-  std::shared_ptr<MasterModule>	getModule() const { return (_requestHandler.getModule()); }
+  std::shared_ptr<MasterModule>	getModule() const { return (_module); }
 
   void			forwardSend(Json::Value const &json, sendHandler handler) { this->send(json, handler); }
   void			forwardRecv(recvHandler handler) { this->recv(handler); }
   
 private:
+  void			recvUUID();
   void			handle(Json::Value const &json);
 };
 

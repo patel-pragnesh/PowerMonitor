@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat Nov 29 00:37:51 2014 alexis mestag
-// Last update Wed Aug 26 03:06:46 2015 alexis mestag
+// Last update Thu Aug 27 02:41:11 2015 alexis mestag
 //
 
 #include	<iostream>
@@ -23,7 +23,7 @@ int	main() {
     Bridge			bridge;
     Database			db("powermonitor", "powermonitor", "powermonitor_DistantServer");
     MasterModulesHandler	mmHandler(ios, "0.0.0.0", "4243", bridge, db);
-    UIHandler			uiHandler(ios, "0.0.0.0", "4242", bridge, db, mmHandler);
+    UIHandler			uiHandler(ios, "0.0.0.0", "4245", bridge, db, mmHandler);
 
     signals.add(SIGINT);
     signals.add(SIGTERM);

@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Thu Jul  9 23:02:21 2015 alexis mestag
-// Last update Wed Aug 26 03:11:08 2015 alexis mestag
+// Last update Thu Aug 27 02:49:43 2015 alexis mestag
 //
 
 #include	<iostream>
@@ -86,9 +86,16 @@ bool	UIConnection::getUser(std::string const &email) {
   }
   if (retrieveFromDB) {
     UserRepository		ur(_database);
-    auto			user = ur.getByEmail(email);
+    std::unique_ptr<Database::transaction_type>	t(_database.getTransaction());
 
-    _user = std::move(user);
+    try {
+      auto			user = ur.getByEmail(email);
+
+      _user = std::move(user);
+    } catch (odb::exception const &e) {
+      std::cerr << "Exception: ODB: " << e.what() << std::endl;
+      t->rollback();
+    }
   }
   return (retrieveFromDB);
 }
