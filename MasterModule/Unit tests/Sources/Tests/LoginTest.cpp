@@ -5,9 +5,10 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Wed Apr 15 17:13:06 2015 alexis mestag
-// Last update Sat Apr 18 00:50:34 2015 alexis mestag
+// Last update Thu Aug 27 03:24:03 2015 alexis mestag
 //
 
+#include		<vector>
 #include		"Tests/LoginTest.hh"
 #include		"Utils/JsonValidator.hh"
 
@@ -16,12 +17,19 @@ LoginTest::LoginTest(UnitTestsClient &client) :
 }
 
 bool			LoginTest::operator()() {
-  bool			bu, bp, lo;
-
-  bu = this->badUser();
-  bp = this->badPassword();
-  lo = this->loginOk();
-  return (bu && bp && lo);
+  std::vector<std::pair<std::string, bool (LoginTest::*)()>> tests = {
+    {"  - Bad user: ", &LoginTest::badUser},
+    {"  - Bad password: ", &LoginTest::badPassword},
+    {"  - Login ok: ", &LoginTest::loginOk}
+  };
+    bool	tmp, ret = true;
+  for (auto it = tests.begin(); it != tests.end(); ++it) {
+    std::cout << it->first;
+    tmp = (this->*it->second)();
+    std::cout << tmp << std::endl;
+    ret &= tmp;
+  }
+  return (ret);
 }
 
 bool			LoginTest::badUser() {

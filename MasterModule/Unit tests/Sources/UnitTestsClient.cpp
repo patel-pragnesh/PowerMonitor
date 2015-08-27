@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Tue Apr 14 17:57:21 2015 alexis mestag
-// Last update Tue Jul  7 22:33:55 2015 alexis mestag
+// Last update Thu Aug 27 03:27:20 2015 alexis mestag
 //
 
 #include		<list>
@@ -34,10 +34,10 @@ UnitTestsClient::UnitTestsClient(std::string const &address, std::string const &
 
 void			UnitTestsClient::run() {
   std::list<std::shared_ptr<UnitTest>>	tests = {
-    std::shared_ptr<UnitTest>(new LoginTest(*this)),
-    std::shared_ptr<UnitTest>(new AlertTest(*this)),
+    // std::shared_ptr<UnitTest>(new LoginTest(*this)),
+    // std::shared_ptr<UnitTest>(new AlertTest(*this)),
     std::shared_ptr<UnitTest>(new TimeSlotTest(*this)),
-    std::shared_ptr<UnitTest>(new ModuleTest(*this)),
+    // std::shared_ptr<UnitTest>(new ModuleTest(*this)),
   };
   bool			ret;
 

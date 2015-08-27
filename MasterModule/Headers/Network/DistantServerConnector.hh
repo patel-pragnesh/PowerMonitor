@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Thu May 28 15:01:52 2015 alexis mestag
-// Last update Tue Aug 25 02:05:49 2015 alexis mestag
+// Last update Thu Aug 27 02:34:56 2015 alexis mestag
 //
 
 #ifndef		__DISTANTSERVERCONNECTOR_HH__
@@ -18,12 +18,9 @@
 # include	<json/value.h>
 # include	<json/writer.h>
 
-# include	"Network/AbstractConnection.hh"
 # include	"Network/RequestHandler.hh"
 
-using	boost::asio::ip::tcp;
-
-class	DistantServerConnector : public AbstractConnection
+class	DistantServerConnector
 {
 private:
   using	sendHandler = std::function<void(boost::system::error_code const &error, std::size_t bytes_transferred)>;
@@ -31,15 +28,25 @@ private:
 
 private:
   boost::asio::io_service		&_ios;
+  boost::asio::ip::tcp::socket		_socket;
   std::string				_address;
   std::string				_port;
+  std::shared_ptr<Json::StreamWriter>	_jsonWriter;
+  std::array<char, 8192>		_buffer;
+  int					_sizeToRead;
+  Database				&_database;
+  Logger				_logger;
   std::map<std::string, std::shared_ptr<RequestHandler>>	_handlers;
 
 public:
   DistantServerConnector(boost::asio::io_service &ios,
 			 std::string const &address,
-			 std::string const &port);
+			 std::string const &port,
+			 Database &database);
 
+  void		send(Json::Value const &json, sendHandler f);
+  void		recv(recvHandler f);
+  
 private:
   void		connect();
   void		sendUUID();

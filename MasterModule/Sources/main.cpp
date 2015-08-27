@@ -5,14 +5,14 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat Nov 29 00:37:51 2014 alexis mestag
-// Last update Tue Aug 25 03:11:05 2015 alexis mestag
+// Last update Thu Aug 27 02:40:46 2015 alexis mestag
 //
 
 #include	<iostream>
 #include	<boost/asio.hpp>
 
 #include	"Database/Database.hh"
-// #include	"Network/DistantServerConnector.hh"
+#include	"Network/DistantServerConnector.hh"
 #include	"Network/SlaveModuleServer.hh"
 #include	"Network/UIHandler.hh"
 
@@ -21,9 +21,8 @@ int	main() {
     boost::asio::io_service	ios;
     boost::asio::signal_set	signals(ios);
 
-    // DistantServerConnector	dsConnector(ios, "127.0.0.1", "4243");
-
     Database			db("powermonitor", "powermonitor", "powermonitor");
+    DistantServerConnector	dsConnector(ios, "127.0.0.1", "4243", db);
     SlaveModuleServer		smServer(ios, "0.0.0.0", "4244", db);
     UIHandler			uiHandler(ios, "0.0.0.0", "4242", db);
 
