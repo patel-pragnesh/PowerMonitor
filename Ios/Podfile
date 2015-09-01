@@ -7,7 +7,9 @@ use_frameworks!
 
   pod 'SwiftyJSON', ">= 2.2"
 
-  pod 'Charts', '~> 2.1'
+	pod 'SwiftCharts', '~> 0.2'
+
+	#pod 'SwiftCharts', :git => 'https://github.com/i-schuetz/SwiftCharts.git', :branch => 'swift2.0'
 
 end
 

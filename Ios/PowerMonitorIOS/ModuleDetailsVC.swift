@@ -7,15 +7,13 @@
 //
 
 import UIKit
-import Charts
+import SwiftCharts
 
 class ModuleDetailsVC: UIViewController, UITextFieldDelegate  {
 	@IBOutlet weak var _nameTextField: UITextField!
 	@IBOutlet weak var _serialNumberLabel: UILabel!
 	@IBOutlet weak var _defaultProfileLabel: UILabel!
 	@IBOutlet weak var _internalProfileLabel: UILabel!
-	@IBOutlet weak var _last24hUsageLabel: UILabel!
-	@IBOutlet weak var _averageUsageLabel: UILabel!
 	private var _module: Module!
 	private var _moduleDetails = ModuleDetails()
 
@@ -34,6 +32,12 @@ class ModuleDetailsVC: UIViewController, UITextFieldDelegate  {
 			popAlertView(self, ret)
 		}
 		return false
+	}
+
+	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+		if let chartVC = segue.destinationViewController as? ChartVC {
+			chartVC.setModuleId(_module.id)
+		}
 	}
 
 	/* ------------------------------------------------------------------------ */

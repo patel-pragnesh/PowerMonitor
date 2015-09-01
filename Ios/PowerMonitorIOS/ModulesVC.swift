@@ -40,5 +40,4 @@ class ModulesVC: UIViewController {
 		// send back to Login view
 		self.performSegueWithIdentifier("gotoLogin", sender: self)
 	}
-	
 }

@@ -9,7 +9,7 @@
 import SwiftyJSON
 
 let D_POLLING_MIN_VAL = 1
-let D_POLLING_MAX_VAL = (60 * 24)
+let D_POLLING_MAX_VAL = (60 * 24) /* //TODO */ * 10
 let D_POLLING_STEP_VAL = 1
 let D_DEFAULT_PROFILE_NAME = "newProfile"
 let D_DEFAULT_PROFILE_POLL = D_POLLING_MIN_VAL

@@ -226,4 +226,18 @@ class Network {
 		return (returnCode)
 	}
 
+	func getModuleConso(moduleId: Int, beg: Int, end: Int, unit: Int) -> (returnCode: Int, consoJSON: JSON) {
+		var returnCode: Int = -1
+		var consoJSON: JSON! //TODO : pas safe
+
+		if _currentSession != nil {
+			_proto.writePaquet(_jReq.getModuleConso(_currentSession!, moduleId: moduleId, beg: beg, end: end, unitId: unit))
+			let resJSON = JSON(data: _proto.readPacket())
+			_currentSession = generateSessionFromJSON(resJSON["session"])
+			returnCode = generateReturnCodeFromJSON(resJSON["returnCode"])
+			consoJSON = resJSON["infos"]
+		}
+		return (returnCode, consoJSON)
+	}
+
 }

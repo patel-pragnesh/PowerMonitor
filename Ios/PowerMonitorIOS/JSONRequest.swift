@@ -20,6 +20,7 @@ let D_JSON_ADDPROFILE: JSON			=	["cmd":"addProfile","name":"","polling":"","sess
 let D_JSON_DELETEPROFILE: JSON	=	["cmd":"deleteProfile","id":"","session":["userId":"","token":""]]
 let D_JSON_UPDATEPOLLING: JSON	=	["cmd":"updateProfilePolling","id":"","polling":"","session":["userId":"","token":""]]
 let D_JSON_GETPROFILE: JSON			= ["cmd":"getProfile","id":"","session":["userId":"","token":""]]
+let D_JSON_GETMODULECONSO: JSON = ["cmd":"getModuleConso","moduleId":"","beg":"","end":"","unitId":"","session":["userId":"","token":""]]
 
 let D_JSON_ADDTIMESLOT: JSON		= ["cmd":"addTimeSlot","profileId":"","beg":["day":"","minute":""],"end":["day":"","minute":""],"session":["userId":"","token":""]]
 let D_JSON_MODIFYTIMESLOT: JSON = ["cmd":"updateTimeSlot","id":"","beg":["day":"","minute":""],"end":["day":"","minute":""],"session":["userId":"","token":""]]
@@ -152,6 +153,18 @@ class JSONRequest {
 		var json: JSON = D_JSON_DELETETIMESLOT
 
 		json["id"] = JSON(id)
+		json["session"]["userId"] = JSON(session.userId)
+		json["session"]["token"] = JSON(session.token)
+		return (json)
+	}
+
+	func getModuleConso(session: Session, moduleId: Int, beg: Int, end: Int, unitId: Int) -> JSON {
+		var json: JSON = D_JSON_GETMODULECONSO
+
+		json["moduleId"] = JSON(moduleId)
+		json["beg"] = JSON(beg)
+		json["end"] = JSON(end)
+		json["unitId"] = JSON(unitId)
 		json["session"]["userId"] = JSON(session.userId)
 		json["session"]["token"] = JSON(session.token)
 		return (json)

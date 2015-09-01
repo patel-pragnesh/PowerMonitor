@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Alexandre Camilleri. All rights reserved.
 //
 
+import SwiftyJSON
+
 class ModuleDetails {
 	private var _network = Network.sharedInstance
 
@@ -18,5 +20,4 @@ class ModuleDetails {
 		}
 		return ret
 	}
-	
 }

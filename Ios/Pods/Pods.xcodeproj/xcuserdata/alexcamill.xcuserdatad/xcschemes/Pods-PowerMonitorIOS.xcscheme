@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "904029E939B3519D05474A32"
+               BlueprintIdentifier = "50351E3B3FCB163EB063EC96"
                BuildableName = "Pods_PowerMonitorIOS.framework"
                BlueprintName = "Pods-PowerMonitorIOS"
                ReferencedContainer = "container:Pods.xcodeproj">

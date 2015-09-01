@@ -1,13 +1,13 @@
 PODS:
-  - Charts (2.1.2)
+  - SwiftCharts (0.2.4)
   - SwiftyJSON (2.2.0)
 
 DEPENDENCIES:
-  - Charts (~> 2.1)
+  - SwiftCharts (~> 0.2)
   - SwiftyJSON (>= 2.2)
 
 SPEC CHECKSUMS:
-  Charts: bedcb1fcb5d2b41119ae14629ffa23ed439233d0
+  SwiftCharts: d2f1d0b96a47de2ca89fe316ac164dfdf7be949c
   SwiftyJSON: 0b3e6c07af17ff745e77e8e9984097b55c956e5c
 
 COCOAPODS: 0.37.1

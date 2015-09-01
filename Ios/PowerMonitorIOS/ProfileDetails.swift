@@ -49,7 +49,6 @@ class ProfileDetails
 		if (reqRet.returnCode != D_REQUEST_SUCCESS) {
 			ret = ("Couldn't fetch the profile information from server", errDesc(reqRet.returnCode), "Ok")
 		}
-		println(reqRet.profileJSON.description) //TODO remove log
 		return (ret, generateTimeSlotsFromJSON(reqRet.profileJSON["timeSlots"]))
 	}
 
