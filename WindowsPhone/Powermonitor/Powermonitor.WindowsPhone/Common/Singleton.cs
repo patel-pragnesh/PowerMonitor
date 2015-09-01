@@ -10,7 +10,7 @@ namespace Powermonitor.Common
     {
         private static readonly Lazy<T> sInstance = new Lazy<T>(() => CreateInstanceOfT());
 
-        public static T getInstance { get { return sInstance.Value; } }
+        public static T GetInstance { get { return sInstance.Value; } }
 
         private static T CreateInstanceOfT()
         {

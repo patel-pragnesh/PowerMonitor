@@ -34,4 +34,16 @@ namespace Powermonitor.Common
             return "";
         }
     }
+
+    public class Error
+    {
+        public UInt64 Code;
+        public string Text;
+
+        public Error(UInt64 code, string text)
+        {
+            Code = code;
+            Text = text;
+        }
+    }
 }

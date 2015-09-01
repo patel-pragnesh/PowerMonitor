@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat Jun 20 22:23:27 2015 alexis mestag
-// Last update Sun Jun 21 00:15:45 2015 alexis mestag
+// Last update Mon Aug 24 23:05:23 2015 alexis mestag
 //
 
 #ifndef			__READING_HH__

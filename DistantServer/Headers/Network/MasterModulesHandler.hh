@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat May 30 18:39:03 2015 alexis mestag
-// Last update Mon Jul 13 21:19:53 2015 alexis mestag
+// Last update Wed Aug 26 02:59:43 2015 alexis mestag
 //
 
 #ifndef		__MASTERMODULESHANDLER_HH__
@@ -15,17 +15,18 @@
 # include	"Network/MasterModuleConnection.hh"
 # include	"Network/Server.hpp"
 
-using	boost::asio::ip::tcp;
+class		Bridge;
 
 class		MasterModulesHandler : public Server<MasterModuleConnection>
 {
 private:
+  Bridge			&_bridge;
   Database			&_database;
 
 public:
   MasterModulesHandler(boost::asio::io_service &ios,
 		       std::string &&address, std::string &&port,
-		       Database &db);
+		       Bridge &bridge, Database &db);
 
   virtual std::shared_ptr<AbstractConnection>	getNewConnection() override;
 };

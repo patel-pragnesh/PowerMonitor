@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Mon May  4 03:21:50 2015 alexis mestag
-// Last update Sat Jun 20 21:34:23 2015 alexis mestag
+// Last update Thu Aug 27 02:45:04 2015 alexis mestag
 //
 
 #include	<algorithm>
@@ -46,5 +46,6 @@ Session::token_type const	&Session::getToken() const {
 
 void				Session::serialize(Json::Value &json) const {
   json["userId"] = static_cast<Json::UInt64>(_user->getId());
+  json["email"] = _user->getEmail();
   json["token"] = Bytes::hexEncode(_token);
 }

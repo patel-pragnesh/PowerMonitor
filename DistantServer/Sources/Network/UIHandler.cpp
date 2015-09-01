@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Mon Jul  6 18:26:41 2015 alexis mestag
-// Last update Tue Jul 21 22:44:12 2015 alexis mestag
+// Last update Wed Aug 26 03:07:53 2015 alexis mestag
 //
 
 #include	<iostream>
@@ -15,11 +15,11 @@
 
 UIHandler::UIHandler(boost::asio::io_service &ios,
 		     std::string &&address, std::string &&port,
-		     Database &db, MasterModulesHandler &mmHandler) :
+		     Bridge &bridge, Database &db, MasterModulesHandler &mmHandler) :
   Server("UIHandler", ios, std::move(address), std::move(port)),
-  _database(db), _mmHandler(mmHandler) {
+  _bridge(bridge), _database(db), _mmHandler(mmHandler) {
 }
 
 std::shared_ptr<AbstractConnection>	UIHandler::getNewConnection() {
-  return (this->_getNewConnection<Database &, MasterModulesHandler &>(_database, _mmHandler));
+  return (this->_getNewConnection<Bridge &, Database &, MasterModulesHandler &>(_bridge, _database, _mmHandler));
 }

@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Sat May 30 18:44:16 2015 alexis mestag
-// Last update Mon Jul 13 21:18:51 2015 alexis mestag
+// Last update Wed Aug 26 02:43:58 2015 alexis mestag
 //
 
 #include	<iostream>
@@ -14,12 +14,12 @@
 
 MasterModulesHandler::MasterModulesHandler(boost::asio::io_service &ios,
 					   std::string &&address, std::string &&port,
-					   Database &db) :
+					   Bridge &bridge, Database &db) :
   Server("MasterModule handler", ios, std::move(address), std::move(port)),
-  _database(db) {
+  _bridge(bridge), _database(db) {
 }
 
 
 std::shared_ptr<AbstractConnection>	MasterModulesHandler::getNewConnection() {
-  return (this->_getNewConnection<Database &>(_database));
+  return (this->_getNewConnection<Bridge &, Database &>(_bridge, _database));
 }

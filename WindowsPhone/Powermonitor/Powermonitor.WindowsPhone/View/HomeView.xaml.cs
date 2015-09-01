@@ -25,7 +25,7 @@ namespace Powermonitor.View
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
-    public sealed partial class HomeView : Page
+    public sealed partial class HomeView : BasePage
     {
         private NavigationHelper navigationHelper;
         private ViewModelBase defaultViewModel;
@@ -106,6 +106,7 @@ namespace Powermonitor.View
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            CancelPreviousDialog();
             this.navigationHelper.OnNavigatedFrom(e);
         }
 

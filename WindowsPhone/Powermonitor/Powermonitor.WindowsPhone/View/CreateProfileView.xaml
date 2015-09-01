@@ -1,5 +1,6 @@
-﻿<Page
+﻿<common:BasePage
     x:Class="Powermonitor.View.CreateProfileView"
+    xmlns:common="using:Powermonitor.Common"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Powermonitor.View"
@@ -45,4 +46,4 @@
             <AppBarButton Name="bSaveProfile" Command="{Binding bSaveProfile_Command}" Icon="Save" Label="Enregistrer"/>
         </CommandBar>
     </Page.BottomAppBar>
-</Page>
+</common:BasePage>

@@ -46,24 +46,6 @@ namespace Powermonitor.Model
 
         }
         #endregion
-        #region IsSelected
-        private bool _isSelected;
-        public bool IsSelected
-        {
-            get
-            {
-                return _isSelected;
-            }
-            set
-            {
-                if (value == _isSelected)
-                    return;
-                _isSelected = value;
-                RaisePropertyChanged("IsSelected");
-            }
-
-        }
-        #endregion
         #region Profile
         private Profile _defaultProfile;
         public Profile DefaultProfile
@@ -90,7 +72,6 @@ namespace Powermonitor.Model
         {
             Name = name;
             _status = status;
-            IsSelected = true;
             Id = id;
             DefaultProfile = defaultProfile;
             InternalProfileId = internalProfileId;

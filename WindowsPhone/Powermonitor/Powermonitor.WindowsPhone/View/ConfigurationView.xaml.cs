@@ -27,7 +27,7 @@ namespace Powermonitor.View
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
-    public sealed partial class ConfigurationView : Page
+    public sealed partial class ConfigurationView : BasePage
     {
         private NavigationHelper navigationHelper;
         private ViewModelBase defaultViewModel;
@@ -41,13 +41,6 @@ namespace Powermonitor.View
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             defaultViewModel = this.DataContext as ViewModelBase;
             LayoutRoot.DataContext = DefaultViewModel;
-            Messenger.Default.Register<string>(this, HandleError);
-        }
-
-        async private void HandleError(string msg)
-        {
-            errorMsg.Text = msg;
-            await error.ShowAsync();
         }
 
         /// <summary>
@@ -111,12 +104,15 @@ namespace Powermonitor.View
         /// les gestionnaires d'événements qui ne peuvent pas annuler la requête de navigation.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            Messenger.Default.Register<Error>(this, HandleError);
             (this.DefaultViewModel as ConfigurationViewModel).Refresh();
             this.navigationHelper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            Messenger.Default.Unregister<Error>(this);
+            CancelPreviousDialog();
             this.navigationHelper.OnNavigatedFrom(e);
         }
 
@@ -189,20 +185,20 @@ namespace Powermonitor.View
         {
             Pivot p = sender as Pivot;
             if (p.SelectedIndex == 0)
-                commandBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                NewProfileButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             else if (p.SelectedIndex == 1)
-                commandBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                NewProfileButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
-        private async void bRename_Click(object sender, RoutedEventArgs e)
+        private void bRename_Click(object sender, RoutedEventArgs e)
         {
-            await moduleRenameDialog.ShowAsync();
+            CancelPreviousAndShowDialog(moduleRenameDialog);
         }
 
-        private async void bChangeDefaultProfile_Click(object sender, RoutedEventArgs e)
+        private void bChangeDefaultProfile_Click(object sender, RoutedEventArgs e)
         {
             DefaultProfile_List.SelectedItem = null;
-            await moduleDefaultProfileDialog.ShowAsync();
+            CancelPreviousAndShowDialog(moduleDefaultProfileDialog);
         }
 
         private void bDissociatDefaultProfile_Click(object sender, RoutedEventArgs e)

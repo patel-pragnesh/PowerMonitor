@@ -19,10 +19,8 @@ using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 
 namespace Powermonitor.ViewModel
 {
-    public class ConsultationViewModel : ViewModelBase
+    public class ConsultationViewModel : MyViewModelBase
     {
-        INavigationService _nav;
-
         #region Modules
         private ObservableCollection<Module> _modules;
         public ObservableCollection<Module> Modules
@@ -41,25 +39,6 @@ namespace Powermonitor.ViewModel
 
         }
         #endregion
-
-        #region SelectedModule
-        private Module _selectedModule;
-        public Module SelectedModule
-        {
-            get
-            {
-                return _selectedModule;
-            }
-            set
-            {
-                if (value == _selectedModule)
-                    return;
-                _selectedModule = value;
-                RaisePropertyChanged("SelectedModule");
-            }
-        }
-        #endregion
-
         #region PowerNoDataVisibility
         private Visibility _powerNoDataVisibility;
         public Visibility PowerNoDataVisibility
@@ -117,33 +96,30 @@ namespace Powermonitor.ViewModel
         private Chart _amperage;
 
 
-        public ConsultationViewModel(INavigationService navigationService)
+        public ConsultationViewModel(INavigationService navigationService) : base(navigationService)
         {
-            _nav = navigationService;
-            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
+            Communication.GetInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
             PowerNoDataVisibility = Visibility.Collapsed;
             VoltageNoDataVisibility = Visibility.Collapsed;
             AmperageNoDataVisibility = Visibility.Collapsed;
-        }
-
-        private void HandleError(JObject response)
-        {
-            var code = response["returnCode"].ToObject<UInt64>();
-            if (code == 0x103 || code == 0x104)
-                this._nav.NavigateTo("Login");
-            MessengerInstance.Send(Errors.GetErrorMessage(code));
         }
 
         public void SetGraphs(Chart power, Chart voltage, Chart amperage) {
             _power = power;
             _voltage = voltage;
             _amperage = amperage;
-            Communication.getInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
+            Communication.GetInstance.sendFuncs["getModules"].DynamicInvoke((Action<JObject, JObject>)GetModulesCallback);
         }
 
-        public void GetConso(uint beg, uint end)
+        public void GetConso(IList<object> SelectedModules, uint beg, uint end)
         {
-            List<Module> selectedModules = Modules.Where(m => m.IsSelected == true).ToList();
+            List<Module> selectedModules;
+            // Getting all modules if "tous" is selected
+            if (SelectedModules.Any(m => (m as Module).Id == 0))
+               selectedModules = Modules.Where(m => m.Id != 0).ToList();
+            // Getting the modules from Modules for easier manipulation without casts
+            else
+                selectedModules = Modules.Where(m => SelectedModules.Any(mod => (mod as Module).Id == m.Id)).ToList();
             _power.Series.Clear();
             _voltage.Series.Clear();
             _amperage.Series.Clear();
@@ -152,10 +128,11 @@ namespace Powermonitor.ViewModel
             AmperageNoDataVisibility = Visibility.Collapsed;
             foreach (Module m in selectedModules)
             {
-                Communication.getInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)1);
+                Communication.GetInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)1);
+                // To do : remove the if, weird bug without it
                 if (m.Id != 2)
-                    Communication.getInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)2);
-                Communication.getInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)3);
+                    Communication.GetInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)2);
+                Communication.GetInstance.sendFuncs["getModuleConso"].DynamicInvoke((Action<JObject, JObject>)GetConsoCallback, m.Id, beg, end, (UInt64)3);
             }
         }
 
@@ -169,54 +146,59 @@ namespace Powermonitor.ViewModel
 
         private void GetConsoCallback(JObject request, JObject response)
         {
-            //if ((response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0) && response["modules"] != null)
-            //{
-            ObservableCollection<Tuple<DateTime, int>> values = new ObservableCollection<Tuple<DateTime, int>>();
-            List<Info> tmp = JsonConvert.DeserializeObject<List<Info>>(response["infos"].ToString());
-            foreach (Info i in tmp) {
-                values.Add(new Tuple<DateTime, int>(UnixTimeStampToDateTime(i.Time), i.Value));
+            if ((response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0) && response["infos"] != null)
+                {
+                ObservableCollection<Tuple<DateTime, int>> values = new ObservableCollection<Tuple<DateTime, int>>();
+                List<Info> tmp = JsonConvert.DeserializeObject<List<Info>>(response["infos"].ToString());
+                foreach (Info i in tmp) {
+                    values.Add(new Tuple<DateTime, int>(UnixTimeStampToDateTime(i.Time), i.Value));
+                }
+                string moduleName = Modules.First(m => m.Id == request["moduleId"].ToObject<UInt64>()).Name;
+                if (request["unitId"].ToObject<UInt64>() == 1)
+                {
+                    if (values.Count == 0)
+                        PowerNoDataVisibility = Visibility.Visible;
+                    _power.Series.Add(new LineSeries());
+                    int i = _power.Series.Count - 1;
+                    (_power.Series[i] as LineSeries).Title = moduleName;
+                    (_power.Series[i] as LineSeries).ItemsSource = values;
+                    (_power.Series[i] as LineSeries).IndependentValuePath = "Item1";
+                    (_power.Series[i] as LineSeries).DependentValuePath = "Item2";
+                }
+                else if (request["unitId"].ToObject<UInt64>() == 2)
+                {
+                    if (values.Count == 0)
+                        VoltageNoDataVisibility = Visibility.Visible;
+                    _voltage.Series.Add(new LineSeries());
+                    int i = _voltage.Series.Count - 1;
+                    (_voltage.Series[i] as LineSeries).Title = moduleName;
+                    (_voltage.Series[i] as LineSeries).ItemsSource = values;
+                    (_voltage.Series[i] as LineSeries).IndependentValuePath = "Item1";
+                    (_voltage.Series[i] as LineSeries).DependentValuePath = "Item2";
+                }
+                else if (request["unitId"].ToObject<UInt64>() == 3)
+                {
+                    if (values.Count == 0)
+                        AmperageNoDataVisibility = Visibility.Visible;
+                    _amperage.Series.Add(new LineSeries());
+                    int i = _amperage.Series.Count - 1;
+                    (_amperage.Series[i] as LineSeries).Title = moduleName;
+                    (_amperage.Series[i] as LineSeries).ItemsSource = values;
+                    (_amperage.Series[i] as LineSeries).IndependentValuePath = "Item1";
+                    (_amperage.Series[i] as LineSeries).DependentValuePath = "Item2";
+                }
             }
-            string moduleName = Modules.First(m => m.Id == request["moduleId"].ToObject<UInt64>()).Name;
-            if (request["unitId"].ToObject<UInt64>() == 1)
-            {
-                if (values.Count == 0)
-                    PowerNoDataVisibility = Visibility.Visible;
-                _power.Series.Add(new LineSeries());
-                int i = _power.Series.Count - 1;
-                (_power.Series[i] as LineSeries).Title = moduleName;
-                (_power.Series[i] as LineSeries).ItemsSource = values;
-                (_power.Series[i] as LineSeries).IndependentValuePath = "Item1";
-                (_power.Series[i] as LineSeries).DependentValuePath = "Item2";
-            }
-            else if (request["unitId"].ToObject<UInt64>() == 2)
-            {
-                if (values.Count == 0)
-                    VoltageNoDataVisibility = Visibility.Visible;
-                _voltage.Series.Add(new LineSeries());
-                int i = _voltage.Series.Count - 1;
-                (_voltage.Series[i] as LineSeries).Title = moduleName;
-                (_voltage.Series[i] as LineSeries).ItemsSource = values;
-                (_voltage.Series[i] as LineSeries).IndependentValuePath = "Item1";
-                (_voltage.Series[i] as LineSeries).DependentValuePath = "Item2";
-            }
-            else if (request["unitId"].ToObject<UInt64>() == 3)
-            {
-                if (values.Count == 0)
-                    AmperageNoDataVisibility = Visibility.Visible;
-                _amperage.Series.Add(new LineSeries());
-                int i = _amperage.Series.Count - 1;
-                (_amperage.Series[i] as LineSeries).Title = moduleName;
-                (_amperage.Series[i] as LineSeries).ItemsSource = values;
-                (_amperage.Series[i] as LineSeries).IndependentValuePath = "Item1";
-                (_amperage.Series[i] as LineSeries).DependentValuePath = "Item2";
-            }
-            //}
+            else
+                HandleError(response);
         }
 
         private void GetModulesCallback(JObject request, JObject response)
         {
             if ((response["returnCode"] == null || response["returnCode"].ToObject<UInt64>() == 0) && response["modules"] != null)
+            {
                 Modules = new ObservableCollection<Module>(JsonConvert.DeserializeObject<List<Module>>(response["modules"].ToString()));
+                Modules.Insert(0, new Module("Tous"));
+            }
             else
                 HandleError(response);
         }

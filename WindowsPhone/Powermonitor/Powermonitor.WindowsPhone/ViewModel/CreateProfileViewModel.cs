@@ -13,10 +13,8 @@ using GalaSoft.MvvmLight.Views;
 
 namespace Powermonitor.ViewModel
 {
-    public class CreateProfileViewModel : ViewModelBase
+    public class CreateProfileViewModel : MyViewModelBase
     {
-        INavigationService _nav;
-
         #region Name
         private string _name;
         public String Name
@@ -56,22 +54,13 @@ namespace Powermonitor.ViewModel
 
         public ICommand bSaveProfile_Command { get { return new RelayCommand(SaveProfileCommand); } }
 
-        public CreateProfileViewModel(INavigationService navigationService)
+        public CreateProfileViewModel(INavigationService navigationService) : base(navigationService)
         {
-            _nav = navigationService;
-        }
-
-        private void HandleError(JObject response)
-        {
-            var code = response["returnCode"].ToObject<UInt64>();
-            if (code == 0x103 || code == 0x104)
-                this._nav.NavigateTo("Login");
-            MessengerInstance.Send(Errors.GetErrorMessage(code));
         }
 
         private void SaveProfileCommand()
         {
-            Communication.getInstance.sendFuncs["addProfile"].DynamicInvoke((Action<JObject, JObject>)SaveProfileCallback, Name, Polling);
+            Communication.GetInstance.sendFuncs["addProfile"].DynamicInvoke((Action<JObject, JObject>)SaveProfileCallback, Name, Polling);
         }
 
         private void SaveProfileCallback(JObject request, JObject response)

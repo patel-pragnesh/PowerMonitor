@@ -5,19 +5,20 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Thu Jul  9 23:02:21 2015 alexis mestag
-// Last update Tue Jul 21 22:59:00 2015 alexis mestag
+// Last update Thu Aug 27 02:49:43 2015 alexis mestag
 //
 
 #include	<iostream>
 #include	"Database/UserRepository.hh"
+#include	"Network/Bridge.hh"
 #include	"Network/UIConnection.hh"
 #include	"Utils/JsonValidator.hh"
 
 UIConnection::UIConnection(boost::asio::ip::tcp::socket socket,
 			   ConnectionManager &connectionManager,
-			   Database &database, MasterModulesHandler &mmHandler) :
+			   Bridge &bridge, Database &database, MasterModulesHandler &mmHandler) :
   JsonConnection(std::move(socket), connectionManager),
-  _database(database), _mmHandler(mmHandler) {
+  _bridge(bridge), _database(database), _mmHandler(mmHandler) {
 }
 
 /*
@@ -30,16 +31,23 @@ UIConnection::UIConnection(boost::asio::ip::tcp::socket socket,
 */
 
 void	UIConnection::start() {
-  this->recv([this](Json::Value const &json) {
-      if (!_user) {
-      	// Find user
-      }
-      if (_user) {
-      	this->forward(json);
-      } else {
-      	// Error, user not found
-      }
-    });
+  _bridge.run(std::dynamic_pointer_cast<UIConnection>(this->shared_from_this()));
+  /*
+  ** Former code when there was no Bridge class
+  */
+  // this->recv([this](Json::Value const &json) {
+  //     std::string	email = this->getEmail(json);
+  //     bool		userChanged = this->getUser(email);
+
+  //     if (userChanged) {
+  // 	this->getMasterModuleConnection();
+  //     }
+  //     if (_mmConnection) {
+  // 	this->forward(json);
+  //     } else {
+  // 	// Send error
+  //     }
+  //   });
 }
 
 /*
@@ -78,15 +86,23 @@ bool	UIConnection::getUser(std::string const &email) {
   }
   if (retrieveFromDB) {
     UserRepository		ur(_database);
-    auto			user = ur.getByEmail(email);
+    std::unique_ptr<Database::transaction_type>	t(_database.getTransaction());
 
-    _user = std::move(user);
+    try {
+      auto			user = ur.getByEmail(email);
+
+      _user = std::move(user);
+    } catch (odb::exception const &e) {
+      std::cerr << "Exception: ODB: " << e.what() << std::endl;
+      t->rollback();
+    }
   }
   return (retrieveFromDB);
 }
 
 /*
-**
+** Gets the module connection from the Master modules handler and
+** the user associated to the received request.
 */
 void	UIConnection::getMasterModuleConnection() {
   _mmConnection = _mmHandler.find([this](MasterModuleConnection const &c) -> bool {
@@ -94,11 +110,29 @@ void	UIConnection::getMasterModuleConnection() {
     });
 }
 
+/*
+** Problem when multiple UI working at the same time
+** (might send & read packets to & from wrong ends)
+*/
 void	UIConnection::forward(Json::Value const &json) {
-  // _user is set and valid.
-
-  /*
-  ** Find the MasterModuleConnection corresponding to the user
-  ** Send the json
-  */
+  // Sends the request to the master module
+  _mmConnection->forwardSend(json, [this](boost::system::error_code const &error, std::size_t) {
+      if (!error) {
+	// Reads the response from the master module
+	_mmConnection->forwardRecv([this](Json::Value const &json) {
+	    // Sends the response to the UI
+	    this->send(json, [this](boost::system::error_code const &ec, std::size_t) {
+		if (!ec) {
+		  this->start();
+		} else {
+		  // Error while forwarding to UI
+		  std::cerr << "Error while forwarding response to UI" << std::endl;
+		}
+	      });
+	  });
+      } else {
+	// Error while forward sending to master module
+	std::cerr << "Error while forward sending to master module" << std::endl;
+      }
+    });
 }

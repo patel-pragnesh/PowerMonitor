@@ -19,6 +19,8 @@ using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight;
 using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 using System.Collections.ObjectModel;
+using GalaSoft.MvvmLight.Messaging;
+using Powermonitor.Model;
 
 // Pour en savoir plus sur le modèle d'élément Page de base, consultez la page http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -27,7 +29,7 @@ namespace Powermonitor.View
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
-    public sealed partial class ConsultationView : Page
+    public sealed partial class ConsultationView : BasePage
     {
         private NavigationHelper navigationHelper;
         private ViewModelBase defaultViewModel;
@@ -105,11 +107,14 @@ namespace Powermonitor.View
         /// les gestionnaires d'événements qui ne peuvent pas annuler la requête de navigation.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            Messenger.Default.Register<Error>(this, HandleError);
             this.navigationHelper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            Messenger.Default.Unregister<Error>(this);
+            CancelPreviousDialog();
             this.navigationHelper.OnNavigatedFrom(e);
         }
 
@@ -123,7 +128,27 @@ namespace Powermonitor.View
 
         private void bGetMeta_Click(object sender, RoutedEventArgs e)
         {
-           (this.DefaultViewModel as ConsultationViewModel).GetConso(ConvertToTimestamp(this.begDatePicker.Date.DateTime), ConvertToTimestamp(this.endDatePicker.Date.DateTime));
+          // (this.DefaultViewModel as ConsultationViewModel).GetConso(ModuleList.SelectedItems, ConvertToTimestamp(this.begDatePicker.Date.DateTime), ConvertToTimestamp(this.endDatePicker.Date.DateTime));
+        }
+
+        private void ModuleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IList<object> items = (sender as ListBox).SelectedItems;
+            if (e.AddedItems.Any(m => (m as Module).Id == 0))
+            {
+                var tmp = items.Where(m => (m as Module).Id != 0).ToList();
+                foreach (Module m in tmp)
+                    items.Remove(m);
+            }
+            else if (e.AddedItems.Count > 0 && items.Any(m => (m as Module).Id == 0))
+            {
+                items.Remove(items.SingleOrDefault(m => (m as Module).Id == 0));
+            }
+        }
+
+        private void bSelectModules_Click(object sender, RoutedEventArgs e)
+        {
+            CancelPreviousAndShowDialog(SelectModulesDialog);
         }
     }
 }

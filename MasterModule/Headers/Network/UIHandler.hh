@@ -5,7 +5,7 @@
 // Login   <mestag_a@epitech.net>
 // 
 // Started on  Tue May 26 22:19:42 2015 alexis mestag
-// Last update Wed May 27 02:50:16 2015 alexis mestag
+// Last update Tue Aug 25 02:01:49 2015 alexis mestag
 //
 
 #ifndef		__UIHANDLER_HH__
@@ -15,27 +15,22 @@
 # include	<boost/asio.hpp>
 
 # include	"Database/Database.hh"
-# include	"Network/ConnectionManager.hh"
+# include	"Network/Server.hpp"
+# include	"Network/UIConnection.hh"
 
-using	boost::asio::ip::tcp;
-
-class	UIHandler
+class	UIHandler : public Server<UIConnection>
 {
 private:
-  tcp::acceptor		_acceptor;
-  tcp::socket		_socket;
-  Database		_database;
-  ConnectionManager	_connectionManager;
+  Database		&_db;
 
 public:
   UIHandler(boost::asio::io_service &ios,
-	    std::string const &address,
-	    std::string const &port);
+	    std::string &&address, std::string &&port,
+	    Database &db);
 
-  void	stop();
-
-private:
-  void	accept();
+  virtual std::shared_ptr<AbstractConnection>	getNewConnection() override {
+    return (this->_getNewConnection<Database &>(_db));
+  }
 };
 
 #endif
